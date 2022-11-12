@@ -1,0 +1,18 @@
+export class ShemaArticle {
+    numero = "Numéro" 
+    reference = "Réference" 
+    designation = "Désignation" 
+    client = "client"  
+    // prixAchat = "Prix Achat HT" 
+    prixRevient = "Prix Revient HT"
+    // margeAppliqueeSur = "Marge Sur"
+    prixVenteHT = "Prix Vente HT"
+    newPrixVenteHT = "Prix Spécifique" 
+    margePourcentage = "Marge" 
+    marge = "Marge" 
+    tauxTVA = "tauxTVA"
+    redevance = "Redevance"
+    prixTTC = "Prix TTC"
+    note = "Note" 
+    isEnable = "Active"
+}

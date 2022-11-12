@@ -1,0 +1,583 @@
+[
+    {
+        "table": "Articles",
+        "champs": {
+            "codeBarre": {
+                "libelle": "Code_Barre",
+                "type": "prix"
+            },
+            "designation": {
+                "libelle": "Désignation",
+                "type": "string"
+            },
+            "categorie": {
+                "libelle": "Catégorie",
+                "type": "string"
+            },
+            "famille": {
+                "libelle": "Famille",
+                "type": "string"
+            },
+            "sousFamille": {
+                "libelle": "SousFamille",
+                "type": "string"
+            },
+            "typeArticle": {
+                "libelle": "Type_Article",
+                "type": "string"
+            },
+            "unite1": {
+                "libelle": "Unité 1",
+                "type": "string"
+            },
+            "prixFourn": {
+                "libelle": "Prix fournisseur",
+                "type": "prix"
+            },
+            "remiseF": {
+                "libelle": "Remise fournisseur (%)",
+                "type": "prix"
+            },
+            "remiseParMontant": {
+                "libelle": "Remise Fourn en Montant",
+                "type": "prix"
+            },
+            "prixFApresRemise": {
+                "libelle": "Prix F Apres Remise",
+                "type": "prix"
+            },
+            "tauxFodec": {
+                "libelle": "Taux Fodec",
+                "type": "taux"
+            },
+            "montantFodec": {
+                "libelle": "Montant Fodec",
+                "type": "prix"
+            },
+            "redevance": {
+                "libelle": "Redevance",
+                "type": "prix"
+            },
+            "prixAchatHT": {
+                "libelle": "Prix Achat HT",
+                "type": "prix"
+            },
+            "prixAchatTTC": {
+                "libelle": "PrixAchat TTC",
+                "type": "prix"
+            },
+            "prixRevient": {
+                "libelle": "PrixRevient HT",
+                "type": "prix"
+            },
+            "prixRevientTTC": {
+                "libelle": "PrixRevient TTC",
+                "type": "prix"
+            },
+            "margeApplique": {
+                "libelle": "Marge Appliqué",
+                "type": "string"
+            },
+            "marge": {
+                "libelle": "Marge (%)",
+                "type": "taux"
+            },
+            "sansRemise": {
+                "libelle": "Sans_Remise",
+                "type": "string"
+            },
+            "plafondRemise": {
+                "libelle": "Plafond_Remise",
+                "type": "prix"
+            },
+            "prixVenteHT": {
+                "libelle": "Prix Vente HT",
+                "type": "prix"
+            },
+            "prixVenteTTC": {
+                "libelle": "Prix Vente TTC",
+                "type": "prix"
+            },
+            "lotActive": {
+                "libelle": "Lot_Active",
+                "type": "string"
+            },
+            "seuilAlerteQTS": {
+                "libelle": "Alerte stock",
+                "type": "qte"
+            },
+            "seuilRearpQTS": {
+                "libelle": "Reapro Stock",
+                "type": "qte"
+            },
+            "stockMax": {
+                "libelle": "Stock Max",
+                "type": "qte"
+            },
+            "venteAvecStockNegative": {
+                "libelle": "Vente stock Negative",
+                "type": "string"
+            },
+            "prixRevientInitial": {
+                "libelle": "Prix revient initial",
+                "type": "prix"
+            },
+            "qteInitial": {
+                "libelle": "qte initial",
+                "type": "qte"
+            },
+            "reference": {
+                "libelle": "Référence",
+                "type": "string"
+            },
+            "tauxDC": {
+                "libelle": "taux_DC",
+                "type": "taux"
+            },
+            "isFodec": {
+                "libelle": "Avec_Fodec",
+                "type": "string"
+            },
+            "tauxTVA": {
+                "libelle": "taux_TVA",
+                "type": "taux"
+            },
+            "pVenteConseille": {
+                "libelle": "pVenteConseille",
+                "type": "prix"
+            },
+            "marque": {
+                "libelle": "Marque",
+                "type": "string"
+            },
+            "modele": {
+                "libelle": "Modele",
+                "type": "string"
+            },
+            "enVente": {
+                "libelle": "En_Vente",
+                "type": "string"
+            },
+            "enAchat": {
+                "libelle": "En_Achat",
+                "type": "string"
+            },
+            "enDisponible": {
+                "libelle": "En_Disponible",
+                "type": "string"
+            },
+            "enVedette": {
+                "libelle": "En_Vedette",
+                "type": "string"
+            },
+            "enPromotion": {
+                "libelle": "En_Promotion",
+                "type": "string"
+            },
+            "enLiquidation": {
+                "libelle": "En_Liquidation",
+                "type": "string"
+            },
+            "enNouveau": {
+                "libelle": "En_Nouveau",
+                "type": "string"
+            },
+            "enArchive": {
+                "libelle": "En_Archive",
+                "type": "string"
+            },
+            "enBalance": {
+                "libelle": "En_Balance",
+                "type": "string"
+            },
+            "refFournisseur": {
+                "libelle": "Ref_Fournisseur",
+                "type": "string"
+            },
+            "description": {
+                "libelle": "Description",
+                "type": "string"
+            },
+            "observations": {
+                "libelle": "Observations",
+                "type": "string"
+            },
+            "poids": {
+                "libelle": "Poids",
+                "type": "prix"
+            },
+            "couleur": {
+                "libelle": "Couleur",
+                "type": "prix"
+            },
+            "longeur": {
+                "libelle": "Longeur",
+                "type": "prix"
+            },
+            "largeur": {
+                "libelle": "Largeur",
+                "type": "prix"
+            },
+            "hauteur": {
+                "libelle": "Hauteur",
+                "type": "prix"
+            },
+            "surface": {
+                "libelle": "Surface",
+                "type": "prix"
+            },
+            "volume": {
+                "libelle": "Volume",
+                "type": "prix"
+            },
+            "coefficient": {
+                "libelle": "Coéfficient",
+                "type": "prix"
+            },
+            "unite2": {
+                "libelle": "Unité 2",
+                "type": "string"
+            },
+            "emplacement": {
+                "libelle": "Emplacement",
+                "type": "string"
+            },
+            "raccourciPLU": {
+                "libelle": "RaccourciPLU",
+                "type": "prix"
+            },
+            "prixVenteHT2": {
+                "libelle": "Prix_Vente_HT2",
+                "type": "prix"
+            },
+            "prixVenteHT3": {
+                "libelle": "Prix_Vente_HT3",
+                "type": "prix"
+            }
+        }
+    },
+    {
+        "table": "Inventaires",
+        "champs": {
+            "reference": {
+                "libelle": "Référence",
+                "type": "string"
+            },
+            "designation": {
+                "libelle": "Désignation",
+                "type": "string"
+            },
+            "quantite": {
+                "libelle": "Quantité validée",
+                "type": "qte"
+            }
+        }
+    },
+    {
+        "table": "Clients",
+        "champs": {
+            "email": {
+                "libelle": "Email",
+                "type": "string"
+            },
+            "telephone": {
+                "libelle": "Téléphone",
+                "type": "string"
+            },
+            "code": {
+                "libelle": "Code",
+                "type": "string"
+            },
+            "raisonSociale": {
+                "libelle": "Raison Sociale",
+                "type": "string"
+            },
+            "matriculeFiscale": {
+                "libelle": "Matricule Fiscale",
+                "type": "string"
+            },
+            "plafondCredit": {
+                "libelle": "Plafond Credit",
+                "type": "prix"
+            },
+            "mobiles": {
+                "libelle": "Mobiles",
+                "type": "string"
+            },
+            "siteWeb": {
+                "libelle": "site Web",
+                "type": "string"
+            },
+            "conditionReglement": {
+                "libelle": "Condition Reglement",
+                "type": "string"
+            },
+            "typeTiers": {
+                "libelle": "Type Tiers",
+                "type": "string"
+            },
+            "fax": {
+                "libelle": "Fax",
+                "type": "string"
+            },
+            "statusProspection": {
+                "libelle": "Status Prospection",
+                "type": "string"
+            },
+            "modeReglement": {
+                "libelle": "Mode Reglement",
+                "type": "string"
+            },
+            "secteur": {
+                "libelle": "Secteur",
+                "type": "string"
+            },
+            "agentPremierContact": {
+                "libelle": "Agent Premier Contact",
+                "type": "string"
+            },
+            "agentCommercial": {
+                "libelle": "Agent Commercial",
+                "type": "string"
+            },
+            "agentRecouvrement": {
+                "libelle": "Agent Recouvrement",
+                "type": "string"
+            },
+            "remise": {
+                "libelle": "Remise",
+                "type": "prix"
+            },
+            "active": {
+                "libelle": "Active",
+                "type": "string"
+            },
+            "nbFactureNonPaye": {
+                "libelle": "Nb Facture Non Paye",
+                "type": "qte"
+            },
+            "paysFacturation": {
+                "libelle": "Pays Facturation",
+                "type": "string"
+            },
+            "gouvernoratFacturation": {
+                "libelle": "Gouvernorat Facturation",
+                "type": "string"
+            },
+            "delegationFacturation": {
+                "libelle": "Délégation Facturation",
+                "type": "string"
+            },
+            "localiteFacturation": {
+                "libelle": "Localite Facturation",
+                "type": "string"
+            },
+            "codePostaleFacturation": {
+                "libelle": "Code Postale Facturation",
+                "type": "string"
+            },
+            "adresseFacturation": {
+                "libelle": "adresse Facturation",
+                "type": "string"
+            },
+            "paysLivraison": {
+                "libelle": "pays Livraison",
+                "type": "string"
+            },
+            "gouvernoratLivraison": {
+                "libelle": "Gouvernorat Livraison",
+                "type": "string"
+            },
+            "delegationLivraison": {
+                "libelle": "délégation Livraison",
+                "type": "string"
+            },
+            "localiteLivraison": {
+                "libelle": "Localite Livraison",
+                "type": "string"
+            },
+            "codePostaleLivraison": {
+                "libelle": "Code Postale Livraison",
+                "type": "string"
+            },
+            "adresseLivraison": {
+                "libelle": "Adresse Livraison",
+                "type": "string"
+            },
+            "soldeInitialDebit": {
+                "libelle": "Solde initial débit",
+                "type": "prix"
+            },
+            "soldeInitialCredit": {
+                "libelle": "Solde initial crédit",
+                "type": "prix"
+            }
+        }
+    },
+    {
+        "table": "Fournisseurs",
+        "champs": {
+            "email": {
+                "libelle": "Email",
+                "type": "string"
+            },
+            "telephone": {
+                "libelle": "Téléphone",
+                "type": "string"
+            },
+            "code": {
+                "libelle": "Code",
+                "type": "string"
+            },
+            "raisonSociale": {
+                "libelle": "Raison Sociale",
+                "type": "string"
+            },
+            "matriculeFiscale": {
+                "libelle": "Matricule Fiscale",
+                "type": "string"
+            },
+            "plafondCredit": {
+                "libelle": "Plafond Credit",
+                "type": "prix"
+            },
+            "mobiles": {
+                "libelle": "Mobiles",
+                "type": "string"
+            },
+            "siteWeb": {
+                "libelle": "site Web",
+                "type": "string"
+            },
+            "conditionReglement": {
+                "libelle": "Condition Reglement",
+                "type": "string"
+            },
+            "typeTiers": {
+                "libelle": "Type Tiers",
+                "type": "string"
+            },
+            "fax": {
+                "libelle": "Fax",
+                "type": "string"
+            },
+            "statusProspection": {
+                "libelle": "Status Prospection",
+                "type": "string"
+            },
+            "modeReglement": {
+                "libelle": "Mode Reglement",
+                "type": "string"
+            },
+            "secteur": {
+                "libelle": "Secteur",
+                "type": "string"
+            },
+            "agentPremierContact": {
+                "libelle": "Agent Premier Contact",
+                "type": "string"
+            },
+            "agentCommercial": {
+                "libelle": "Agent Commercial",
+                "type": "string"
+            },
+            "agentRecouvrement": {
+                "libelle": "Agent Recouvrement",
+                "type": "string"
+            },
+            "remise": {
+                "libelle": "Remise",
+                "type": "prix"
+            },
+            "active": {
+                "libelle": "Active",
+                "type": "string"
+            },
+            "nbFactureNonPaye": {
+                "libelle": "Nb Facture Non Paye",
+                "type": "qte"
+            },
+            "paysFacturation": {
+                "libelle": "Pays Facturation",
+                "type": "string"
+            },
+            "gouvernoratFacturation": {
+                "libelle": "Gouvernorat Facturation",
+                "type": "string"
+            },
+            "delegationFacturation": {
+                "libelle": "Délégation Facturation",
+                "type": "string"
+            },
+            "localiteFacturation": {
+                "libelle": "Localite Facturation",
+                "type": "string"
+            },
+            "codePostaleFacturation": {
+                "libelle": "Code Postale Facturation",
+                "type": "string"
+            },
+            "adresseFacturation": {
+                "libelle": "adresse Facturation",
+                "type": "string"
+            },
+            "paysLivraison": {
+                "libelle": "pays Livraison",
+                "type": "string"
+            },
+            "gouvernoratLivraison": {
+                "libelle": "Gouvernorat Livraison",
+                "type": "string"
+            },
+            "delegationLivraison": {
+                "libelle": "délégation Livraison",
+                "type": "string"
+            },
+            "localiteLivraison": {
+                "libelle": "Localite Livraison",
+                "type": "string"
+            },
+            "codePostaleLivraison": {
+                "libelle": "Code Postale Livraison",
+                "type": "string"
+            },
+            "adresseLivraison": {
+                "libelle": "Adresse Livraison",
+                "type": "string"
+            },
+            "soldeInitialDebit": {
+                "libelle": "Solde initial débit",
+                "type": "prix"
+            },
+            "soldeInitialCredit": {
+                "libelle": "Solde initial crédit",
+                "type": "prix"
+            }
+        }
+    },
+    {
+        "table": "Prix spécifique",
+        "champs": {
+            "reference": {
+                "libelle": "Reference",
+                "type": "string"
+            },
+            "designation": {
+                "libelle": "Désignation",
+                "type": "string"
+            },
+            "typeTier": {
+                "libelle": "typeTier",
+                "type": "string"
+            },
+            "marge": {
+                "libelle": "marge",
+                "type": "prix"
+            },
+            "margePourcentage": {
+                "libelle": "margePourcentage",
+                "type": "taux"
+            }
+        }
+    }
+]

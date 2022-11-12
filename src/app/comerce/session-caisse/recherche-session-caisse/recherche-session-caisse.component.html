@@ -1,0 +1,41 @@
+<div class="col-xl-14">
+    <app-card cardTitle="Liste des sessions caisse" blockClass="table-border-style">
+        <form [formGroup]="formC">
+            <div class="row">
+                <div class="col-md-6">
+                    <app-filtre-date (setNewDates)="getReleveDate($event)"></app-filtre-date>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="utilisateur" class="col-sm-2 col-form-label">Utilisateur</label>
+                        <div class="col-sm-6">
+                            <app-autocomplete (addElementEvent)="setUtilisateurID($event)"
+                                [keySelected]="keySelectedUtilisateur"
+                                [bordureRed]="erreurSessionCaisse.utilisateur != ''" [objet]="objetUtilisateur"
+                                [articles]="allUtilisateurs" [idSelected]="sessionCaisse.utilisateur" [idHtml]="15"
+                                (openAddElementEvent)="openModalAjoutUtilisateur()"></app-autocomplete>
+                            <p *ngIf="erreurSessionCaisse.utilisateur != ''" class="erreur">
+                                {{erreurSessionCaisse.utilisateur}}</p>
+                        </div>
+                        <button class="col-sm-3 btn btn-primary" type="button" (click)="getListReglements()">Recherche</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- partie Réglements -->
+            <div class="col-md-12" style="margin-top: 10px;">
+                <hr>
+                <app-reglements-caisse [changeVar]="changeVar" (envoitListeRegl)="envoitListeRegl($event)"
+                    [sessionCaisse]="sessionCaisse" [utilisateur]="utilisateur" [dates]="dates">
+                </app-reglements-caisse>
+            </div>
+            <!-- partie somme des Charges-->
+            <div class="col-md-12" style="margin-top: 10px;">
+                <hr>
+                <app-charge-mode-regl [listTotalRegl]="listTotalRegl">
+                </app-charge-mode-regl>
+            </div>
+        </form>
+    </app-card>
+</div>

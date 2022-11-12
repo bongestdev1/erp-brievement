@@ -1,0 +1,49 @@
+<div id="myModalAjoutElement" [class]="classCss">
+
+    <div style="position: absolute; width: 100%; height: 100%;top: 0px; left:0px;">
+    </div>
+
+    <!-- Modal content -->
+    <div class="modal-contentAjoutElement">
+        
+        <div style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+            <span style="font-weight: 800; font-size: 18px; margin-left: 10px; ">Liste des sessions caisses</span>
+           
+        </div>
+
+
+        <div class="container" style="position:relative; padding:0px;">
+            <hr>
+
+            <div class="col-sm-12" style="text-align: center;">
+                <!--end modal societe-->
+
+                <div class="list-group">
+                    <button type="button" class="list-group-item list-group-item-action active">
+                        Veuillez choisir la caisse.
+                    </button>
+                   
+                    <button type="button" class="list-group-item list-group-item-action" *ngFor="let item of listeSessionCaisses" (click)="setSession(item)">
+                        <span *ngIf="item.caisse"> {{item.caisseObjet.libelle}} </span>
+                    </button>
+                   
+                </div>
+
+                <hr>
+
+                <button type="button" class="btn btn-success" [routerLink]="['/sessionCaisses/ajout']">
+                    <i class="fas fa-plus"></i> Ajouter nouvelle session
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+</div>
