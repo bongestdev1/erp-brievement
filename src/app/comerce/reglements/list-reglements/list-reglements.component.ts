@@ -32,7 +32,7 @@ export class ListReglementsComponent implements OnInit {
     pageAjoute:"",
     pageEcheance:"",
     titreAjouter:"",
-    typeTier:"Client"
+    typeTier:"Client",
   }
 
   getDate(date){
@@ -99,6 +99,7 @@ export class ListReglementsComponent implements OnInit {
       tresorerie:[''],
       modeReglement:[''],
       reste:[''],
+      sessionCaisse:[''],
       limit: 50
     })
 
@@ -128,6 +129,7 @@ export class ListReglementsComponent implements OnInit {
     dateReglement:"Date",
     numCheque:"Numéro Chèque",
     dateEcheance:"Date d'échéance",
+    sessionCaisse:"Session Caisse",
     notes:"Notes"
   };
 
@@ -142,10 +144,9 @@ export class ListReglementsComponent implements OnInit {
     dateReglement:"Date",
     numCheque:"Numéro Chèque",
     dateEcheance:"Date d'échéance",
+    sessionCaisse:"Session Caisse",
     notes:"Notes"
   };
-
-
 
   request = {
     dateStart: this.informationGenerale.idDateAujourdCurrent,
@@ -163,6 +164,7 @@ export class ListReglementsComponent implements OnInit {
       dateReglement:"",
       numCheque:"",
       dateEcheance:"",
+      sessionCaisse:"",
       notes:"",
     },
     orderBy:{
@@ -176,6 +178,7 @@ export class ListReglementsComponent implements OnInit {
       dateReglement:0,
       numCheque:0,
       dateEcheance:0,
+      sessionCaisse:0,
       notes:0,
     },
     limit: 50,
@@ -198,6 +201,7 @@ export class ListReglementsComponent implements OnInit {
       dateReglement:"",
       numCheque:"",
       dateEcheance:"",
+      sessionCaisse:"",
       notes:"",
     },
     orderBy:{
@@ -211,6 +215,7 @@ export class ListReglementsComponent implements OnInit {
       dateReglement:0,
       numCheque:0,
       dateEcheance:0,
+      sessionCaisse:0,
       notes:0,
     },
     limit: 50,

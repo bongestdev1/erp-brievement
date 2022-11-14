@@ -111,12 +111,21 @@ import { AjoutSessionCaisseComponent } from './session-caisse/ajout-session-cais
 import { ReglementsCaisseComponent } from './session-caisse/reglements-caisse/reglements-caisse.component';
 import { ChargeModeReglComponent } from './session-caisse/charge-mode-regl/charge-mode-regl.component'
 import { RechercheSessionCaisseComponent } from './session-caisse/recherche-session-caisse/recherche-session-caisse.component';
+import { AjoutBonRetourFournisseurComponent } from './bonRetourFournisseur/ajout-bon-retour-fournisseur/ajout-bon-retour-fournisseur.component';
+import { DetailsBonRetourFournisseurComponent } from './bonRetourFournisseur/details-bon-retour-fournisseur/details-bon-retour-fournisseur.component';
+import { ListBonRetourFournisseurComponent } from './bonRetourFournisseur/list-bon-retour-fournisseur/list-bon-retour-fournisseur.component';
+import { ModifierBonRetourFournisseurComponent } from './bonRetourFournisseur/modifier-bon-retour-fournisseur/modifier-bon-retour-fournisseur.component';
 
 
 /*---------------------------End-------------------*/
 
 @NgModule({
   declarations: [
+
+    AjoutBonRetourFournisseurComponent,
+    DetailsBonRetourFournisseurComponent,
+    ListBonRetourFournisseurComponent,
+    ModifierBonRetourFournisseurComponent,
 
     /* ---------------- Start ---------------*/
     LigneblComponent,

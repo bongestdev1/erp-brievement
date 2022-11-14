@@ -90,16 +90,3 @@ input{
     padding-right: 2px;
 }
 
-table thead,
-table tfoot {
-  position: sticky;
-}
-table thead {
-  inset-block-start: 0; /* "top" */
-  z-index: 100;
-}
-table tfoot {
-  background: #e3eaef;
-  inset-block-end: 0; /* "bottom" */
-  z-index: 100;
-}

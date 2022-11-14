@@ -39,7 +39,10 @@ const routes: Routes = [
     path: '',
     component: AdminComponent,
     children: [
-     
+      {
+        path: 'bonRetourFournisseur',
+        loadChildren: () => import('./comerce/bonRetourFournisseur/bonretourfournisseur.module').then(module => module.BonretourfournisseurModule)
+      },
       {
         path: 'prixSpecifiques',
         loadChildren: () => import('./comerce/article/prix-specifique-article/prix-specifique-articl-input/prix-specifique-articl-input.module').then(module => module.PrixSpecifiqueArticlInputModule)

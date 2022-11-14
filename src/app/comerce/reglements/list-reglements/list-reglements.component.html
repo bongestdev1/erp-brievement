@@ -21,8 +21,7 @@
                             <th>
                             </th>
                         </tr>
-                    </thead>
-                    <thead>
+                    
                         <tr>
                             <th *ngFor="let key of objectKeys(itemsVariable)">
                                 <div class="th-tableau" (click)="changeCroissante(key)">
@@ -82,7 +81,10 @@
                                 </a>
                             </td>
                         </tr>
-                        <tr style="text-align: center;">
+                        </tbody>
+                        
+                        <tfoot>
+                         <tr style="text-align: center;">
                           <td *ngFor="let key of objectKeys(itemsVariable)">
                             <span *ngIf="fonctionPartages.colonnesQuantites.includes(key)" style="float:right;color:#1abc9c">{{fonctionPartages.getFormaThreeAfterVerguleQuantite(fonctionPartages.getSomme(reglements, key))}}</span>
                             <span *ngIf="fonctionPartages.colonnesPrix.includes(key)" style="float:right;color:#1abc9c">{{fonctionPartages.getFormaThreeAfterVerguleNomber(fonctionPartages.getSomme(reglements, key))}}</span>
@@ -92,9 +94,10 @@
                             <!-- <span *ngIf="allCreDebs.includes(key)" style="font-family: cursive,Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; color:#1abc9c ;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item[key])}}</span>
                             <span *ngIf="allChargRets.includes(key)">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item[key])}}</span>
                             <span *ngIf="key == 'typeOperation'">{{item[key]}}</span> -->
-                        </td>
+                          </td>
                         </tr>
-                    </tbody>
+                    </tfoot>
+                    
                 </table>
             </div>
             <app-spinner2 *ngIf="isLoading"></app-spinner2>
