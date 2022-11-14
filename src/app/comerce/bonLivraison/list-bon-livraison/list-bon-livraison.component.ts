@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RoutesRecognized  } from '@angular/router';
 import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 import { InformationsService } from 'src/app/services/informations.service';
 import { formatDate } from '@angular/common';
@@ -13,6 +13,9 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { GenerationPdfFactureService } from 'src/app/services/generation-pdf-facture.service';
 
 const S_F_S = "SAVE_FILTER_SESSION_BON_LIVRAISON"
+
+import { BehaviorSubject } from 'rxjs';
+import { filter, pairwise } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-bon-livraison',
@@ -39,6 +42,7 @@ export class ListBonLivraisonComponent implements OnInit {
 
   setSaveFilterSession(){
     var request = {request:this.request, idItemSelected:this.idItemSelected }
+    
     localStorage.setItem(S_F_S, JSON.stringify(request))
   }
 
@@ -50,8 +54,7 @@ export class ListBonLivraisonComponent implements OnInit {
     }
 
     request = JSON.parse(request)
-    console.log(request)
-
+    
     this.request = request.request
     this.oldRequest = this.request
     this.idItemSelected = request.idItemSelected
@@ -136,6 +139,16 @@ export class ListBonLivraisonComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+    this.router.events
+    .pipe(filter((e: any) => e instanceof RoutesRecognized),
+      pairwise()
+    ).subscribe((e: any) => {
+      if(e[0].urlAfterRedirects.indexOf('bonLivraison')){
+        this.getSaveFilterSession()
+      } // previous url
+    });
+
     if (this.router.url.indexOf("venteComptoire") > -1) {
       this.isVenteContoire = true
       this.pageDetails = "/venteComptoire/details/"
@@ -148,7 +161,7 @@ export class ListBonLivraisonComponent implements OnInit {
 
     this.oldRequest = this.request
 
-    //this.getSaveFilterSession()
+    this.getSaveFilterSession()
 
     this.getBonLivraisons(this.request)
 
@@ -304,8 +317,6 @@ export class ListBonLivraisonComponent implements OnInit {
       this.request.page = 1
     }
 
-    this.setSaveFilterSession()
-
     this.isLoading = true
     this.http.post(this.informationGenerale.baseUrl + this.apiList, this.request, this.tokenStorageService.getHeader()).subscribe(
 
@@ -315,8 +326,8 @@ export class ListBonLivraisonComponent implements OnInit {
         if (resultat.status) {
           this.bonLivraisons = resultat.resultat.docs
 
-          console.log(this.bonLivraisons)
-
+          this.setSaveFilterSession()
+        
           this.totalPage = resultat.resultat.pages
           this.oldRequest = resultat.request
           if (this.totalPage < this.request.page && this.request.page != 1) {

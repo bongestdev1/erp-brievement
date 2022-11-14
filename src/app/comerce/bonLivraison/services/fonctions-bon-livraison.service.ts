@@ -98,6 +98,7 @@ export class FonctionsBonLivraisonService {
   organiserArtticlesSelonNumero(articles) {
     for (let i = 0; i < articles.length; i++) {
       articles[i].numero = i + 1
+      articles[i].validRemise = true
     }
     return articles
   }

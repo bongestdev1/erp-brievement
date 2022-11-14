@@ -296,8 +296,6 @@ export class InputBonLivraisonComponent implements OnInit {
     }
     this.isLoading = true
 
-    console.log(url)
-
     this.http.get(this.informationGenerale.baseUrl + url + id, this.tokenStorageService.getHeader()).subscribe(
 
       res => {

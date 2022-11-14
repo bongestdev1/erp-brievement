@@ -101,9 +101,9 @@
                     </thead>
                     <tbody>
 
-                        <tr *ngFor="let item of bonLivraisons" class="{{idItemSelected === item.id ? 'color-ligne-selected' : '' }}">
+                        <tr *ngFor="let item of bonLivraisons" class="{{idItemSelected === item.id ? 'color-ligne-selected' : '' }}" [id]="item.id">
 
-                            <td *ngFor="let key of objectKeys(itemsVariable)">
+                            <td *ngFor="let key of objectKeys(itemsVariable)" (click)="idItemSelected = item.id">
                                 <span *ngIf="fonctionPartages.colonnesQuantites.includes(key)"
                                     style="float:right;">{{fonctionPartages.getFormaThreeAfterVerguleNomber(item[key])}}</span>
                                 <span *ngIf="fonctionPartages.colonnesPrix.includes(key)"

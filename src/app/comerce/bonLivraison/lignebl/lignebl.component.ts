@@ -270,8 +270,10 @@ export class LigneblComponent implements OnInit {
       this.itemArticleSelected.totalHT = 0
       this.itemArticleSelected.article = id
 
-      if (this.isPrixVenteNotPrixAchat()) {
+      if (this.isPrixVenteNotPrixAchat() ) {
         this.changeQuantiteVente()
+      }else if ( this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur ) {
+        this.changeQuantiteAchat()
       }
 
       this.changePrixTotal()
@@ -573,7 +575,15 @@ export class LigneblComponent implements OnInit {
 
   }
 
-  verifierStockNegative(article) {
+  verifierStockNegative(article){
+    if(this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur){
+      return this.verifierStockNegativeAchat(article)
+    }else{
+      return this.verifierStockNegativeVente(article)
+    }
+  }
+
+  verifierStockNegativeVente(article) {
 
     var encienQte = 0
 
@@ -604,6 +614,43 @@ export class LigneblComponent implements OnInit {
         return { isValid: false, stockMax: articles[0].stockMax, qteDiff: qteDiff }
       }
       return { isValid: true, stockMax: articles[0].stockMax, qteDiff: qteDiff }
+    }
+
+    return { isValid: false, stockMax: 0, qteDiff: 0 }
+
+  }
+
+  verifierStockNegativeAchat(article) {
+
+    var encienQte = 0
+
+    if(this.titreCrud === this.fonctionPartagesService.titreCrud.modifier){
+      this.bonLivraison.articles.forEach(x => {
+        if (x.article === article) {
+          encienQte += x.quantiteAchat
+        }
+      })
+    }
+    
+    var newQte = 0
+    this.articlesSelected.forEach(x => {
+      if (x.article === article) {
+        newQte += x.quantiteAchat
+      }
+    })
+
+    if (this.itemArticleSelected.article === article) {
+      newQte += this.itemArticleSelected.quantiteAchat
+    }
+
+    var articles = this.articles.filter(x => x.id == article)
+
+    if (articles.length > 0) {
+      var qteDiff = (Number(articles[0].qteEnStock) - newQte + encienQte)
+      if (qteDiff < 0 && articles[0].venteAvecStockNegative && articles[0].venteAvecStockNegative === "non") {
+        return { isValid: false, stockMax: articles[0].stockMax, qteDiff: qteDiff }
+      }
+      return { isValid: true, stockMax: articles[0].stockMax, qteDiff: qteDiff }
 
     }
 
@@ -614,19 +661,14 @@ export class LigneblComponent implements OnInit {
   changeQuantiteVente() {
     var articles = this.articles.filter(x => x.id == this.itemArticleSelected.article)
     if (articles.length > 0) {
-
+      console.log(this.titreDocument)
       //if (this.isPrixVenteNotPrixAchat()) {
       if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
         var result = this.verifierStockNegative(this.itemArticleSelected.article)
         if (!result.isValid) {
           this.openBlockedStockNegative()
           this.itemArticleSelected.quantiteVente += (result.qteDiff)
-
-
           if (this.itemArticleSelected.quantiteVente < 0) {
-
-            console.log("stock negative")
-
             this.itemArticleSelected.quantiteVente = 0
           }
         }
@@ -641,6 +683,16 @@ export class LigneblComponent implements OnInit {
   changeQuantiteAchat() {
     var articles = this.articles.filter(x => x.id == this.itemArticleSelected.article)
     if (articles.length > 0) {
+      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
+        var result = this.verifierStockNegative(this.itemArticleSelected.article)
+        if (!result.isValid) {
+          this.openBlockedStockNegative()
+          this.itemArticleSelected.quantiteAchat += (result.qteDiff)
+          if (this.itemArticleSelected.quantiteAchat < 0) {
+            this.itemArticleSelected.quantiteAchat = 0
+          }
+        }
+      }
       //this.itemArticleSelected.prixVenteHTReel = this.setPrixVenteSelonQuantiteAndClient(this.itemArticleSelected.quantiteVente, articles[0], this.client)
       //this.itemArticleSelected.tauxRemise = (this.itemArticleSelected.prixVenteHT - this.itemArticleSelected.prixVenteHTReel) / this.itemArticleSelected.prixVenteHT * 100
       this.changePrixTotal()
@@ -714,6 +766,17 @@ export class LigneblComponent implements OnInit {
           this.articlesSelected[numero - 1].quantiteVente += (result.qteDiff)
           if (this.articlesSelected[numero - 1].quantiteVente < 0) {
             this.articlesSelected[numero - 1].quantiteVente = 0
+          }
+        }
+      }
+
+      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
+        var result = this.verifierStockNegative(this.articlesSelected[numero - 1].article)
+        if (!result.isValid) {
+          this.openBlockedStockNegative()
+          this.articlesSelected[numero - 1].quantiteAchat += (result.qteDiff)
+          if (this.articlesSelected[numero - 1].quantiteAchat < 0) {
+            this.articlesSelected[numero - 1].quantiteAchat = 0
           }
         }
       }
