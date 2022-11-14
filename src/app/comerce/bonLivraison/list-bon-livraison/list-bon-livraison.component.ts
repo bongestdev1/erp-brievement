@@ -42,8 +42,11 @@ export class ListBonLivraisonComponent implements OnInit {
 
   setSaveFilterSession(){
     var request = {request:this.request, idItemSelected:this.idItemSelected }
-    
     localStorage.setItem(S_F_S, JSON.stringify(request))
+    setTimeout( x => {
+      let el = document.getElementById(this.idItemSelected);
+      if(el) el.scrollIntoView();
+    }, 100)
   }
 
   getSaveFilterSession(){
@@ -144,7 +147,7 @@ export class ListBonLivraisonComponent implements OnInit {
     .pipe(filter((e: any) => e instanceof RoutesRecognized),
       pairwise()
     ).subscribe((e: any) => {
-      if(e[0].urlAfterRedirects.indexOf('bonLivraison')){
+      if(e[0].urlAfterRedirects.indexOf('bonLivraison') > -1){
         this.getSaveFilterSession()
       } // previous url
     });
