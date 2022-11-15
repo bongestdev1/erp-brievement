@@ -31,7 +31,7 @@ const routes: Routes = [
     path: 'dashboard-admin',
     component: SuperAdminComponent,
     children: [
-    
+     
     ]
   },
 
@@ -39,10 +39,7 @@ const routes: Routes = [
     path: '',
     component: AdminComponent,
     children: [
-      {
-        path: 'bonRetourFournisseur',
-        loadChildren: () => import('./comerce/bonRetourFournisseur/bonretourfournisseur.module').then(module => module.BonretourfournisseurModule)
-      },
+     
       {
         path: 'prixSpecifiques',
         loadChildren: () => import('./comerce/article/prix-specifique-article/prix-specifique-articl-input/prix-specifique-articl-input.module').then(module => module.PrixSpecifiqueArticlInputModule)
@@ -111,7 +108,6 @@ const routes: Routes = [
         path: 'alert-stock',
         loadChildren: () => import('./comerce/article/alert-stock/alert-stock.module').then(module => module.AlertStockModule)
       },
-    
       {
         path: 'bonLivraison',
         loadChildren: () => import('./comerce/bonLivraison/bon-livrason.module').then(module => module.BonLivrasonModule)
@@ -129,18 +125,28 @@ const routes: Routes = [
         loadChildren: () => import('./comerce/bonLivraison/parametrelivraison/parametrelivraison.module').then(module => module.ParametrelivraisonModule)
       },
       {
+        path: 'commande',
+        loadChildren: () => import('./comerce/commande/commande.module').then(module => module.CommandeModule)
+      },
+      {
         path: 'reglement',
         loadChildren: () => import('./comerce/reglements/reglements.module').then(module => module.ReglementsModule)
       },
-      
+      {
+        path: 'factureVente',
+        loadChildren: () => import('./comerce/facture-vente/facture-vente-routing.module').then(module => module.FactureVenteRoutingModule)
+      },
+      {
+        path: 'factureAvoir',
+        loadChildren: () => import('./comerce/facture-avoir/facture-avoir-routing.module').then(module => module.FactureAvoirRoutingModule)
+      },
+      {
+        path: 'factureAchat',
+        loadChildren: () => import('./comerce/facture-achat/facture-achat-routing.module').then(module => module.FactureAchatRoutingModule)
+      },
       {
         path: 'recepetion',
         loadChildren: () => import('./comerce/bonLivraison/receptions/receptions.module').then(module => module.ReceptionsModule)
-      },
-
-      {
-        path: 'sessionCaisses',
-        loadChildren: () => import('./comerce/session-caisse/session-caisse.module').then(module => module.SessionCaisseModule)
       },
       {
         path: 'filterCat',

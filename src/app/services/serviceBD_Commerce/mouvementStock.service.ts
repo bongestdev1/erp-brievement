@@ -40,7 +40,7 @@ export class MouvementStockService {
   }
 
   rappelStock(request): Observable<any> {
-    return this.http.post(this.host + "rappelStock", request, this.tokenStorageService.getHeader());
+    return this.http.post(this.host + "rappelStockTest", request, this.tokenStorageService.getHeader());
   }
 
   valeurStock(request): Observable<any> {

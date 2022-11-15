@@ -22,7 +22,7 @@ import { FraisParArticle } from 'src/app/services/serviceBD_Commerce/prixSpecifi
 
 
 
-//  
+//
 @Component({
   selector: 'app-prix-specifique-articles-list',
   templateUrl: './prix-specifique-articles-list.component.html',
@@ -72,7 +72,7 @@ export class PrixSpecifiqueArticlesListComponent implements OnInit {
       marge: [''],
       margePourcentage: [''],
       // quantiteMin:[''],
-      // quantiteMax:[''], 
+      // quantiteMax:[''],
       typeTier: [''],
       note: [''],
       prixAchat: [''],
@@ -84,7 +84,7 @@ export class PrixSpecifiqueArticlesListComponent implements OnInit {
 
     console.log(this.isTypeTier)
 
-    
+
   }
 
   request = new PrixSpecifiqueRequest()
@@ -238,9 +238,9 @@ export class PrixSpecifiqueArticlesListComponent implements OnInit {
   //end prix specifique
 
   ngOnInit(): void {
- 
+
     var shemaArticleCopie = {}
-    
+
     if(this.isTypeTier){
       for(let key in this.shemaArticle){
         if('client' === key){
@@ -249,13 +249,13 @@ export class PrixSpecifiqueArticlesListComponent implements OnInit {
           shemaArticleCopie[key] = this.shemaArticle[key]
         }
       }
-      
+
       this.shemaArticle = JSON.parse(JSON.stringify(shemaArticleCopie))
       this.shemaArticleVariables = JSON.parse(JSON.stringify(shemaArticleCopie))
 
     }
 
-   
+
   }
 
   getStyleErrorLigne(item) {

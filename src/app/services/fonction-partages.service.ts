@@ -192,7 +192,7 @@ export class FonctionPartagesService {
 
   colonnesQuantites = ["qteSortie","qteEntree","qteInitial", "quantiteAccepter", "quantite", "qteStock", "quantiteVente", "quantiteAchat", "qteAncienne", "qteDifference", "qteNouvelle", "quantiteMax", "quantiteMin", "qteEnStock", "qteTheorique"]
 
-  colonnesPrix = ["PTTC","margeVar","montantNonLettre","montantLettre","soldeInitialDebit", "soldeInitialCredit", "sPeriodeD",'sPeriodeC', 'sFinaleD',"sFinaleC","soldeInitiale", "soldeDeLaPeriode", "soldeFinale","fodec","droitConsomation","droitTimbre","totalRemise","totalNetHT","chiffreAffaire","soldeGlobal","soldeImpaye","soldeEnCours","sdebit","scredit","enCours","impaye", "marge", "charge", "retrait", "caisse", "debit", "fondCaisseOuvrier", "totalCaisse", "montantDifference", "fondCaisseAdmin", "TotalTTCFacture", "TotalHTFacture", "prixAchatTTCReelFacture", "prixAchatHTReelFacture", "totalRemiseFacture","totalHTFacture","totalTTCFacture", "remiseFactureMontant", "remiseFactureTotal", "prixAchatTTC", "prixAchatHT", "montantFodec", "prixFApresRemise", "montantAfterMultiply", "montantNbj", "montantAPayer", "restPayer", "montantPaye", "montantTotal", "totalReglement", "totalVente", "budjet", "valeurVenteTTC", "valeurVenteHT", "valeurRevientTTC", "valeurRevientHT", "valeurAchatTTC", "valeurAchatHT", "prixRevient", "prixVenteHTReel", "remiseParMontant", "montantRemise", "prixDC", "prixFodec", "totalRedevance", "totalGainReel", "totalGainCommerciale", "prixAchatHTReel", "montant", "reste", "impactPrix", "impactPoids", "budget", "trajet", "totalGain", "totalTTC", "tFiscale", "totalTVA", "totalHT", "totalRemise", "prixVenteHT", "valeurRetiree", "taux", "prixFourn", "remiseF", "marge", "prixVenteHT", "montantTVA", "prixAchat", "prixAchatTTC", "valeurStock", "prixTTC", "plafondRemise", "pVenteConseille", "redevance", "longueur", "largeur", "hauteur", "surface", "volume", "poids", "coefficient", "prixVenteHT2", "prixVenteHT3", "seuilAlerteQTS", "seuilRearpQTS", "plafondCredit", "solde", "credit", "remiseParMontant2"]
+  colonnesPrix = ["qteCorrectionStock","qteCasse","qteSortie","qteEntree","qteInitial","PUTTC","PTTC","margeVar","montantNonLettre","montantLettre","soldeInitialDebit", "soldeInitialCredit", "sPeriodeD",'sPeriodeC', 'sFinaleD',"sFinaleC","soldeInitiale", "soldeDeLaPeriode", "soldeFinale","fodec","droitConsomation","droitTimbre","totalRemise","totalNetHT","chiffreAffaire","soldeGlobal","soldeImpaye","soldeEnCours","sdebit","scredit","enCours","impaye", "marge", "charge", "retrait", "caisse", "debit", "fondCaisseOuvrier", "totalCaisse", "montantDifference", "fondCaisseAdmin", "TotalTTCFacture", "TotalHTFacture", "prixAchatTTCReelFacture", "prixAchatHTReelFacture", "totalRemiseFacture","totalHTFacture","totalTTCFacture", "remiseFactureMontant", "remiseFactureTotal", "prixAchatTTC", "prixAchatHT", "montantFodec", "prixFApresRemise", "montantAfterMultiply", "montantNbj", "montantAPayer", "restPayer", "montantPaye", "montantTotal", "totalReglement", "totalVente", "budjet", "valeurVenteTTC", "valeurVenteHT", "valeurRevientTTC", "valeurRevientHT", "valeurAchatTTC", "valeurAchatHT", "prixRevient", "prixVenteHTReel", "remiseParMontant", "montantRemise", "prixDC", "prixFodec", "totalRedevance", "totalGainReel", "totalGainCommerciale", "prixAchatHTReel", "montant", "reste", "impactPrix", "impactPoids", "budget", "trajet", "totalGain", "totalTTC", "tFiscale", "totalTVA", "totalHT", "totalRemise", "prixVenteHT", "valeurRetiree", "taux", "prixFourn", "remiseF", "marge", "prixVenteHT", "montantTVA", "prixAchat", "prixAchatTTC", "valeurStock", "prixTTC", "plafondRemise", "pVenteConseille", "redevance", "longueur", "largeur", "hauteur", "surface", "volume", "poids", "coefficient", "prixVenteHT2", "prixVenteHT3", "seuilAlerteQTS", "seuilRearpQTS", "plafondCredit", "solde", "credit", "remiseParMontant2"]
 
   colonnesDates = ["dateFactureVenteFournisseur", "dateBonLivraisonFournisseur", "dateCloture", "dateOuverture", "dateFacture", "dateReglement", "dateEcheance", "date", "dateDebut", "dateFin"]
 
@@ -305,7 +305,6 @@ export class FonctionPartagesService {
       }
     }
 
- 
     for (let i = 0; i < items.length-1; i++) {
       for (let j = i+1; j < items.length; j++) {
         var valeurI = items[i][orderBySelected]
@@ -321,9 +320,6 @@ export class FonctionPartagesService {
         }else if ( this.colonnesTaux.indexOf(orderBySelected) > -1 || this.colonnesPrix.indexOf(orderBySelected) > -1 || this.colonnesQuantites.indexOf(orderBySelected) > -1 ){
           valeurI = Number(items[i][orderBySelected])
           valeurJ = Number(items[j][orderBySelected])
-        }else{
-          valeurI = items[i][orderBySelected].toUpperCase()
-          valeurJ = items[j][orderBySelected].toUpperCase()
         }
 
         if (itemsVariableGOrderby[orderBySelected] == -1) {
@@ -408,6 +404,11 @@ export class FonctionPartagesService {
     var number = Number(float);
     return  number.toFixed(this.parametres.nombreChiffresApresVerguleNormale)
   }
+  getFormaThreeAfterVerguleNomberExportEtatImpression(float) {
+    var number = Number(float);
+    return parseFloat(parseFloat(float).toFixed(3));
+
+  }
 
   getNumerWithEspaceEntreTroisChiffre(number2) {
     var part1 = number2
@@ -446,6 +447,11 @@ export class FonctionPartagesService {
   getFormaThreeAfterVerguleQuantite(float) {
     var number = Number(float);
     return number.toFixed(this.parametres.nombreChiffresApresVerguleQuantite)
+  }
+
+  getFormaThreeAfterVerguleQuantiteExportEtatImpression(float) {
+    var number = Number(float);
+    return parseFloat(number.toFixed(this.parametres.nombreChiffresApresVerguleQuantite))
   }
 
   showInput(event) {

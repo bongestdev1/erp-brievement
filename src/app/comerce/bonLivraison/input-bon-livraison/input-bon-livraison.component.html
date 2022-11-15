@@ -147,17 +147,17 @@
 
                             <label for="credit" class="col-sm-6 col-form-label">Solde
                                 <span *ngIf="client.credit && client.credit < 0 && isPrixVenteNotPrixAchat() ">
-                                  créditeur: {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(-1 *
+                                  débiteur: {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(-1 *
                                     client.credit)}}</span>
                                 <span *ngIf="client.credit && client.credit > 0 && isPrixVenteNotPrixAchat()">
-                                  débiteur:
+                                    créditeur:
                                     {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(client.credit)}}</span>
 
                                 <span *ngIf="client.credit && client.credit > 0 && !isPrixVenteNotPrixAchat()">
-                                  créditeur:
+                                    débiteur:
                                     {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(client.credit)}}</span>
                                 <span *ngIf="client.credit && client.credit < 0 && !isPrixVenteNotPrixAchat()">
-                                  débiteur: {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(-1 *
+                                    créditeur: {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(-1 *
                                     client.credit)}}</span>
 
                                 <span *ngIf="!client.credit">0.000</span></label>

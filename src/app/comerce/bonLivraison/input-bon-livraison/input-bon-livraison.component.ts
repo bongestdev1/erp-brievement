@@ -296,6 +296,8 @@ export class InputBonLivraisonComponent implements OnInit {
     }
     this.isLoading = true
 
+    console.log(url)
+
     this.http.get(this.informationGenerale.baseUrl + url + id, this.tokenStorageService.getHeader()).subscribe(
 
       res => {
@@ -620,7 +622,6 @@ export class InputBonLivraisonComponent implements OnInit {
       res => {
         this.isLoading = false
         let resultat: any = res
-        console.log(resultat)
         if (resultat.status) {
           this.isDejaEnregistrer = true
           //this.reseteFormulaire()
