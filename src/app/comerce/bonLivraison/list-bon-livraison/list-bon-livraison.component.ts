@@ -57,7 +57,6 @@ export class ListBonLivraisonComponent implements OnInit {
     }
 
     request = JSON.parse(request)
-    
     this.request = request.request
     this.oldRequest = this.request
     this.idItemSelected = request.idItemSelected
@@ -143,15 +142,6 @@ export class ListBonLivraisonComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.router.events
-    .pipe(filter((e: any) => e instanceof RoutesRecognized),
-      pairwise()
-    ).subscribe((e: any) => {
-      if(e[0].urlAfterRedirects.indexOf('bonLivraison') > -1){
-        this.getSaveFilterSession()
-      } // previous url
-    });
-
     if (this.router.url.indexOf("venteComptoire") > -1) {
       this.isVenteContoire = true
       this.pageDetails = "/venteComptoire/details/"
@@ -164,9 +154,17 @@ export class ListBonLivraisonComponent implements OnInit {
 
     this.oldRequest = this.request
 
-    this.getSaveFilterSession()
+    // this.getSaveFilterSession()
 
-    this.getBonLivraisons(this.request)
+    this.router.events
+    .pipe(filter((e: any) => e instanceof RoutesRecognized),
+      pairwise()
+    ).subscribe((e: any) => {
+      if(e[0].urlAfterRedirects.indexOf('bonLivraison') > -1){
+        this.getSaveFilterSession()
+      } // previous url
+      this.getBonLivraisons(this.request)
+    });
 
   }
 
@@ -301,6 +299,8 @@ export class ListBonLivraisonComponent implements OnInit {
 
   getBonLivraisons(request) {
 
+    console.log("this.request = ", this.request)
+ 
     if (this.isLoading) {
       return
     }
@@ -314,7 +314,6 @@ export class ListBonLivraisonComponent implements OnInit {
     this.request.limit = this.formBL.value.limit
     this.request.magasin = this.informationGenerale.idSocieteCurrent
     this.request.isVenteContoire = this.isVenteContoire
-
 
     if (!this.testSyncronisation(this.request, this.oldRequest)) {
       this.request.page = 1

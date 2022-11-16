@@ -159,8 +159,6 @@
                 <!-- partie collapse -->
                 <div class="col-md-12">
 
-
-
                     <div id="collapseExample" [ngbCollapse]="isCollapsed">
                         <hr />
 
@@ -581,6 +579,7 @@
                                                     <th> Total HT</th>
                                                     <th> Total Remise</th>
                                                     <th> Total TTC</th>
+                                                    <th> Montant Financier</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -609,6 +608,11 @@
                                                                     style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalTTC)}}
                                                                 </span>
                                                             </th>
+
+                                                            <th> 
+                                                                <app-input-number-vergule [field]="item" key="montantFinancie" [idUnique]="'montantFinancie'+item.id"
+                                                                (change)="changeMontantFinancier()"></app-input-number-vergule>
+                                                            </th>
                                 
                                                             <th>
                                                                 <!-- <button class="btn btn-info" style="padding:5px;"
@@ -616,11 +620,6 @@
                                                                     <i class="fa fa-eye"></i>
                                                                 </button> -->
                                 
-                                
-                                                                <button class="btn btn-success" style="padding:5px;"
-                                                                    (click)="openModalModiferFV(item.id)">
-                                                                    <i class="fas fa-edit"></i>
-                                                                </button>
                                 
                                                                 <button class="btn btn-danger" style="padding:5px;"
                                                                     (click)="openModalDeleteFV(item.id, item.numero)">

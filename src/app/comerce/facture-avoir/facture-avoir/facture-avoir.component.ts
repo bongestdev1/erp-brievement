@@ -50,6 +50,7 @@ export class FactureAvoirComponent implements OnInit {
 
   lienGetDocuments1 = "/factureAvoirs/getBonRetourClients/"
   lienGetDocuments2 = "/factureAvoirs/getFacturesClient/"
+  lienGetDocuments3 = "/factureAvoirs/getFacturesClientSansDejaAvoir/"
 
   allBonReceptions = []
 
@@ -371,8 +372,10 @@ export class FactureAvoirComponent implements OnInit {
       this.request.typeAvoir = this.bonAchat.typeAvoir
       if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises){
         this.getBonDocumentsBonRetourClients()
-      }else{
+      }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture){
         this.getBonDocumentsFacturesClient()
+      }else{
+        this.getBonDocumentsFacturesClientSansDejaTransformerAvoirSurFac()
       }
   }
 
@@ -408,6 +411,33 @@ export class FactureAvoirComponent implements OnInit {
   }
 
   allFacturesClient = []
+
+  getBonDocumentsFacturesClientSansDejaTransformerAvoirSurFac() {
+    if (this.isLoading) {
+      return
+    }
+
+    this.allBonReceptions = []
+    this.isLoading = true
+    this.http.get(this.informationGenerale.baseUrl + this.lienGetDocuments3 + this.client.id+ '/' + this.informationGenerale.idSocieteCurrent, this.tokenStorageService.getHeader()).subscribe(
+      res => {
+        console.log(res)
+        this.isLoading = false
+        let resultat: any = res
+        if (resultat.status) {
+          this.allFacturesClient = resultat.factureVentes
+          this.renitialiserFacture()
+          if(this.bonAchat.typeAvoir !== this.request.typeAvoir){
+            this.getBonDocuments()
+          }
+        }
+      }, err => {
+        this.isLoading = false
+        console.log(err)
+        alert("Désole, ilya un problème de connexion internet")
+      }
+    );
+  }
 
   getBonDocumentsFacturesClient() {
     if (this.isLoading) {
@@ -873,7 +903,9 @@ export class FactureAvoirComponent implements OnInit {
     if(this.allFacturesClient.filter(x => x.id === this.itemFVSelected).length > 0 &&
     this.factureVenteSelected.filter(x => x.id === this.itemFVSelected).length === 0
     ){
-      this.factureVenteSelected.push(this.allFacturesClient.filter(x => x.id === this.itemFVSelected)[0])
+      var factureVente = this.allFacturesClient.filter(x => x.id === this.itemFVSelected)[0]
+      factureVente.montantFinancie = 0
+      this.factureVenteSelected.push(factureVente)
       this.allFacturesClient = this.allFacturesClient.filter(x => x.id !== this.itemFVSelected)
     }
   }
@@ -903,6 +935,34 @@ export class FactureAvoirComponent implements OnInit {
     this.allBonRetourClients.push(fv)
     this.factureVenteSelected = this.factureVenteSelected.filter( x => x.id !== this.itemFVSelected)
     this.closeModalDelete()
+  }
+
+  changeMontantFinancier(){
+    var sommeHt = 0
+    var sommeTTC = 0
+ 
+    // this.bonAchat.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+    this.bonAchat.totalRemise = 0
+    this.bonAchat.totalTTC = sommeTTC
+    this.bonAchat.totalHT = sommeHt
+    this.bonAchat.montantTotal = this.bonAchat.timbreFiscale + this.bonAchat.totalTTC
+    this.bonAchat.montantPaye = 0
+    this.bonAchat.restPayer = 0
+  
+    for(let item of this.factureVenteSelected){
+      if(item.montantFinancie > item.montantTotal){
+        item.montantFinancie = item.montantTotal
+      } 
+      sommeHt += item.montantFinancie
+      sommeTTC += item.montantFinancie
+    }
+
+    this.bonAchat.totalRemise = 0
+    this.bonAchat.totalTTC = sommeTTC
+    this.bonAchat.totalHT = sommeHt
+    this.bonAchat.montantTotal = this.bonAchat.timbreFiscale + this.bonAchat.totalTTC
+    this.bonAchat.montantPaye = 0
+    this.bonAchat.restPayer = 0
   }
 
   //end FactureVente
