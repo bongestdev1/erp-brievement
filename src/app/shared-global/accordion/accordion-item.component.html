@@ -1,0 +1,13 @@
+<div class="acc-header" (click)="toggle()">
+  <div class="headerTitle">
+
+  </div>
+  <div class="arrow"><i class="icofont-arrow-down"></i></div>
+</div>
+
+<div *ngIf="showBody">
+  <div class="acc-body">
+    <ng-content></ng-content>
+
+  </div>
+</div>

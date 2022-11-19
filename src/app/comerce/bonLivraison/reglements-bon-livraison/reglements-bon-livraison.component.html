@@ -15,6 +15,7 @@
         [isLoading]="isLoading"
         (getAllParametres)="getAllParametres2()"
         (joinAndClose)="joinAndClose()"
+        (setImprission)="setImprission($event)"
         [bonLivraison]="bonLivraison"
         [client]="client"
         >
@@ -36,10 +37,10 @@
        Ajouter Réglement <i class="fa fa-plus" aria-hidden="true"></i>
     </button>
 
-    <button type="button" class="btn btn-info ng-tns-c112-14" *ngIf="!isLoading && !isDetails"
+    <!-- <button type="button" class="btn btn-info ng-tns-c112-14" *ngIf="!isLoading && !isDetails"
        style="font-size: 12px; padding:5px; height: 30; margin-right: 5px; float:right;" (click)="onImpressionPDF()" >
        Impression Réglements <i class="fa fa-file-pdf" aria-hidden="true"></i>
-    </button>
+    </button> -->
 
     <table class="table table-striped" id="output">
         <thead>
@@ -76,9 +77,14 @@
                         <span *ngIf="isDetails" style="float:right;"> {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(itemG[key])}} </span>
                         <app-input-number-vergule *ngIf="!isDetails" [field]="itemG" [key]="key" [idUnique]="itemG.id + key" (change)="changeMontant()"></app-input-number-vergule>
                     </div>
-                    <div *ngIf="key == 'aImprimer' " class="col-md-12" style="text-align: -webkit-center;position: relative;top: 8px;">
-                      <input (change)="onChange(i, $event.target.checked)"name="{{ i }}" type="checkbox" id="{{i}}"/>
-                  </div>
+                    <div *ngIf="key == 'aImprimer' " class="col-md-12">
+                      <!-- <input (change)="onChange(i, $event.target.checked)"name="{{ i }}" type="checkbox" id="{{i}}"/> -->
+                        <button (click)="onChange(i, true)"name="{{ i }}" type="button" class="btn btn-info ng-tns-c112-14" *ngIf="!isLoading && itemG.numero != bonLivraison.numero"
+                           style="font-size: 12px; padding:5px; margin-right: 0px; float:right;" >
+                           <i class="fa fa-file-pdf" aria-hidden="true"></i>
+                        </button>
+
+                    </div>
                     <span style="float:right;" *ngIf="key == 'montant' && itemG['numero'] != 'Nouveau'">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(itemG[key])}}</span>
 
                 </td>

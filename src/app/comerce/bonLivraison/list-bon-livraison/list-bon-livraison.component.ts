@@ -61,7 +61,8 @@ export class ListBonLivraisonComponent implements OnInit {
     this.oldRequest = this.request
     this.idItemSelected = request.idItemSelected
     this.formBL.patchValue(this.request.search)
-
+    console.log("this.request1 = ",this.request)
+    return this.request
   }
 
   deleteItem() {
@@ -108,6 +109,7 @@ export class ListBonLivraisonComponent implements OnInit {
   titreDocument = this.fonctionPartagesService.titreDocuments.bonLivraison
   format = this.fonctionPartagesService.format
 
+  requestPardefaut:any
   constructor(
     private utilite: UtiliteService,
     private fb: FormBuilder,
@@ -137,7 +139,7 @@ export class ListBonLivraisonComponent implements OnInit {
       limit: 50
     })
 
-
+    
   }
 
   ngOnInit(): void {
@@ -151,20 +153,25 @@ export class ListBonLivraisonComponent implements OnInit {
 
     this.request.dateEnd =this.informationGenerale.idDateFinCurrent
     this.request.dateStart = this.informationGenerale.idDateAujourdCurrent
+    this.requestPardefaut = JSON.parse(JSON.stringify(this.request))
 
     this.oldRequest = this.request
 
-    // this.getSaveFilterSession()
+    this.request = this.getSaveFilterSession()
+    this.getBonLivraisons(this.request)
 
     this.router.events
     .pipe(filter((e: any) => e instanceof RoutesRecognized),
       pairwise()
     ).subscribe((e: any) => {
-      if(e[0].urlAfterRedirects.indexOf('bonLivraison') > -1){
-        this.getSaveFilterSession()
+      console.log(e)
+      if(e[0].urlAfterRedirects.indexOf('bonLivraison') === -1){
+        this.request = this.requestPardefaut
+        this.getBonLivraisons(this.request)
       } // previous url
-      this.getBonLivraisons(this.request)
     });
+
+  
 
   }
 
@@ -299,7 +306,7 @@ export class ListBonLivraisonComponent implements OnInit {
 
   getBonLivraisons(request) {
 
-    console.log("this.request = ", this.request)
+    console.log("this.request2 = ", this.request)
  
     if (this.isLoading) {
       return
@@ -335,10 +342,12 @@ export class ListBonLivraisonComponent implements OnInit {
           if (this.totalPage < this.request.page && this.request.page != 1) {
             this.request.page = this.totalPage
             this.getBonLivraisons(this.request)
+            console.log("appelle 1")
           }
 
           if (!this.testSyncronisation(this.request, resultat.request) || (this.request.page != resultat.request.page)) {
             this.getBonLivraisons(this.request)
+            console.log("appelle 2")
           }
         }
       }, err => {

@@ -932,9 +932,10 @@ export class FactureAvoirComponent implements OnInit {
   deleteFV() {
     this.notificationToast.showSuccess("Votre facture est supprimée")
     var fv = this.factureVenteSelected.filter( x => x.id === this.itemFVSelected)[0]
-    this.allBonRetourClients.push(fv)
+    this.allFacturesClient.push(fv)
     this.factureVenteSelected = this.factureVenteSelected.filter( x => x.id !== this.itemFVSelected)
-    this.closeModalDelete()
+    this.closeModeleDeleteFV()
+    this.changeMontantFinancier()
   }
 
   changeMontantFinancier(){

@@ -4,6 +4,7 @@ import { FonctionPartagesService } from 'src/app/services/fonction-partages.serv
 import { formatDate } from '@angular/common';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { verify } from 'crypto';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 @Component({
   selector: 'app-reglements-bon-livraison',
@@ -42,7 +43,7 @@ export class ReglementsBonLivraisonComponent implements OnInit {
     this.bonLivraison.restPayer = this.bonLivraison.montantTotal - this.bonLivraison.montantPaye
   }
 
-  constructor(private modalService: NgbModal, public fonctionPartagesService: FonctionPartagesService) { }
+  constructor(private toastService:ToastNotificationService, private modalService: NgbModal, public fonctionPartagesService: FonctionPartagesService) { }
 
   modalReference: NgbModalRef;
   public visible = false;
@@ -201,21 +202,16 @@ export class ReglementsBonLivraisonComponent implements OnInit {
     buttons2.setAttribute("class", classList)
   }
 
+  setImprission(pos){
+    this.onChange(pos, true)
+  }
+
   tabImprimer = []
   impressionArray = []
   onChange(position: string, isChecked: boolean) {
-    if (isChecked) {
-      this.impressionArray.push(position);
-    } else {
-      let index = this.impressionArray.indexOf(position);
-      this.impressionArray.splice(index, 1);
-    }
+    this.impressionArrayEvent.emit(position);
+    this.toastService.showSuccess("Votre règlement n°="+(position+1)+" est ajouté à l'impression.")
   }
-
-  onImpressionPDF() {
-    this.impressionArrayEvent.emit(this.impressionArray);
-  }
-  
 
 }
 

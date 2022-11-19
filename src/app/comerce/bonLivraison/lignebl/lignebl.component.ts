@@ -65,6 +65,14 @@ export class LigneblComponent implements OnInit {
 
   @Input() titreCrud = this.fonctionPartagesService.titreCrud.ajouter
 
+  arrondiNombre(float){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(float))
+  }
+
+  arrondiQuantite(float){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleQuantite(float))
+  }
+
   modifierPrixTotalBL() {
     for (let i = 0; i < this.articlesSelected.length; i++) {
       this.articlesSelected[i].numero = i + 1
@@ -116,7 +124,7 @@ export class LigneblComponent implements OnInit {
     }
 
     for (let key in totals) {
-      this.bonLivraison[key] = totals[key]
+      this.bonLivraison[key] = this.arrondiNombre(totals[key])
     }
 
     var montantPaye = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(this.bonLivraison.montantPaye))
@@ -208,15 +216,15 @@ export class LigneblComponent implements OnInit {
 
   setArticleID(id) {
 
-    if (this.client.raisonSociale == undefined) {
-      this.itemArticleSelected.article = ""
-      this.openInsererClientDabord()
-      this.resetItemSelecte()
-      return
-    }
-
     var articles = this.articles.filter(x => x.id == id)
     if (articles.length > 0) {
+      if (this.client.raisonSociale == undefined) {
+        this.itemArticleSelected.article = ""
+        this.openInsererClientDabord()
+        this.resetItemSelecte()
+        return
+      }
+      
       //if (Number(articles[0].qteEnStock) < 0 && this.isPrixVenteNotPrixAchat() && articles[0].venteAvecStockNegative && articles[0].venteAvecStockNegative === "non") {
       if (Number(articles[0].qteEnStock) < 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison && articles[0].venteAvecStockNegative && articles[0].venteAvecStockNegative === "non") {
         this.openBlockedStockNegative()
@@ -1071,9 +1079,9 @@ export class LigneblComponent implements OnInit {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if(this.articles.length > 0){
-      this.resetLigneBL()
-    }
+    // if(this.articles.length > 0){
+    //   this.resetLigneBL()
+    // }
     // if (changes.client && this.isPrixVenteNotPrixAchat()) {
     //   if (changes.client.previousValue != undefined && changes.client.previousValue.exemptTVA != undefined && changes.client.currentValue.exemptTVA != undefined) {
     //     if ((changes.client.previousValue.exemptTVA != changes.client.currentValue.exemptTVA) || (changes.client.previousValue.exemptTimbreFiscale != changes.client.currentValue.exemptTimbreFiscale)) {

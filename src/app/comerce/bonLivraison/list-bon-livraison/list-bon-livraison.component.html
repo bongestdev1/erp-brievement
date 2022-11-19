@@ -5,7 +5,7 @@
     <app-card cardTitle="Liste {{isVenteContoire? 'Ventes Comptoire': 'Bons Livraisons'}}" blockClass="table-border-style">
         <form [formGroup]="formBL">
             <div class="col-xl-14 pagination-inner" style="margin-bottom: 10px;">
-                <app-filtre-date-button class="col-sm-7" (getDatee)="getBonLivraisons($event)"></app-filtre-date-button>
+                <app-filtre-date-button class="col-sm-7" (getDatee)="getBonLivraisons($event)" [dateStart]="request.dateStart" [dateEnd]="request.dateEnd"></app-filtre-date-button>
 
                 <div class="col-md-5">
                     <div class="form-group row">

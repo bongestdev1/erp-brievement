@@ -2,7 +2,7 @@
         
     <div class="form-group row">
         <label for="codeBarre" class="col-sm-2 col-form-label" style="padding-left: 20px !important;">Article</label>
-        <div class="col-sm-9">
+        <div class="col-sm-9 padding-none-left">
             <!--<app-autocomplete [bordureRed]="erreurArticle.reference != ''" modeMultiSortie=true
                 [shemaMultiSortie]="shemaMultiSortie" (addElementEvent)="setArticleID($event)"
                 [keySelected]="keySelectedArticle" [objet]="shemaArticle2" [articles]="articles"
@@ -58,7 +58,7 @@
         <div class="col-sm-2">
             <label for="tauxRemise" class="col-form-label" style="font-size: 12px;">Remise (%)</label>
             <div class="col-sm-12 collapse-input">
-                <app-input-number-vergule [field]="itemArticleSelected" key="tauxRemise" idUnique="tauxRemise222" (change)="changePrixTotalRemiseParMontantVente()"></app-input-number-vergule>
+                <app-input-number-vergule [field]="itemArticleSelected" key="tauxRemise" idUnique="tauxRemise222" (change)="changePrixTotalRemiseParMontantVente()" [isMarge]=true></app-input-number-vergule>
             </div>
         </div>
         <div class="col-sm-2">  
@@ -120,7 +120,7 @@
                 </label>
                 
                 <div class="col-sm-6 padding-LR-0">
-                    <app-input-number-vergule [field]="itemArticleSelected" key="tauxRemise" idUnique="remiseF222" (change)="changePrixTotal()"></app-input-number-vergule>
+                    <app-input-number-vergule [field]="itemArticleSelected" key="tauxRemise" idUnique="remiseF222" (change)="changePrixTotal()" [isMarge]=true></app-input-number-vergule>
                 </div>
             </div>
         </div>
@@ -132,7 +132,7 @@
                 </label>
                 
                 <div class="col-sm-6 padding-LR-0">
-                    <app-input-number-vergule [field]="itemArticleSelected" key="remiseParMontant" idUnique="remiseParMontantF222" (change)="changePrixTotal()"></app-input-number-vergule>
+                    <app-input-number-vergule [field]="itemArticleSelected" key="remiseParMontant" idUnique="remiseParMontantF222" (change)="changePrixTotal()" [isMarge]=true></app-input-number-vergule>
                 </div>
             </div>
         </div>
@@ -277,7 +277,7 @@
 
                         <div *ngIf="item && key == 'tauxRemise'" class="col-sm-12 collapse-input">
                             <span *ngIf="isDetails == 'oui'" style="float:right;">{{getNumber(item[key])}}</span>
-                            <app-input-number-vergule *ngIf="isDetails == 'non'" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changeTauxRemise(item['numero'])"></app-input-number-vergule>
+                            <app-input-number-vergule *ngIf="isDetails == 'non'" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changeTauxRemise(item['numero'])" [isMarge]=true></app-input-number-vergule>
                         </div>
 
                         <div *ngIf="item && key == 'remiseParMontant'" class="col-sm-12 collapse-input">

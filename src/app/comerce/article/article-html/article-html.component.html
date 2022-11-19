@@ -175,7 +175,7 @@
                 <div class="col-sm-6">
                     <div class=" ">
                         <app-input-number-vergule [field]="article" key="prixFourn" idUnique="prixFourn"
-                            [messageErreur]="erreurArticle.prixFourn" (ngModelChange)="changePrixVHTFunction()">
+                            [messageErreur]="erreurArticle.prixFourn" (change)="changePrixVHTFunction()">
                         </app-input-number-vergule>
                     </div>
 
@@ -186,8 +186,8 @@
             <div class="form-group row">
                 <label for="remiseF" class="col-sm-6 col-form-label">Remise.Four(%)</label>
                 <div class="col-sm-6  ">
-                    <app-input-number-vergule [field]="article" key="remiseF" idUnique="remiseF"
-                        (ngModelChange)="changePrixVHTFunction()"></app-input-number-vergule>
+                    <app-input-number-vergule [field]="article" key="remiseF" idUnique="remiseF" [isMarge]=true
+                        (change)="changePrixVHTFunction()"></app-input-number-vergule>
 
                 </div>
             </div>
@@ -195,16 +195,24 @@
                 <label for="remiseParMontant" class="col-sm-6 col-form-label">Remise Par montant</label>
                 <div class="col-sm-6  ">
                     <app-input-number-vergule [field]="article" key="remiseParMontant" idUnique="remiseParMontant"
-                        (ngModelChange)="changePrixVHTFunction()"></app-input-number-vergule>
+                        (change)="changePrixVHTFunction()"></app-input-number-vergule>
 
                 </div>
             </div>
+            
+            <div class="form-group row">
+                <label for="remiseParMontant" class="col-sm-6 col-form-label">Prix d'achat Net</label>
+                <div class="col-sm-6  ">
+                    <p id="prixAchatNet" style="margin-top: 5px; margin-bottom: 5px;"> {{getNumber(article.prixAchatNet)}} </p>
+                </div>
+            </div>
+
             <div class="form-group row">
                 <label for="tauxDC" class="col-sm-3 col-form-label"
                     style="padding-right: 5px !important;">TauxDC</label>
                 <div class="col-sm-3  ">
                     <app-input-number-vergule [field]="article" key="tauxDC" idUnique="tauxDC"
-                        (ngModelChange)="changePrixVHTFunction()"></app-input-number-vergule>
+                        (change)="changePrixVHTFunction()"></app-input-number-vergule>
 
                 </div>
 
@@ -227,7 +235,7 @@
                 <label for="prixAchat" class="col-sm-6 col-form-label class-libelle">Prix Achat HT</label>
                 <div class="col-sm-6  ">
                     <app-input-number-vergule [field]="article" key="prixAchat" idUnique="prixAchat"
-                        (change)="changePrixAchat('prixachatHT')"></app-input-number-vergule>
+                        (change)="changePrixAchat('prixachatHT')" [isEditable]=false></app-input-number-vergule>
                 </div>
             </div>
 
@@ -243,7 +251,7 @@
                 <label for="redevance" class="col-sm-4 col-form-label">Redevance</label>
                 <div class="col-sm-8  ">
 
-                    <app-input-number-vergule [field]="article" key="redevance" idUnique="redevance" (ngModelChange)="changePrixVHTFunction()">
+                    <app-input-number-vergule [field]="article" key="redevance" idUnique="redevance" (change)="changePrixVHTFunction()">
                     </app-input-number-vergule>
 
                 </div>
@@ -251,13 +259,11 @@
 
             <div class="form-group row" style="margin-top:15px">
                 <label for="prixVenteHT" class="col-sm-8 col-form-label">Prix de revient HT</label>
-                <label for="prixVenteHT" class="col-sm-4 col-form-label">{{getNumber(calculTotalFrais() +
-                    article.prixAchat)}}</label>
+                <label for="prixVenteHT" class="col-sm-4 col-form-label">{{getNumber(this.article.prixRevient)}}</label>
             </div>
             <div class="form-group row">
                 <label for="prixVenteHT" class="col-sm-8 col-form-label">Prix de revient TTC</label>
-                <label for="prixVenteHT" class="col-sm-4 col-form-label">{{getNumber(calculTotalFraisTTC() +
-                    article.prixAchatTTC + article.redevance)}}</label>
+                <label for="prixVenteHT" class="col-sm-4 col-form-label">{{getNumber(this.article.prixRevientTTC + article.redevance)}}</label>
             </div>
             
             <div class="form-group row" style="margin-bottom: 10px;">
@@ -321,15 +327,14 @@
                 <label for="marge" class="col-sm-6 col-form-label">Marge(%)</label>
                 <div class="col-sm-6  ">
                     <app-input-number-vergule [field]="article" key="marge" idUnique="marge"
-                        (ngModelChange)="changePrixVHTFunction()"></app-input-number-vergule>
-
+                        (change)="changePrixVHTFunction()" [isMarge]=true ></app-input-number-vergule>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="prixVenteHT" class="col-sm-6 col-form-label class-libelle">Prix Vente HT</label>
                 <div class="col-sm-6">
                     <app-input-number-vergule [field]="article" key="prixVenteHT" idUnique="prixVenteHT"
-                        (ngModelChange)="changePrixVenteHT()"></app-input-number-vergule>
+                        (change)="changePrixVenteHT()"></app-input-number-vergule>
                 </div>
             </div>
             <div class="form-group row">
@@ -354,7 +359,7 @@
                 <label for="prixTTC" class="col-sm-6 col-form-label class-libelle">Prix de Vente TTC</label>
                 <div class="col-sm-6  ">
                     <app-input-number-vergule [field]="article" key="prixTTC" idUnique="prixTTC"
-                        (ngModelChange)="changePrixVenteTTC()"></app-input-number-vergule>
+                        (change)="changePrixVenteTTC()"></app-input-number-vergule>
                 </div>
             </div>
 

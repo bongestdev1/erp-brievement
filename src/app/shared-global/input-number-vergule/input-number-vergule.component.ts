@@ -21,7 +21,8 @@ export class InputNumberVerguleComponent implements OnInit {
   @Input() isQuantite = "0"
   @Input() isTauxTva = "non"
   @Input() isEditable = true
-  
+  @Input() isMarge = false
+
   ngOnInit(): void {
   }
 
@@ -69,6 +70,10 @@ export class InputNumberVerguleComponent implements OnInit {
   }
 
   getNumberWithVergile(){
+    if(this.isMarge){
+      return  this.getFormaAfterVerguleNomber(5, this.field[this.key])
+    }
+
     if(this.isTauxTva == "non"){
        if(this.isQuantite == "0"){
          return this.fonctionPartagesService.getNumerWithEspaceEntreTroisChiffre(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(this.field[this.key]))

@@ -178,7 +178,7 @@ export class ArticleHtmlComponent implements OnInit {
   keySelectedTauxTVA = "taux"
   objetTauxTVA = { libelle: "Libelle" , taux: "Taux" }
   setTauxTVA(id) {
-    this.article.tauxTVA = this.tauxTVAs.filter((x) => x.id == id)[0].taux
+    this.article.tauxTVA = Number(this.tauxTVAs.filter((x) => x.id == id)[0].taux.toFixed(2))
     this.changePrixVHTFunction()
   }
 
@@ -189,28 +189,28 @@ export class ArticleHtmlComponent implements OnInit {
   }
 
   changePrixVenteTTC(){
-    var difference = Number(this.article.prixTTC) - this.article.redevance
-    this.article.prixVenteHT  = difference / (Number(this.article.tauxTVA) / 100 + 1)
-    this.calculMantantTvaTTC()
+    var prixTTCSansRed = this.article.prixTTC - this.article.redevance
+    this.article.prixVenteHT = prixTTCSansRed /(1+this.article.tauxTVA /100) 
+    this.calculMantantTvaTTC()  
+    // this.changePrixVHT.emit()
   }
 
   changePrixVenteHT(){
-    var rest = Number(this.article.prixVenteHT) - Number(this.article.prixAchat)
     this.calculMantantTvaTTC()
   }
 
   calculMantantTvaTTC(){
-    var rest = Number(this.article.prixVenteHT) - Number(this.article.prixAchat)
-    if(this.article.prixAchat != 0){
-      var marge =  rest / this.article.prixRevient * 100
-      this.article.marge = Number(this.getNumber(marge))
+    var rest = this.article.prixVenteHT - this.article.prixRevient
+    var prixRevient = this.article.prixRevient
+   
+    if(prixRevient != 0){
+      var marge = rest / prixRevient * 100
+      this.article.marge = marge
     }else{
-      this.article.marge = Number(this.getNumber(0))
+      this.article.marge = 0
     }
-  
-    this.article.montantTVA = Number(this.getNumber(this.article.prixVenteHT * this.article.tauxTVA / 100))
-    this.article.prixTTC = Number(this.getNumber(Number(this.article.montantTVA) + Number(this.article.prixVenteHT)))
-    this.article.prixAchatTTC = Number(this.getNumber(Number(this.article.prixAchat) * this.article.tauxTVA / 100 + Number(this.article.prixAchat)) + this.article.redevance)
+    
+    this.changePrixVHT.emit()
   }
 
   tabNumbers = ['prixVenteHT', 'tauxRemise', 'quantiteVente', 'tauxDC', 'redevance', 'prixTTC']
@@ -304,11 +304,26 @@ export class ArticleHtmlComponent implements OnInit {
     this.changePrixVHT.emit()
   }
 
+  roundNumber(number){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(number))
+  }
+
+  roundQuantite(number){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleQuantite(number))
+  }
+
+  roundTaux(number){
+    return Number(this.fonctionPartagesService.getFormaTwoAfterVerguleTaux(number))
+  }
+
   calculTotalFrais(){
+  
     var fraisTotal = 0
     for(let i = 0; i < this.listFrais.length; i++){
+      this.listFrais[i].montant = this.roundNumber(this.listFrais[i].montant)
       fraisTotal += this.listFrais[i].montant
     }
+    
     this.article.frais = this.listFrais
     this.article.totalFrais = fraisTotal
     this.article.prixRevient = fraisTotal + this.article.prixAchat
@@ -329,7 +344,7 @@ export class ArticleHtmlComponent implements OnInit {
   getMontantTTC(id, montant){
     for(let j = 0; j < this.frais.length; j++){
       if(this.frais[j].id == id){
-        return montant + montant * this.frais[j].tauxTVA / 100
+        return montant + this.roundNumber(montant * this.roundNumber(this.frais[j].tauxTVA / 100))
       }
     }
   }

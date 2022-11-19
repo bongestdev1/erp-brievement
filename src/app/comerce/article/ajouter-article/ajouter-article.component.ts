@@ -107,7 +107,6 @@ export class AjouterArticleComponent implements OnInit {
 
 
   getArticle(id) {   
-    console.log(id)
     this.isLoading = true
     this.http.get(this.informationGenerale.baseUrl + this.lienGetById + this.informationGenerale.idSocieteCurrent + "/" + id,this.tokenStorageService.getHeader()).subscribe(
       res => {
@@ -434,47 +433,92 @@ export class AjouterArticleComponent implements OnInit {
     this.listFrais = newListFrai
   }
 
-  changePrixVHT() {
+  roundNumber(number){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(number))
+  }
 
-    var prixAchat = Number(this.article.prixFourn) - Number(this.article.prixFourn) * Number(this.article.remiseF / 100) - this.article.remiseParMontant
+  roundQuantite(number){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleQuantite(number))
+  }
+
+  roundTaux(number){
+    return Number(this.fonctionPartagesService.getFormaTwoAfterVerguleTaux(number))
+  }
+
+  changeArrondu(){
+    var tabPrix = this.fonctionPartagesService.colonnesPrix
+    var tabColonne = this.fonctionPartagesService.colonnesQuantites
+    var tabTaux = this.fonctionPartagesService.colonnesTaux
+   
+    for(let key in this.article){
+      if(tabPrix.includes(key) && key != 'marge'){
+        this.article[key] = this.roundNumber(this.article[key])
+      }else if(tabColonne.includes(key)){
+        this.article[key] = this.roundQuantite(this.article[key])
+      }else if(tabTaux.includes(key)){
+        this.article[key] = Number(Number(this.article[key]).toFixed(5))
+      }
+    } 
+
+    this.article['marge'] = Number(Number(this.article['marge']).toFixed(5))
     
+  }
+
+  changePrixVHT() {
+    console.log("changePrixVHT()")
     var marge = Number(this.article.marge)
+    console.log("marge1 ="+marge)
     
-    this.article.prixDC = Number(this.getNumber(prixAchat * this.article.tauxDC / 100)) 
+    this.changeArrondu()
+    
+    var prixAchat = Number(this.article.prixFourn) - this.roundNumber(this.article.prixFourn * this.article.remiseF / 100) - this.article.remiseParMontant
+    prixAchat = this.roundNumber(prixAchat)
+    this.article.prixAchatNet = prixAchat
+
+    var marge = Number(this.article.marge)
+    console.log("marge2 ="+marge)
+    
+    this.article.prixDC = this.roundNumber(prixAchat * this.article.tauxDC / 100) 
     
     if(this.article.isFodec == "oui"){
-      this.article.prixFodec = Number(this.getNumber(prixAchat * this.fonctionPartagesService.parametres.tauxFodec / 100)) 
+      this.article.prixFodec = this.roundNumber(prixAchat * this.fonctionPartagesService.parametres.tauxFodec / 100) 
     }else{
-      this.article.prixFodec = Number(this.getNumber(0)) 
+      this.article.prixFodec = this.roundNumber(0) 
     }
       
-    this.article.prixAchat = Number(this.getNumber( prixAchat + this.article.prixDC + this.article.prixFodec))
+    this.article.prixAchat = this.roundNumber( prixAchat + this.article.prixDC + this.article.prixFodec)
      
-    this.article.prixAchatTTC = Number(this.getNumber(this.article.prixAchat + this.article.prixAchat * this.article.tauxTVA / 100))
+    this.article.prixAchatTTC = this.roundNumber(this.article.prixAchat + this.article.prixAchat * this.article.tauxTVA / 100)
 
     this.article.totalFrais = 0
 
     for(let frais of this.article.frais){
-      this.article.totalFrais += frais.montant
+      this.article.totalFrais += this.roundNumber(frais.montant)
     }
   
     // if(this.article.margeAppliqueeSur == "Revient"){
-      var prixRevient =  Number(this.article.prixAchat) + Number(this.article.totalFrais)
-      this.article.prixRevient = prixRevient
-      this.article.prixVenteHT = Number(prixRevient) + marge * prixRevient / 100
+    var prixRevient =  this.roundNumber(this.article.prixAchat) + this.roundNumber(this.article.totalFrais)
+    this.article.prixRevient = prixRevient
+    this.article.prixRevientTTC = this.roundNumber(prixRevient * this.article.tauxTVA / 100) + prixRevient
+
+    this.article.prixVenteHT = this.roundNumber(prixRevient) + this.roundNumber(marge / 100 * prixRevient)
+  
+    console.log(this.article.prixVenteHT)
+  
     // }else{
     //   this.article.prixVenteHT = Number(this.article.prixAchat) + marge * this.article.prixAchat / 100
     // }
 
-    this.article.montantTVA = Number(this.getNumber(this.article.prixVenteHT * this.article.tauxTVA / 100))
+    this.article.montantTVA = this.roundNumber(this.article.prixVenteHT * this.article.tauxTVA / 100)
 
-    this.article.prixTTC = Number(this.getNumber(Number(this.article.montantTVA) + Number(this.article.prixVenteHT))) + this.article.redevance
+    this.article.prixTTC = this.roundNumber(Number(this.article.prixVenteHT * this.article.tauxTVA / 100) + Number(this.article.prixVenteHT) + this.roundNumber(this.article.redevance))
+    
+    this.changeArrondu()
     
   }
 
   getNumber(float) {
-    return this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(float)
+    return this.roundNumber(float)
   }
    
-  
 }

@@ -363,14 +363,14 @@ const NavigationItems = [
             url: '/balanceFournisseur',
             icon: 'icofont-law-alt-2'
           },
-          {
-            id: 'suiveDocument',
-            title: 'Suivi Document Fournisseur',
-            type: 'item',
-            classes: 'nav-item',
-            url: '/document/suiveDocumentAchats',
-            icon: 'icofont-search-document'
-          },
+          // {
+          //   id: 'suiveDocument',
+          //   title: 'Suivi Document Fournisseur',
+          //   type: 'item',
+          //   classes: 'nav-item',
+          //   url: '/document/suiveDocumentAchats',
+          //   icon: 'icofont-search-document'
+          // },
           // {
           //   id: 'classementFournisseurs',
           //   title: 'Classement fournisseurs',
@@ -703,14 +703,14 @@ const NavigationItems = [
             url: '/balanceClient',
             icon: 'icofont-law-alt-2'
           },
-          {
-            id: 'suiveDocument',
-            title: 'Suivi Document Client',
-            type: 'item',
-            classes: 'nav-item',
-            url: '/document/suiveDocumentVente',
-            icon: 'icofont-search-document'
-          },
+          // {
+          //   id: 'suiveDocument',
+          //   title: 'Suivi Document Client',
+          //   type: 'item',
+          //   classes: 'nav-item',
+          //   url: '/document/suiveDocumentVente',
+          //   icon: 'icofont-search-document'
+          // },
           // {
           //   id: 'releveeClientDetaille',
           //   title: 'Relevee client Detaille',

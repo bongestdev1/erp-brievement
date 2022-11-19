@@ -662,8 +662,8 @@ export class GenerationPdfFactureService {
 
   }
 
-  getFodecDConsommationFodecEscompte(){
-    if(this.typeDoc != this.fonctionPartagesService.titreDocuments.bonLivraison || this.typeDoc != this.fonctionPartagesService.titreDocuments.bonRetourClient || this.typeDoc != this.fonctionPartagesService.titreDocuments.devis || this.typeDoc != this.fonctionPartagesService.titreDocuments.commande){
+  getFodecDConsommationFodecEscompte() {
+    if (this.typeDoc != this.fonctionPartagesService.titreDocuments.bonLivraison || this.typeDoc != this.fonctionPartagesService.titreDocuments.bonRetourClient || this.typeDoc != this.fonctionPartagesService.titreDocuments.devis || this.typeDoc != this.fonctionPartagesService.titreDocuments.commande) {
       return [
         [
           { text: 'Escompte', fontSize: 8 },
@@ -674,7 +674,7 @@ export class GenerationPdfFactureService {
           { text: this.facture.totalRedevance.toFixed(3), alignment: 'right', fontSize: 9 },
         ],
       ]
-    }else{
+    } else {
       return [
         [
           { text: 'D.Consommation', fontSize: 8 },
@@ -699,13 +699,14 @@ export class GenerationPdfFactureService {
   async generatePdf(action = 'open') {
 
 
-    var urlImage =  this.fonctionPartagesService.parametres.logo === '' ? '' : this.fonctionPartagesService.parametres.logo
+    var urlImage = this.fonctionPartagesService.parametres.logo === '' ? '' : this.fonctionPartagesService.parametres.logo
 
     console.log("urlImage", urlImage)
     console.log(this.facture);
+    console.log(this.tabTVA);
 
 
-    if(!urlImage || urlImage === ''){
+    if (!urlImage || urlImage === '') {
       alert("Veuillez insérer votre logo en paramètre !")
       return
     }
@@ -717,10 +718,9 @@ export class GenerationPdfFactureService {
     await this.generatePDF3()
     //console.log(this.fonctionPartagesService.getNumerWithEspaceEntreTroisChiffre(this.facture.montantTotal.toString().split('.')[1]));
 
-    let [firstNumber, secondNumber] = [+this.facture.montantTotal.toString().split('.')[0], +(this.facture.montantTotal.toString().split('.')[1])];
+    let [firstNumber, secondNumber] = [+this.facture.montantTotal.toString().split('.')[0], +parseInt(this.facture.montantTotal.toString().split('.')[1])];
 
-
-    if (this.idFormat==="A4") {
+    if (this.idFormat === "A4") {
       let docDefinition = {
 
         pageSize: "A4",
@@ -733,14 +733,14 @@ export class GenerationPdfFactureService {
 
               columns: [
 
-                  {
-                    text: `${new Date().toLocaleDateString('en-GB')}`,
-                    cellFilter: 'date:\'MM/dd/yyyy\'',
-                    alignment: 'left',
-                    margin: [210, 5, 0, 0],
-                    fontSize: 9,
-                    italics: true,
-                  }
+                {
+                  text: `${new Date().toLocaleDateString('en-GB')}`,
+                  cellFilter: 'date:\'MM/dd/yyyy\'',
+                  alignment: 'left',
+                  margin: [210, 5, 0, 0],
+                  fontSize: 9,
+                  italics: true,
+                }
 
 
               ]
@@ -759,7 +759,7 @@ export class GenerationPdfFactureService {
             [
               {
                 headerRows: 1,
-                image: await this.getBase64ImageFromURL(this.informationGenerale.baseUrl +'/'+ urlImage),
+                image: await this.getBase64ImageFromURL(this.informationGenerale.baseUrl + '/' + urlImage),
                 alignment: 'left',
                 height: 60,
                 width: 100,
@@ -823,7 +823,7 @@ export class GenerationPdfFactureService {
               body: [
                 [
                   {
-                    image: await this.getBase64ImageFromURL(this.informationGenerale.baseUrl +'/'+ urlImage),
+                    image: await this.getBase64ImageFromURL(this.informationGenerale.baseUrl + '/' + urlImage),
                     alignment: 'left',
                     height: 60,
                     width: 100,
@@ -858,19 +858,19 @@ export class GenerationPdfFactureService {
                       [
                         [
                           {
-                          text: this.typeDoc,
-                          style: 'sectionHeader',
+                            text: this.typeDoc,
+                            style: 'sectionHeader',
 
-                        },
-                        {
-                          text: this.fonctionPartagesService.getDateFormatStandart(this.facture.date),
-                          style: 'sectionHeader',
+                          },
+                          {
+                            text: this.fonctionPartagesService.getDateFormatStandart(this.facture.date),
+                            style: 'sectionHeader',
 
-                        },
-                        {
-                          text: 'Numéro :' + ' ' + this.facture.numero,
+                          },
+                          {
+                            text: 'Numéro :' + ' ' + this.facture.numero,
 
-                        },
+                          },
                         ],
 
                       ],
@@ -980,12 +980,12 @@ export class GenerationPdfFactureService {
               [
                 [
                   {
-                    text: (this.facture.numeroFactureVenteFournisseur && this.facture.numeroFactureVenteFournisseur.length > 0) ? "Num Facture Fournisseur: " + this.facture.numeroFactureVenteFournisseur  : "",
+                    text: (this.facture.numeroFactureVenteFournisseur && this.facture.numeroFactureVenteFournisseur.length > 0) ? "Num Facture Fournisseur: " + this.facture.numeroFactureVenteFournisseur : "",
                     fontSize: 9,
                   },
 
                   {
-                    text: (this.facture.dateFactureVenteFournisseur && this.facture.dateFactureVenteFournisseur.length > 0) ? "Date Facture Fournisseur: " + formatDate(new Date(this.facture.dateFactureVenteFournisseur), 'dd-MM-yyyy', 'en')   : "",
+                    text: (this.facture.dateFactureVenteFournisseur && this.facture.dateFactureVenteFournisseur.length > 0) ? "Date Facture Fournisseur: " + formatDate(new Date(this.facture.dateFactureVenteFournisseur), 'dd-MM-yyyy', 'en') : "",
                     fontSize: 9,
                   }
 
@@ -1056,11 +1056,12 @@ export class GenerationPdfFactureService {
                     body: [
 
                       [{ text: 'N°', fontSize: 8 }, { text: 'Base HT ', fontSize: 8 }, { text: 'Taux TVA ', fontSize: 8 }, { text: ' Montant TVA', fontSize: 8 }],
-                      ...this.tabTVA.map(p => ([
-                        { text: this.i1++, i2: this.i2 = this.i1 + 2, alignment: 'right', fontSize: 9 },
+                      ...this.tabTVA.map(p => (
+                        [
+                        { text: (this.i1++)+1, i2: this.i2 = this.i1 + 2, alignment: 'right', fontSize: 9 },
                         { text: p.totalHT.toFixed(3), alignment: 'right', fontSize: 9 },
                         { text: this.fonctionPartagesService.getFormaTwoAfterVerguleTaux(p.tauxTVA) + '%', alignment: 'right', fontSize: 9 },
-                        { text: p.montantTVA.toFixed(3), alignment: 'right', fontSize: 9 }])),
+                        { text: this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(p.montantTVA), alignment: 'right', fontSize: 9 }])),
                       [{ text: 'Total TVA', colSpan: 3, alignment: 'left', fontSize: 9 }, {}, {}, { text: this.tabTVA.reduce((sum, p) => sum + (p.montantTVA), 0).toFixed(3), alignment: 'right' }],
 
 
@@ -1122,7 +1123,7 @@ export class GenerationPdfFactureService {
                   body: [
                     [
                       { text: 'TOTAL HT', fontSize: 8 },
-                      { text:  this.facture.totalRemiseFacture ? (Number(this.facture.totalHT) + Number(this.facture.totalRemiseFacture) + Number(this.facture.totalRemise)).toFixed(3) : ( Number(this.facture.totalRemise) + Number(this.facture.totalHT)).toFixed(3), alignment: 'right', fontSize: 9, },
+                      { text: this.facture.totalRemiseFacture ? (Number(this.facture.totalHT) + Number(this.facture.totalRemiseFacture) + Number(this.facture.totalRemise)).toFixed(3) : (Number(this.facture.totalRemise) + Number(this.facture.totalHT)).toFixed(3), alignment: 'right', fontSize: 9, },
                     ],
                     [
                       { text: 'TOTAL REMISE', fontSize: 8 },
@@ -1156,7 +1157,8 @@ export class GenerationPdfFactureService {
             ],
 
           },
-          {text : "Total En Chiffres : "+NumberToLetter(Math.trunc(parseInt(this.facture.montantTotal)))+" et "+secondNumber ,alignment:"left",italics: true },
+          { text: `Arrété le présente ${this.typeDoc} à la somme de :\n ${this.fonctionPartagesService.strUcFirst(NumberToLetter(firstNumber)) + " dinars " + (((secondNumber === null || isNaN(secondNumber)) ? " " : "et " + secondNumber.toString() + " millimes")) + "."} `, alignment: "left", italics: true, margin: [0, 15, 0, 0] },
+
           { text: 'Cachet et signature', alignment: 'right', italics: true, decoration: 'underline', margin: [0, 60, 50, 0], fontSize: 10 },
 
 
@@ -1181,7 +1183,7 @@ export class GenerationPdfFactureService {
     } else {
       let docDefinition = {
 
-        pageOrientation : "landscape",
+        pageOrientation: "landscape",
         pageSize: this.idFormat,
         pageMargins: [12, 90, 12, 35],
 
@@ -1216,7 +1218,7 @@ export class GenerationPdfFactureService {
             [
               {
                 headerRows: 1,
-                image: await this.getBase64ImageFromURL(this.informationGenerale.baseUrl +'/'+ urlImage),
+                image: await this.getBase64ImageFromURL(this.informationGenerale.baseUrl + '/' + urlImage),
                 alignment: 'left',
                 height: 60,
                 width: 100,
@@ -1280,7 +1282,7 @@ export class GenerationPdfFactureService {
               body: [
                 [
                   {
-                    image: await this.getBase64ImageFromURL(this.informationGenerale.baseUrl +'/'+ urlImage),
+                    image: await this.getBase64ImageFromURL(this.informationGenerale.baseUrl + '/' + urlImage),
                     alignment: 'left',
                     height: 50,
                     width: 100,
@@ -1306,104 +1308,104 @@ export class GenerationPdfFactureService {
 
 
 
-                {
-                  margin: [0, 15, 0, 0],
-                  table: {
-                    bold: 'false',
-                    widths: ['*', 20, 30,],
-                    body: [
-                      [
-                        [{
-                          text: this.typeDoc,
-                          style: 'sectionHeader',
+              {
+                margin: [0, 15, 0, 0],
+                table: {
+                  bold: 'false',
+                  widths: ['*', 20, 30,],
+                  body: [
+                    [
+                      [{
+                        text: this.typeDoc,
+                        style: 'sectionHeader',
 
-                        },
-                        {
-                          text: this.fonctionPartagesService.getDateFormatStandart(this.facture.date),
-                          style: 'sectionHeader',
+                      },
+                      {
+                        text: this.fonctionPartagesService.getDateFormatStandart(this.facture.date),
+                        style: 'sectionHeader',
 
-                        },
-                        {
-                          text: 'Numéro :' + ' ' + this.facture.numero,
+                      },
+                      {
+                        text: 'Numéro :' + ' ' + this.facture.numero,
 
-                        },
-                        ],
-
+                      },
                       ],
-                    ]
-                  },
-                  layout: {
-                    hLineWidth: function (i, node) {
-                      return (i === 0 || i === node.table.body.length) ? 2 : 2;
-                    },
-                    vLineWidth: function (i, node) {
-                      return (i === 0 || i === node.table.widths.length) ? 2 : 2;
-                    },
-                    hLineColor: function (i, node) {
-                      return (i === 0 || i === node.table.body.length) ? 'gray' : 'gray';
-                    },
-                    vLineColor: function (i, node) {
-                      return (i === 0 || i === node.table.widths.length) ? 'gray' : 'gray';
-                    },
-                  }
 
+                    ],
+                  ]
                 },
+                layout: {
+                  hLineWidth: function (i, node) {
+                    return (i === 0 || i === node.table.body.length) ? 2 : 2;
+                  },
+                  vLineWidth: function (i, node) {
+                    return (i === 0 || i === node.table.widths.length) ? 2 : 2;
+                  },
+                  hLineColor: function (i, node) {
+                    return (i === 0 || i === node.table.body.length) ? 'gray' : 'gray';
+                  },
+                  vLineColor: function (i, node) {
+                    return (i === 0 || i === node.table.widths.length) ? 'gray' : 'gray';
+                  },
+                }
+
+              },
 
 
-                {
-                  margin: [0, -45, -39, 10],
+              {
+                margin: [0, -45, -39, 10],
 
-                  table: {
+                table: {
 
-                    widths: ['*', 10, 10],
-                    body: [
-                      [
-                        [{
-                          text: this.modeTier + ' :' + ' ' + this.client.code + '\n\n',
-                          fontSize: 9,
-                        },
-                        {
-                          text: this.client.raisonSociale + '\n\n',
-                          bold: 'Courier-Bold',
-                          fontSize: 16,
-                        },
-                        {
-                          text: 'Adresse :' + ' ' + this.client.adresseLivraison + '\n\n',
-                          fontSize: 9,
+                  widths: ['*', 10, 10],
+                  body: [
+                    [
+                      [{
+                        text: this.modeTier + ' :' + ' ' + this.client.code + '\n\n',
+                        fontSize: 9,
+                      },
+                      {
+                        text: this.client.raisonSociale + '\n\n',
+                        bold: 'Courier-Bold',
+                        fontSize: 16,
+                      },
+                      {
+                        text: 'Adresse :' + ' ' + this.client.adresseLivraison + '\n\n',
+                        fontSize: 9,
 
-                        },
-                        {
-                          text: 'télephone :' + ' ' + this.client.telephone + '\n\n',
-                          fontSize: 9,
+                      },
+                      {
+                        text: 'télephone :' + ' ' + this.client.telephone + '\n\n',
+                        fontSize: 9,
 
-                        },
-                        {
-                          text: 'Matricule Fiscale :' + ' ' + this.client.matriculeFiscale + '\n\n',
-                          fontSize: 9,
+                      },
+                      {
+                        text: 'Matricule Fiscale :' + ' ' + this.client.matriculeFiscale + '\n\n',
+                        fontSize: 9,
 
-                        }
-                        ],
-
+                      }
                       ],
-                    ]
-                  },
-                  layout: {
-                    hLineWidth: function (i, node) {
-                      return (i === 0 || i === node.table.body.length) ? 2 : 2;
-                    },
-                    vLineWidth: function (i, node) {
-                      return (i === 0 || i === node.table.widths.length) ? 2 : 2;
-                    },
-                    hLineColor: function (i, node) {
-                      return (i === 0 || i === node.table.body.length) ? 'gray' : 'gray';
-                    },
-                    vLineColor: function (i, node) {
-                      return (i === 0 || i === node.table.widths.length) ? 'gray' : 'gray';
-                    },
-                  }
 
-
+                    ],
+                  ]
                 },
+                layout: {
+                  hLineWidth: function (i, node) {
+                    return (i === 0 || i === node.table.body.length) ? 2 : 2;
+                  },
+                  vLineWidth: function (i, node) {
+                    return (i === 0 || i === node.table.widths.length) ? 2 : 2;
+                  },
+                  hLineColor: function (i, node) {
+                    return (i === 0 || i === node.table.body.length) ? 'gray' : 'gray';
+                  },
+                  vLineColor: function (i, node) {
+                    return (i === 0 || i === node.table.widths.length) ? 'gray' : 'gray';
+                  },
+                }
+
+
+              },
 
 
             ]
@@ -1468,34 +1470,36 @@ export class GenerationPdfFactureService {
 
 
 
-                {
-                  margin: [0, 35, 10, -15],
-                  table: {
+              {
+                margin: [0, 35, 10, -15],
+                table: {
 
 
 
-                    widths: ['auto', 'auto', 'auto', 'auto',],
-                    fontSize: 8,
-                    body: [
+                  widths: ['auto', 'auto', 'auto', 'auto',],
+                  fontSize: 8,
+                  body: [
 
-                      [{ text: 'N°', fontSize: 8 }, { text: 'Base HT ', fontSize: 8 }, { text: 'Taux TVA ', fontSize: 8 }, { text: ' Montant TVA', fontSize: 8 }],
-                      ...this.tabTVA.map(p => ([
-                        { text: this.i1++, i2: this.i2 = this.i1 + 2, alignment: 'right', fontSize: 9 },
+                    [{ text: 'N°', fontSize: 8 }, { text: 'Base HT ', fontSize: 8 }, { text: 'Taux TVA ', fontSize: 8 }, { text: ' Montant TVA', fontSize: 8 }],
+                    ...this.tabTVA.map(p =>
+                    (
+                      [
+                        { text: (this.i1++)+1, i2: this.i2 = this.i1 + 2, alignment: 'right', fontSize: 9 },
                         { text: p.totalHT.toFixed(3), alignment: 'right', fontSize: 9 },
                         { text: this.fonctionPartagesService.getFormaTwoAfterVerguleTaux(p.tauxTVA) + '%', alignment: 'right', fontSize: 9 },
-                        { text: p.montantTVA.toFixed(3), alignment: 'right', fontSize: 9 }])),
-                      [{ text: 'Total TVA', colSpan: 3, alignment: 'left', fontSize: 9 }, {}, {}, { text: this.tabTVA.reduce((sum, p) => sum + (p.montantTVA), 0).toFixed(3), alignment: 'right' }],
+                        { text: p.montantTVA.toFixed(3), alignment: 'right', fontSize: 9 }
+                      ]
+                    )),
+                    [{ text: 'Total TVA', colSpan: 3, alignment: 'left', fontSize: 9 }, {}, {}, { text: this.tabTVA.reduce((sum, p) => sum + (p.montantTVA), 0).toFixed(3), alignment: 'right' }],
+                  ],
 
 
-                    ],
-
-
-                    headerRows: this.i2,
-                    keepWithHeaderRows: true,
-
-                  },
+                  headerRows: this.i2,
+                  keepWithHeaderRows: true,
 
                 },
+
+              },
 
 
 
@@ -1545,7 +1549,7 @@ export class GenerationPdfFactureService {
                   body: [
                     [
                       { text: 'TOTAL HT', fontSize: 8 },
-                      { text:  this.facture.totalRemiseFacture ? (Number(this.facture.totalHT) + Number(this.facture.totalRemiseFacture) + Number(this.facture.totalRemise)).toFixed(3) : ( Number(this.facture.totalRemise) + Number(this.facture.totalHT)).toFixed(3), alignment: 'right', fontSize: 9, },
+                      { text: this.facture.totalRemiseFacture ? (Number(this.facture.totalHT) + Number(this.facture.totalRemiseFacture) + Number(this.facture.totalRemise)).toFixed(3) : (Number(this.facture.totalRemise) + Number(this.facture.totalHT)).toFixed(3), alignment: 'right', fontSize: 9, },
                     ],
                     [
                       { text: 'TOTAL REMISE', fontSize: 8 },
@@ -1579,7 +1583,7 @@ export class GenerationPdfFactureService {
             ],
 
           },
-          {text : "Total En Chiffres : "+NumberToLetter(Math.trunc(parseInt(this.facture.montantTotal)))+" et "+secondNumber ,alignment:"left",italics: true },
+          { text: `Arrété le présente ${this.typeDoc} à la somme de :\n ${this.fonctionPartagesService.strUcFirst(NumberToLetter(firstNumber)) + " dinars " + (((secondNumber === null || isNaN(secondNumber)) ? " " : "et " + secondNumber.toString() + " millimes")) + "."} `, alignment: "left", italics: true, margin: [0, 15, 0, 0] },
           { text: 'Cachet et signature', alignment: 'right', italics: true, decoration: 'underline', margin: [0, 40, 50, 0], fontSize: 10 },
 
 
@@ -1611,9 +1615,9 @@ export class GenerationPdfFactureService {
 
   async generatePdfDemandeOffrePrix(demandeOffrePrix) {
 
-    var urlImage =  this.fonctionPartagesService.parametres.logo === '' ? '' : this.fonctionPartagesService.parametres.logo
+    var urlImage = this.fonctionPartagesService.parametres.logo === '' ? '' : this.fonctionPartagesService.parametres.logo
 
-    if(!urlImage || urlImage === ''){
+    if (!urlImage || urlImage === '') {
       alert("Veuillez insérer votre logo en paramètre !")
       return
     }
@@ -1913,37 +1917,53 @@ export class GenerationPdfFactureService {
   }
 
   async generatePDFReglementDocument(reglements, client, bonLivraison, tabSelectionnerImpression, modeReglements) {
-    
+
+    console.log(client);
+
     var newReglements = []
     reglements.forEach(x => {
       var item = JSON.parse(JSON.stringify(x))
-      if(modeReglements){
+      if (modeReglements) {
         var modeReglements2 = modeReglements.filter(x => x.id === item.modeReglement)
-        if(modeReglements2.length > 0){
+        if (modeReglements2.length > 0) {
           item.modeReglement = modeReglements2[0].libelle
-        }else{
-           item.modeReglement = ""
+        } else {
+          item.modeReglement = ""
         }
       }
-      if(client.raisonSociale){
+      if (client.raisonSociale) {
         item.client = client.raisonSociale
+        item.telephone = client.telephone
       }
-     
+
+      if (bonLivraison.numero) {
+        item.bonLivraison = bonLivraison.numero
+      }
+
       newReglements.push(item)
     })
 
-    for(let i = 0; i < tabSelectionnerImpression.length; i++){
+    for (let i = 0; i < tabSelectionnerImpression.length; i++) {
       console.log(newReglements[tabSelectionnerImpression[i]])
-      if(newReglements[tabSelectionnerImpression[i]]){
+      if (newReglements[tabSelectionnerImpression[i]]) {
         await this.generatePDFReglementDocumentParReglement(newReglements[tabSelectionnerImpression[i]])
       }
     }
   }
 
+  separator(number) {
+    console.log(number);
+
+    var convertedNumber = number
+    for (let index = 0; index < number.length; index++) {
+      console.log(number[index]);
+    }
+  }
+
+  reglement: any = []
   async generatePDFReglementDocumentParReglement(reglement) {
-
-    var data = []
-
+    console.log(reglement);
+    this.reglement = reglement
     function buildTableBody(data, columns, showHeaders, headers, footerTable) {
       //console.log(footerTable);
 
@@ -1990,111 +2010,240 @@ export class GenerationPdfFactureService {
       }
     };
 
-    
+    function table(data, columns, showHeaders, headers, footerTable) {
+      //console.log(data);
+      //console.log(columns);
+      return {
+        style: 'table',
+        table: {
+          heights: ['auto'],
+          widths: [80, 80, 80, 40, 40, 40, 40, 40, 40, 52, 52, 52, 52],
+          headerRows: 1,
+          body: buildTableBody(data, columns, showHeaders, headers, footerTable)
+        },
+        layout: 'myCustomLayout'
+      };
+    }
     var url = this.informationGenerale.baseUrl + "/" + this.fonctionPartagesService.parametres.logo
-    var idSociete = this.informationGenerale.idSocieteCurrent
-   
-    var dateEnd = new Date().toLocaleDateString('fr')
+    var societe = this.informationGenerale.getSocieteCurrentObject()
+
+    var test = this.separator(this.reglement.montant)
+
+
+    let [firstNumber, secondNumber] = [+this.reglement.montant.toString().split('.')[0], +parseInt(this.reglement.montant.toString().split('.')[1])];
+    console.log(firstNumber);
+    console.log(secondNumber);
+
+    var user = await this.tokenStorageService.getUser()
+
+    let dateFormat = new Date().toLocaleDateString('en-GB')
+
+    let dateHeurFormat = new Date()
+    let heur = dateHeurFormat.getHours() + ':' + String(dateHeurFormat.getMinutes()).padStart(2, '0')
+    let societeInformations =
+      `${societe.raisonSociale}
+       Tel:${societe.telephones}Fax:${societe.fax}`
     var image = await this.getBase64ImageFromURL(url)
     const documentDefinition = {
+
       pageOrientation: 'landscape',
       pageSize: 'A5',
-      pageMargins: [3, 80, 1, 80],
-
-      header: function (currentPage, pageCount, pageSize) {
-
-        let date = `${new Date().toLocaleDateString('en-GB')}`
-        return [
-          {
-
-            layout: 'noBorders',
-            table: {
-              headerRows: 1,
-              widths: ['*', '*', '*'],
-              body: [
-                [
-                  {
-                    image: image,
-                    rowSpan: 3,
-                    alignment: 'left',
-                    height: 60,
-                    width: 100,
-                    margin: [5, 5, 0, 0],
-                  },
-                  {
-                    text: `Reglement N°= `+reglement.numero,
-                    rowSpan: 3,
-                    alignment: 'center',
-                    italics: true,
-                    fontSize: 12,
-                    margin: [0, 30, 0, 0],
-                  },
-                  { text: date, rowSpan: 3, alignment: 'right',margin: [0, 10, 20, 0], }
-                ],
-                [],
-                []
-              ]
-            }
-          },
-        ]
+      pageMargins: [3, 3, 3, 3],
+      info: {
+        title: 'Recu Paiement',
+        author: `${user}`,
+        subject: `recu paiement de client ${this.reglement.client}`,
+        keywords: 'recu paiement',
       },
       content: [
         {
-          columns:[
+          layout: "noBorders",
+          table: {
+            heights: [400],
+            body: [
+              [
+                [
+                  {
+                    margin: [5, 0, 0, 0],
 
-            { text: 'Type Fournisseur', fontSize: 8, fillColor: '#D3D3D3', alignment: 'left', alignmentChild: 'left' },
-         
-          ],
+                    layout: {
+                      hLineWidth: function (i, node) {
+                        return (i === 0 || i === node.table.body.length) ? 2 : 1;
+                      },
+                      vLineWidth: function (i, node) {
+                        return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+                      },
+                    },
+                    table: {
+                      widths: [130, 130],
+                      body: [
+                        [{
+                          layout: 'noBorders',
+                          table: {
+                            headerRows: 1,
+                            widths: ['*', '*', '*'],
+                            body: [
+                              [
+                                {
+                                  image: image,
+                                  alignment: 'left',
+                                  height: 30,
+                                  width: 40,
+                                  margin: [5, 0, 0, 0],
+                                },
+                                {
+                                  text: `Recu Paiement`,
+                                  alignment: 'center',
+                                  italics: true,
+                                  fontSize: 12,
+                                  margin: [0, 20, 0, 0],
+                                },
+                                { text: `Imprimer par ${user.login} Le ${dateFormat} à ${heur}`, fontSize: 7, alignment: 'right', margin: [0, 0, 0, 0] }
+                              ],
+                            ]
+                          }, colSpan: 2
+                        }],
+                        [{
+                          layout: "lightHorizontalLines",
+                          table: {
+                            margin: [0, 0, 0, 0],
+                            widths: [80, 170],
+                            body: [
+                              [{ text: `N° Reglement :`, alignment: 'left', fontSize: 9, margin: [0, 20, 0, 5] }, { text: `${(this.reglement.numero)}`, alignment: 'right', fontSize: 9, margin: [0, 20, 0, 5] }],
+
+                              [{ text: `Tiers :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${(this.reglement.client)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Telephone :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${(this.reglement.telephone)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Date Reg :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${this.getDate(this.reglement.dateReglement)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Montant Reg :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(this.reglement.montant))}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Mode Reg :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${(this.reglement.modeReglement)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `N° Piece :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${this.reglement.numCheque}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Date Echeance :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${this.getDate(this.reglement.dateEcheance)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Num Vente :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${(this.reglement.bonLivraison)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+
+                              [{ text: `Observation :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: ``, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `MT En Lettre :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${this.fonctionPartagesService.strUcFirst(NumberToLetter(firstNumber)) + " dinars " + (((secondNumber === null || isNaN(secondNumber)) ? " " : "et " + secondNumber.toString() + " millimes")) + "."} `, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Signature`, alignment: 'left', fontSize: 9, margin: [0, 15, 0, 30] }, { text: `Signature`, alignment: 'right', fontSize: 9, margin: [0, 15, 0, 30] }]
+
+                            ]
+                          }, colSpan: 2
+                        }],
+                        [{
+                          layout: 'noBorders',
+                          table: {
+                            widths: ['*', '*', '*'],
+                            body: [
+                              [
+                                { text: "", fontSize: 7, rowSpan: 3, alignment: 'left', margin: [0, 20, 0, 0] },
+                                { text: societeInformations, fontSize: 7, rowSpan: 3, alignment: 'center', margin: [0, 0, 0, 0] },
+                                { text: "", fontSize: 7, rowSpan: 3, alignment: 'right', margin: [0, 20, 0, 0] }
+                              ],
+                              [],
+                              []
+                            ]
+                          }, alignment: 'center', colSpan: 2
+                        }],
+                      ]
+                    },
+                  }
+                ],
+                [
+                  {
+                    margin: [5, 0, 0, 0],
+
+                    layout: {
+                      hLineWidth: function (i, node) {
+                        return (i === 0 || i === node.table.body.length) ? 2 : 1;
+                      },
+                      vLineWidth: function (i, node) {
+                        return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+                      },
+                    },
+                    table: {
+                      widths: [130, 130],
+                      body: [
+                        [{
+                          layout: 'noBorders',
+                          table: {
+                            headerRows: 1,
+                            widths: ['*', '*', '*'],
+                            body: [
+                              [
+                                {
+                                  image: image,
+                                  alignment: 'left',
+                                  height: 30,
+                                  width: 40,
+                                  margin: [5, 0, 0, 0],
+                                },
+                                {
+                                  text: `Recu Paiement`,
+                                  alignment: 'center',
+                                  italics: true,
+                                  fontSize: 12,
+                                  margin: [0, 20, 0, 0],
+                                },
+                                { text: `Imprimer par ${user.login} Le ${dateFormat} à ${heur}`, fontSize: 7, alignment: 'right', margin: [0, 0, 0, 0] }
+                              ],
+                            ]
+                          }, colSpan: 2
+                        }],
+                        [{
+                          layout: "lightHorizontalLines",
+                          table: {
+                            margin: [0, 0, 0, 0],
+                            widths: [80, 170],
+                            body: [
+                              [{ text: `N° Reglement :`, alignment: 'left', fontSize: 9, margin: [0, 20, 0, 5] }, { text: `${(this.reglement.numero)}`, alignment: 'right', fontSize: 9, margin: [0, 20, 0, 5] }],
+
+                              [{ text: `Tiers :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${(this.reglement.client)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Telephone :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${(this.reglement.telephone)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Date Reg :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${this.getDate(this.reglement.dateReglement)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Montant Reg :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(this.reglement.montant))}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Mode Reg :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${(this.reglement.modeReglement)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `N° Piece :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${this.reglement.numCheque}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Date Echeance :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${this.getDate(this.reglement.dateEcheance)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `Num Vente :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${(this.reglement.bonLivraison)}`, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+
+                              [{ text: `Observation :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: ``, alignment: 'right', fontSize: 9, margin: [0, 0, 0, 5] }],
+                              [{ text: `MT En Lettre :`, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }, { text: `${this.fonctionPartagesService.strUcFirst(NumberToLetter(firstNumber)) + " dinars " + (((secondNumber === null || isNaN(secondNumber)) ? " " : "et " + secondNumber.toString() + " millimes")) + "."} `, alignment: 'left', fontSize: 9, margin: [0, 0, 0, 5] }],
+
+                              [{ text: `Signature`, alignment: 'left', fontSize: 9, margin: [0, 15, 0, 30] }, { text: `Signature`, alignment: 'right', fontSize: 9, margin: [0, 15, 0, 30] }]
+
+                            ]
+                          }, colSpan: 2
+                        }],
+                        [{
+                          layout: 'noBorders',
+                          table: {
+                            widths: ['*', '*', '*'],
+                            body: [
+                              [
+                                { text: "", fontSize: 7, rowSpan: 3, alignment: 'left', margin: [0, 20, 0, 0] },
+                                { text: societeInformations, fontSize: 7, rowSpan: 3, alignment: 'center', margin: [0, 0, 0, 0] },
+                                { text: "", fontSize: 7, rowSpan: 3, alignment: 'right', margin: [0, 20, 0, 0] }
+                              ],
+                              [],
+                              []
+                            ]
+                          }, alignment: 'center', colSpan: 2
+                        }],
+                      ]
+                    },
+                  }
+                ],
+              ]
+            ]
+          }
         }
       ],
 
-      footer: function (currentPage, pageCount) {
-        let textFooter = `
-        \n${'societe'}. Thank You!
-        This is line 2
-        Line 3 comes here`
-        let page = `\n${currentPage.toString()} of ${pageCount}`
-        return [
-          { canvas: [{ type: 'line', x1: 10, y1: 10, x2: 833 - 10, y2: 10, lineWidth: 0.5 }] },
-
-          {
-
-            layout: 'noBorders',
-            table: {
-              headerRows: 1,
-              widths: ['*', '*', '*'],
-              body: [
-                [
-                  { text: "", fontSize: 10, rowSpan: 3, alignment: 'center' },
-                  { text: textFooter, fontSize: 10, rowSpan: 3, alignment: 'center' },
-                  { text: page, fontSize: 10, rowSpan: 3, alignment: 'right',margin:[0,0,20,0] }
-                ],
-                [],
-                []
-              ]
-            }
-          },
-        ];
-      },
-
-      styles: {
-        table: {
-          fontSize: 9,
-          alignment: 'center',
-          margin: [30, 0, 0, 0]
-        },
-        pageCount: {
-          italics: true,
-          alignment: 'right',
-
-        },
-
-      },
-
-
     };
     pdfMake.createPdf(documentDefinition).open();
+    pdfMake.createPdf(documentDefinition).download(`Recu Paiement De Client ${this.reglement.client} ${this.reglement.numero}.pdf`);
 
   }
-
+  getDate(date) {
+    let dateVar = new Date(date)
+    return dateVar.toLocaleDateString('fr');
+  }
 }

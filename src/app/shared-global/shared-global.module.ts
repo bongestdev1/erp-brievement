@@ -1,3 +1,5 @@
+import { AccordionItemComponent } from './accordion/accordion-item.component';
+import { AccordionComponent } from './accordion/accordion.component';
 import {ReactiveFormsModule} from '@angular/forms';
 
 import { NgModule } from '@angular/core';
@@ -44,8 +46,11 @@ import { AutoCompleteTypeTiersComponent } from './auto-complete-type-tiers/auto-
 
 
 
+
 @NgModule({
   declarations: [
+    AccordionItemComponent,
+    AccordionComponent,
     FiltreDateArretComponent,
     FiltreDateComponent,
     AutocompleteComponent,
@@ -85,6 +90,8 @@ import { AutoCompleteTypeTiersComponent } from './auto-complete-type-tiers/auto-
 
   ],
   exports:[
+    AccordionItemComponent,
+    AccordionComponent,
     AutoCompleteTypeTiersComponent,
     FiltreDateArretComponent,
     PopupChoixTransfertDocumentComponent,

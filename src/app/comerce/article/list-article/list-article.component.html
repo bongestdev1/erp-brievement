@@ -90,9 +90,9 @@
 
                             <td *ngFor="let key of objectKeys(itemsVariable)" (click)="selectionLigneFunction(item.id)">
 
-                                <span *ngIf="fonctionPartages.colonnesQuantites.includes(key)" style="float:right;">{{fonctionPartages.getFormaThreeAfterVerguleNomber(item[key])}}</span>
-                                <span *ngIf="fonctionPartages.colonnesPrix.includes(key)" style="float:right;">{{fonctionPartages.getFormaThreeAfterVerguleQuantite(item[key])}}</span>
-                                <span *ngIf="fonctionPartages.colonnesDates.includes(key)" style="text-align: center; display: block;">{{fonctionPartages.getDate(item[key], 'yyyy-MM-dd')}}</span>
+                                <span *ngIf="fonctionPartages.colonnesQuantites.includes(key)" style="float:right;">{{fonctionPartages.nombresAvecEspaces(fonctionPartages.getFormaThreeAfterVerguleNomber(item[key]))}}</span>
+                                <span *ngIf="fonctionPartages.colonnesPrix.includes(key)" style="float:right;">{{fonctionPartages.nombresAvecEspaces(fonctionPartages.getFormaThreeAfterVerguleQuantite(item[key]))}}</span>
+                                <span *ngIf="fonctionPartages.colonnesDates.includes(key)" style="text-align: center; display: block;">{{fonctionPartages.getDateFormatStandart(item[key])}}</span>
                                 <span *ngIf="fonctionPartages.colonnesOuiNon.includes(key)" style="text-align: center; display: block;"> <i class="fas fa-check-square" style="font-size: 15px;" *ngIf="item[key] == 'oui'"></i> <i class="fas fa-square" style="font-size: 15px;" *ngIf="item[key] != 'oui'"></i> </span>
                                 <span *ngIf="!(fonctionPartages.colonnesDates.includes(key) || fonctionPartages.colonnesQuantites.includes(key) || fonctionPartages.colonnesPrix.includes(key) || fonctionPartages.colonnesOuiNon.includes(key))">{{item[key]}}</span>
 

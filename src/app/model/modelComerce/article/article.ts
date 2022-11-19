@@ -3,6 +3,7 @@ export class Article {
     remiseFactureMontant = 0
  
     isFodec = "non"
+    prixAchatNet = 0
     prixFodec = 0
     tauxDC = 0
     prixDC=0

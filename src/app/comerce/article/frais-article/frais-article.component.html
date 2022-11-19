@@ -34,23 +34,19 @@
 
             <td>
                 <app-input-number-vergule *ngIf="isModifiable == 'oui'" [field]="item" key="montant" idUnique="montant{{item.frais}}"
-                (ngModelChange)="changePrix()"></app-input-number-vergule>
+                 (change)="changePrix()"></app-input-number-vergule>
 
-                <div class="col-sm-12 collapse-input" *ngIf="isModifiable != 'oui'">
-                    <span class="form-control desactive-text-span collapse-input-table" >{{getNumber(item['montant'])}} </span>
+                <div *ngIf="isModifiable != 'oui'">
+                    <span>{{getNumber(item['montant'])}} </span>
                 </div>
             </td>
 
             <td>
-                <div class="col-sm-12 collapse-input">
-                    <span class="form-control desactive-text-span collapse-input-table" >{{getNumber(getTaux(item['frais']))}} </span>
-                </div>
+                    <span>{{getNumber(item['tva'])}} </span>
             </td>
 
             <td>
-                <div class="col-sm-12 collapse-input">
-                    <span class="form-control desactive-text-span collapse-input-table" >{{getNumber(getMontantTTC(item['frais'], item['montant']))}} </span>
-                </div>
+                    <span >{{getNumber(item['montantTTC'])}} </span>
             </td>
         
         </tr>

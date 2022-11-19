@@ -22,15 +22,24 @@ export class FraisArticleComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log("this.listFrais",this.listFrais, this.allFrais)
     for(let i = 0; i < this.allFrais.length; i++){
        if(this.listFrais.filter(x => x.frais == this.allFrais[i].id).length == 0){
-         this.listFrais.push({frais:this.allFrais[i].id, montant:0 })
+         this.listFrais.push({frais:this.allFrais[i].id, montant:0, tva: this.getTaux(this.allFrais[i].id), montantTTC: 0 })
        }
     }
+    
+    this.initialiserFrais()
   }
 
+  initialiserFrais(){
+    for(let i = 0; i < this.listFrais.length; i++){
+      this.listFrais[i].tva = this.getTaux(this.listFrais[i].frais)
+      this.listFrais[i].montantTTC = this.getMontantTTC(this.listFrais[i].frais, this.listFrais[i].montant)
+    }
+  }
+  
   changePrix(){
+    this.initialiserFrais()
     this.changePrixVHT.emit()
   }
 
@@ -71,15 +80,27 @@ export class FraisArticleComponent implements OnInit {
   getTaux(id){
     for(let j = 0; j < this.allFrais.length; j++){
       if(this.allFrais[j].id == id){
-        return this.allFrais[j].tauxTVA
+        return this.roundTaux(this.allFrais[j].tauxTVA)
       }
     }
+  }
+
+  roundNumber(number){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(number))
+  }
+
+  roundQuantite(number){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleQuantite(number))
+  }
+
+  roundTaux(number){
+    return Number(this.fonctionPartagesService.getFormaTwoAfterVerguleTaux(number))
   }
 
   getMontantTTC(id, montant){
     for(let j = 0; j < this.allFrais.length; j++){
       if(this.allFrais[j].id == id){
-        return montant + montant * this.allFrais[j].tauxTVA / 100
+        return this.roundNumber(montant) + this.roundNumber(montant * this.roundNumber(this.allFrais[j].tauxTVA / 100))
       }
     }
   }

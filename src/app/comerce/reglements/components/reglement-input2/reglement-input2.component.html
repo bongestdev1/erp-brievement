@@ -11,7 +11,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="montant" class="col-sm-4 col-form-label">Montant</label>
+                <label for="montant" class="col-sm-4 col-form-label">Montant Reglement</label>
                 <div class="col-sm-8 collapse-input">
 
                     <app-input-number-vergule [field]="reglement" key="montant" idUnique="montant"
@@ -89,7 +89,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="montant" class="col-sm-4 col-form-label">Montant affecté</label>
+                <label for="montant" class="col-sm-4 col-form-label">Montant Lettré</label>
                 <div class="col-sm-8 collapse-input">
 
                     <app-input-number-vergule [field]="reglement" key="montantAPayer" idUnique="montantAPayer"
@@ -100,7 +100,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="modeReglement" class="col-sm-4 col-form-label">Reste</label>
+                <label for="modeReglement" class="col-sm-4 col-form-label">Reste Liltrages</label>
                 <div class="col-sm-8" >
                     <span class="form-control desactive-span" name="reste">
                         {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(reglement.reste)}}
@@ -121,6 +121,7 @@
 
     <div class="col-md-12">
         <hr style="margin:5px 0px; width: 100%;">
+        <button type="button" class="btn btn-info" style="float:right;" (click)="ImprimerReglement()">Imprimer</button>
         <button type="button" class="btn btn-primary" style="float:right;" (click)="addReglement()">Ajouter</button>
         <!-- <button type="button" class="btn btn-primary" style="float:right;" (click)="addReglement(); generatePDF()">Imprimer</button> -->
     </div>

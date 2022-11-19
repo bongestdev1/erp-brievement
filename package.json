@@ -37,6 +37,7 @@
     "ng-apexcharts": "^1.6.0",
     "ng-click-outside": "^4.0.0",
     "ng-number-formatter": "^1.5.0",
+    "ngx-bootstrap": "^6.2.0",
     "ngx-lightbox": "^2.0.0",
     "ngx-owl-carousel-o": "^1.1.5",
     "ngx-perfect-scrollbar": "^8.0.0",

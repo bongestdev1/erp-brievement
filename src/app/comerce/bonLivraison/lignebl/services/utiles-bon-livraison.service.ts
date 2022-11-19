@@ -54,7 +54,45 @@ export class UtilesBonLivraisonService {
     return true
   }
 
+  arrondiNombre(float){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(float))
+  }
+
+  arrondiQuantite(float){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleQuantite(float))
+  }
+
+  changeArrondu(item){
+    var tabPrix = this.fonctionPartagesService.colonnesPrix
+    var tabColonne = this.fonctionPartagesService.colonnesQuantites
+    var tabTaux = this.fonctionPartagesService.colonnesTaux
+   
+    for(let key in item){
+      if(tabPrix.includes(key) && key != 'marge'){
+        item[key] = this.arrondiNombre(item[key])
+      }else if(tabColonne.includes(key)){
+        item[key] = this.arrondiQuantite(item[key])
+      }else if(tabTaux.includes(key)){
+        item[key] = Number(Number(item[key]).toFixed(5))
+      }
+    } 
+    
+    if(item['marge']){
+      item['marge'] = Number(Number(item['marge']).toFixed(5))
+    }
+    if(item['tauxRemise']){
+      item['tauxRemise'] = Number(Number(item['tauxRemise']).toFixed(5))
+    }
+    if(item['remiseF']){
+      item['remiseF'] = Number(Number(item['remiseF']).toFixed(5))
+    }
+    
+    return item
+  }
+
   calculTotalsVente(item, client, articles) {
+    item = this.changeArrondu(item)
+
     var totalFraisTva = 0
     item.tauxTVA = 0
     if (client && client.exemptTVA == "non") {
@@ -106,10 +144,14 @@ export class UtilesBonLivraisonService {
     item.totalGainReel = Number(this.getNumber((newPrixVenteHt - (item.prixRevient)) * quantiteVente))
     item.validRemise = this.checkPlafondRemise(item)
    
+    item = this.changeArrondu(item)
+
     return item
   }
 
   calculTotalsAchat(item, client, articles) {
+    item = this.changeArrondu(item)
+
     var societe = this.informationGenerale.getSocieteCurrentObject() 
     client.exemptTVA = societe.exemptTVA
       
@@ -158,6 +200,8 @@ export class UtilesBonLivraisonService {
     item.prixAchatHTReel2 = item.prixAchatHTReel / item.coefficient
     item.quantiteAchat2 = item.quantiteAchat * item.coefficient
     
+    item = this.changeArrondu(item)
+
     return item
   }
 

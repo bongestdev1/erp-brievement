@@ -30,6 +30,11 @@ export class FonctionPartagesService {
     return regex.test(id)
   }
 
+
+  strUcFirst(a){return (a+'').charAt(0).toUpperCase()+a.substr(1);}
+  nombresAvecEspaces(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  }
   getModalDocument(document){
 
     switch(document){
@@ -217,7 +222,7 @@ export class FonctionPartagesService {
     factureVente: "Facture Vente",
     factureAchat: "Facture Achat",
     factureAvoirMarchandises: "Avoir-marchandises",
-    factureAvoirFinanciers: "Avoir-financier",
+    factureAvoirFinanciers: "Avoir-financiers",
     factureAvoirSurFacture: "Avoir-facture",
     bonLivraison: "Bon Livraison",
     devis: "Devis",
@@ -371,21 +376,21 @@ export class FonctionPartagesService {
 
 
   getDate(date, format) {
-    if (!(date && date.length && date.length > 1)) {
-      return ""
-    }
     try{
-      return formatDate(new Date(date), "dd-MM-yyyy", 'en');
+      let dateVar = new Date(date)
+      return dateVar.toLocaleDateString('fr');
     }catch(e){
       return ""
     }
   }
 
   getDateFormatStandart(date) {
-    if (!(date && date.length && date.length > 1)) {
-      return ""
-    }
-    return formatDate(new Date(date), 'dd/MM/yyyy', 'en');
+    // if (!(date && date.length && date.length > 1)) {
+    //   return ""
+    // }
+    // return formatDate(new Date(date), 'dd/MM/yyyy', 'en');
+    let dateVar = new Date(date)
+    return dateVar.toLocaleDateString('fr');
   }
 
   getTitreCrudOfUrl(url) {

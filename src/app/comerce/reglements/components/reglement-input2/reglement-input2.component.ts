@@ -16,6 +16,7 @@ export class ReglementInput2Component implements OnInit {
 
   @Output() joinAndClose = new EventEmitter<string>();
   @Output() getAllParametres = new EventEmitter<string>();
+  @Output() setImprission = new EventEmitter<Object>();
 
   @Input() allModeReglement: any
   @Input() allSituationReglement: any
@@ -93,6 +94,17 @@ export class ReglementInput2Component implements OnInit {
 
   }
 
+  ImprimerReglement() {
+    if (!this.controleInputs()) {
+      return
+    }
+    this.reglement.numero = this.bonLivraison.numero
+    this.reglement.id = this.fonctionPartagesService.getIdOfArrayElement(this.reglements, 'id')
+    this.reglements.push(this.reglement)
+    this.setImprission.emit(this.reglements.length - 1)
+    this.joinAndClose.emit()
+  }
+
   addReglement() {
     if (!this.controleInputs()) {
       return
@@ -100,7 +112,7 @@ export class ReglementInput2Component implements OnInit {
     this.reglement.numero = this.bonLivraison.numero
     this.reglement.id = this.fonctionPartagesService.getIdOfArrayElement(this.reglements, 'id')
     this.reglements.push(this.reglement)
-    console.log(this.reglements)
+    console.log("addReglement")
     this.joinAndClose.emit()
   }
 

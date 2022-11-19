@@ -87,10 +87,15 @@ export class InputBonLivraisonComponent implements OnInit {
 
   isImpressionReglements = false
   tabSelectionnerImpression = []
-  impressionArray(tabReg){
-    this.tabSelectionnerImpression = tabReg
+  impressionArray(position){
+    if (this.tabSelectionnerImpression.indexOf(position) === -1) {
+      this.tabSelectionnerImpression.push(position);
+    } else {
+      // let index = this.tabSelectionnerImpression.indexOf(position);
+      // this.tabSelectionnerImpression.splice(index, 1);
+    }
     this.isImpressionReglements = true
-    this.ajoutImage()
+    // this.ajoutImage()
   }
 
   autoriserCoutTransporteur(){
@@ -186,7 +191,7 @@ export class InputBonLivraisonComponent implements OnInit {
           this.allOrdreEmissions = resultat.ordreEmissions
 
           if (this.allClients.filter(x => x.id == this.bonLivraison.client).length > 0) {
-            this.setClientID(this.bonLivraison.client)
+            this.client = this.allClients.filter(x => x.id == this.bonLivraison.client)[0]
           }
 
           if (this.titreCrud == this.fonctionPartagesService.titreCrud.ajouter) {
@@ -401,13 +406,20 @@ export class InputBonLivraisonComponent implements OnInit {
 
           if(this.isOpenImpressionAfter){
             this.generationPdfFacture.openPopup(this.id, this.titreDocument)
-          }else if(this.isImpressionReglements) {
+          }
+          
+          if(this.isImpressionReglements) {
             var reglements = JSON.parse(JSON.stringify(response.reglements))
             var client = JSON.parse(JSON.stringify(this.client))
             var bonLivraison = JSON.parse(JSON.stringify(this.bonLivraison))
             this.generationPdfFacture.generatePDFReglementDocument(reglements, client, bonLivraison, this.tabSelectionnerImpression, this.allModeReglement)
           }
 
+          if(this.isOpenImpressionAfter || this.isImpressionReglements){
+            this.router.navigate([this.pageList]);
+          }
+
+          this.tabSelectionnerImpression = []
           this.isOpenImpressionAfter = false
           this.isImpressionReglements = false
           
@@ -763,7 +775,7 @@ export class InputBonLivraisonComponent implements OnInit {
       this.getBonDocuments()
     }
 
-    if (this.titreDocument == this.fonctionPartagesService.titreDocuments.bonLivraison || this.titreDocument == this.fonctionPartagesService.titreDocuments.commande) {
+    if (this.titreDocument == this.fonctionPartagesService.titreDocuments.bonLivraison) {
       this.verifierClient()
     }
     //this.bonLivraisonsClient(id)
@@ -828,6 +840,7 @@ export class InputBonLivraisonComponent implements OnInit {
     var resultat = this.fonctionsBL.verifierClient(this.client)
 
     this.isOpenModalBlockerClient = resultat.isOpenModalBlockerClient
+
     this.messageBlockerClient = resultat.messageBlockerClient
 
     if (resultat.isOpenModalBlockerClient) {

@@ -47,7 +47,7 @@ export class InformationsService {
   }
 
   baseUrl = APIEndpoint
-  // baseUrl = "http://localhost:5000"
+  //  baseUrl = "http://localhost:5000"
   // baseUrl = "http://51.255.106.29:5000"
 
   //baseUrl = "https://erp.b2bservices.tn"
