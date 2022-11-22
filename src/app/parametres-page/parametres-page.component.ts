@@ -256,6 +256,7 @@ export class ParametresPageComponent implements OnInit {
     }
   }
 
+  
   clickIsTimbreFiscaleBonRec(){
     if(this.parametres.validationTimbreFiscaleBonRec == "oui"){
       this.parametres.validationTimbreFiscaleBonRec = "non"

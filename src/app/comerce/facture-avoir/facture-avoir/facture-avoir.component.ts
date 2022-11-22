@@ -499,7 +499,7 @@ export class FactureAvoirComponent implements OnInit {
 
     var societe = this.informationGenerale.getSocieteCurrentObject() 
     
-    if (societe.exemptTimbreFiscale == "non" && this.bonAchat.typeAvoir == this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture) {
+    if (this.fonctionPartagesService.parametres. societe.exemptTimbreFiscale == "non" && this.bonAchat.typeAvoir == this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture) {
       this.bonAchat.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
     } else {
       this.bonAchat.timbreFiscale = 0
@@ -920,6 +920,7 @@ export class FactureAvoirComponent implements OnInit {
 
   isOpenModalDeleteFV = false
   
+
   openModalDeleteFV(numero, params2) {
     this.itemFVSelected = numero
     this.isOpenModalDeleteFV = true

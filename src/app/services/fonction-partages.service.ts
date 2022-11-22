@@ -187,7 +187,8 @@ export class FonctionPartagesService {
     societeTransport:"",
     validationTimbreFiscaleBonRec: "oui",
     validationTimbreFiscaleBonLiv: "oui",
-
+    validationTimbreFiscaleAvoirSurFacture:true,
+   
     logo: "",
     paramatresImportationArticle: "{}",
 
