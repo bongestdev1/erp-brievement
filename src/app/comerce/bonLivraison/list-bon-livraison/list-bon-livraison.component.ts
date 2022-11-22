@@ -157,19 +157,19 @@ export class ListBonLivraisonComponent implements OnInit {
 
     this.oldRequest = this.request
 
-    this.request = this.getSaveFilterSession()
+    // this.request = this.getSaveFilterSession()
     this.getBonLivraisons(this.request)
 
-    this.router.events
-    .pipe(filter((e: any) => e instanceof RoutesRecognized),
-      pairwise()
-    ).subscribe((e: any) => {
-      console.log(e)
-      if(e[0].urlAfterRedirects.indexOf('bonLivraison') === -1){
-        this.request = this.requestPardefaut
-        this.getBonLivraisons(this.request)
-      } // previous url
-    });
+    // this.router.events
+    // .pipe(filter((e: any) => e instanceof RoutesRecognized),
+    //   pairwise()
+    // ).subscribe((e: any) => {
+    //   console.log(e)
+    //   if(e[0].urlAfterRedirects.indexOf('bonLivraison') === -1){
+    //     this.request = this.requestPardefaut
+    //     this.getBonLivraisons(this.request)
+    //   } // previous url
+    // });
 
   
 

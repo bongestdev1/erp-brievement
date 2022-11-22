@@ -10,23 +10,20 @@ import { UtiliteService } from 'src/app/services/utilite.service';
 import { TokenStorageService } from 'src/app/services/authentication/token-storage.service';
 
 @Component({
-  selector: 'app-facture-avoir-list',
-  templateUrl: './facture-avoir-list.component.html',
-  styleUrls: ['./facture-avoir-list.component.scss']
+  selector: 'app-facture-vente-list',
+  templateUrl: './facture-vente-list.component.html',
+  styleUrls: ['./facture-vente-list.component.scss']
 })
-export class FactureAvoirListComponent implements OnInit {
-
- 
+export class FactureVenteListComponent implements OnInit {
 
   formBL: FormGroup
 
-  apiDelete = "/factureAvoirs/deleteFactureAvoir"
-  apiList = "/factureAvoirs/listFactureAvoirs"
+  apiDelete = "/factureVentes/deleteFactureVente"
+  apiList = "/factureVentes/listFactureVentes"
 
-
-  pageDetails = "/factureAvoir/details/"
-  pageModifie = "/factureAvoir/modifier/"
-  pageAjoute = "/factureAvoir/ajout"
+  pageDetails = "/factureVente/details/"
+  pageModifie = "/factureVente/modifier/"
+  pageAjoute = "/factureVente/ajout"
 
   isOpenModalDelete = false
   idDeleteModal = ""
@@ -43,13 +40,11 @@ export class FactureAvoirListComponent implements OnInit {
 
     this.http.post(this.informationGenerale.baseUrl + this.apiDelete + "/" + this.idDeleteModal, {},this.tokenStorageService.getHeader()).subscribe(
 
-
       res => {
         this.isLoading = false
         let resultat: any = res
         if (resultat.status) {
           this.getBonLivraisons(this.request)
-          
           this.closeModalDelete()
           this.notificationToast.showSuccess("Votre BonLivraison est bien supprimée !")
         }
@@ -81,13 +76,14 @@ export class FactureAvoirListComponent implements OnInit {
 
     this.formBL = this.fb.group({
       numero: [''],
-      typeAvoir: [''],
       date: [''],
       client: [''],
+      totalRemise: [''],
       totalHT: [''],
       totalTVA: [''],
       tFiscale: [''],
       totalTTC: [''],
+      totalGain: [''],
       limit: 50
     })
     this.getBonLivraisons(this.request)
@@ -104,30 +100,32 @@ export class FactureAvoirListComponent implements OnInit {
 
   itemsNotShowInput = ["client", "date"]
 
-  titreFile = "factureAchatListe"
-  nameFile = "facture_achat_list"
+  titreFile = "Liste Bon Livraison"
+  nameFile = "liste_bon_livraison"
 
   items = {
     numero: "Numero",
     date: "Date",
-    client: "client",
-    typeAvoir: "typeAvoir",
+    client: "Client",
+    totalRemise: "Total_Remise",
     totalHT: "Total_HT",
     totalTVA: "Total_TVA",
     tFiscale: "Timbre_Fiscale",
     totalTTC: "Total_TTC",
+    totalGain: "Total_Gain",
   };
 
 
   itemsVariable = {
-    numero: "Numero",
-    date: "Date",
-    client: "client",
-    typeAvoir: "typeAvoir",
-    totalHT: "Total_HT",
-    totalTVA: "Total_TVA",
-    tFiscale: "Timbre_Fiscale",
-    totalTTC: "Total_TTC",
+    numero: "active",
+    date: "active",
+    client: "active",
+    totalRemise: "active",
+    totalHT: "active",
+    totalTVA: "active",
+    tFiscale: "active",
+    totalTTC: "active",
+    totalGain: "active",
   };
 
   request = {
@@ -137,24 +135,26 @@ export class FactureAvoirListComponent implements OnInit {
     search: {
       numero: "",
       client: "",
-      typeAvoir: "",
       date: "",
       tiers: "",
+      totalRemise: "",
       totalHT: "",
       totalTVA: "",
       tFiscale: "",
       totalTTC: "",
+      totalGain: ""
     },
     orderBy: {
       numero: 0,
       client: 0,
-      typeAvoir: 0,
       date: 0,
       tiers: 0,
+      totalRemise: 0,
       totalHT: 0,
       totalTVA: 0,
       tFiscale: 0,
       totalTTC: 0,
+      totalGain: 0,
     },
     limit: 50,
     page: 1
@@ -167,28 +167,32 @@ export class FactureAvoirListComponent implements OnInit {
     search: {
       numero: "",
       client: "",
-      typeAvoir: "",
       date: "",
       tiers: "",
+      totalRemise: "",
       totalHT: "",
       totalTVA: "",
       tFiscale: "",
       totalTTC: "",
+      totalGain: "",
     },
     orderBy: {
       numero: 0,
       client: 0,
-      typeAvoir: 0,
       date: 0,
       tiers: 0,
+      totalRemise: 0,
       totalHT: 0,
       totalTVA: 0,
       tFiscale: 0,
       totalTTC: 0,
+      totalGain: 0,
     },
     limit: 50,
     page: 1
   }
+
+
 
   isLoading = false
 
@@ -323,5 +327,4 @@ export class FactureAvoirListComponent implements OnInit {
 
 
 }
-
 

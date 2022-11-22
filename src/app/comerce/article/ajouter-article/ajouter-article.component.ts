@@ -448,19 +448,18 @@ export class AjouterArticleComponent implements OnInit {
   changeArrondu(){
     var tabPrix = this.fonctionPartagesService.colonnesPrix
     var tabColonne = this.fonctionPartagesService.colonnesQuantites
-    var tabTaux = this.fonctionPartagesService.colonnesTaux
+    var tabTaux = ["marge", "remiseF"]
    
     for(let key in this.article){
-      if(tabPrix.includes(key) && key != 'marge'){
+      if(tabPrix.includes(key) && !tabTaux.includes(key)){
         this.article[key] = this.roundNumber(this.article[key])
-      }else if(tabColonne.includes(key)){
+      }else if(tabColonne.includes(key) && !tabTaux.includes(key)){
         this.article[key] = this.roundQuantite(this.article[key])
-      }else if(tabTaux.includes(key)){
-        this.article[key] = Number(Number(this.article[key]).toFixed(5))
       }
     } 
 
     this.article['marge'] = Number(Number(this.article['marge']).toFixed(5))
+    this.article['remiseF'] = Number(Number(this.article['remiseF']).toFixed(5))
     
   }
 

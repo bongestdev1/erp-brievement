@@ -1,43 +1,41 @@
-<app-controle-acces [avoirAccee]="informationGenerale.verifierAccee('listBonLivraisons')"></app-controle-acces>
 
+<app-controle-acces [avoirAccee]="informationGenerale.verifierAccee('listBonReceptions')"></app-controle-acces>
 
-<div *ngIf="informationGenerale.verifierAccee('listBonLivraisons')" class="col-xl-14">
-    <app-card cardTitle="Liste {{isVenteContoire? 'Ventes Comptoire': 'Bons Livraisons'}}" blockClass="table-border-style">
+<div class="col-xl-14" *ngIf="informationGenerale.verifierAccee('listBonReceptions')">
+    <app-card cardTitle="Liste {{isAchatContoire ? 'Achat Comptoire' : 'Bon Reception'}}" blockClass="table-border-style">
         <form [formGroup]="formBL">
             <div class="col-xl-14 pagination-inner" style="margin-bottom: 10px;">
-                <app-filtre-date-button class="col-sm-7" (getDatee)="getBonLivraisons($event)" ></app-filtre-date-button>
-
+                <app-filtre-date-button class="col-sm-7" (getDatee)="getBonLivraisons($event)"></app-filtre-date-button>
+                
                 <div class="col-md-5">
                     <div class="form-group row">
                         <label for="typeArticle" class="col-sm-4" style="margin-top: -8 px;">Document Transférés</label>
                         <div class="col-sm-8">
                             <div class="row">
                                 <div class="custom-control custom-radio" style="margin-left: -30px;">
-                                    <input type="radio" id="oui" value="oui" name="document" [checked]="request.search.isTransfert === 'oui'" (click)="clickDocument('oui')">
+                                    <input type="radio" id="oui" value="oui" name="document" (click)="clickDocument('oui')">
                                     <label for="oui">Oui</label>
                                 </div>
                                 <div class="custom-control custom-radio" style="margin-left: 15px;">
-                                    <input type="radio" id="non" value="non" name="document" [checked]="request.search.isTransfert === 'non'" (click)="clickDocument('non')">
+                                    <input type="radio" id="non" value="non" name="document" checked
+                                        (click)="clickDocument('non')">
                                     <label for="non">Non</label>
                                 </div>
                                 <div class="custom-control custom-radio" style="margin-left: 15px;">
-                                    <input type="radio" id="tout" value="tout" name="document" [checked]="request.search.isTransfert === ''" (click)="clickDocument('')">
+                                    <input type="radio" id="tout" value="tout" name="document" (click)="clickDocument('')">
                                     <label for="tout">Tout</label>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
-
             <div class="pagination-inner">
                 <!-- <button type="button" *ngIf="informationGenerale.verifierAccee('ajouterBonReception')" class="btn btn-info ng-tns-c112-14 btn-speciale" (click)="gotToAdd()">
-                    Ajouter {{isVenteContoire? 'Ventes Comptoire': 'Bons Livraisons'}} <i class="fas fa-plus"></i>
+                    Ajouter {{isAchatContoire ? 'Achat Comptoire' : 'Bon Reception'}} <i class="fas fa-plus"></i>
                 </button> -->
-                <button type="button" *ngIf="informationGenerale.verifierAccee('ajouterBonAchat') && !isVenteContoire" class="btn btn-warning ng-tns-c112-14 btn-speciale" (click)="transfertFactureVente()">
-                    Transfert Facture <i class="fas fa-plus"></i>
+                <button type="button" *ngIf="informationGenerale.verifierAccee('ajouterFactureAchat') && !isAchatContoire" class="btn btn-warning ng-tns-c112-14 btn-speciale" (click)="transfertFactureAchat()">
+                    Transfert Facture Achat <i class="fas fa-plus"></i>
                 </button>
 
                 <ul class="pagination">
@@ -52,9 +50,9 @@
                     </li>
                 </ul>
                 <div class="th-tableau2" style="margin-top:5px;">
-
+              
                     <app-nombre-list-page (getItemsEvent)="getBonLivraisons(request)" [control]="formBL.controls['limit']"> </app-nombre-list-page>
-
+              
                     <button (click)="getBonLivraisons(request)" class="btn btn-info ng-tns-c112-14"
                         style="font-size: 15px; padding:2px; height: 30px; display: inline-block; white-space: nowrap; margin-left: 3px;">
                         <i class="feather icon-search"></i>
@@ -66,7 +64,6 @@
                 </div>
 
             </div>
-
             <div class="table-responsive">
                 <table class="table table-striped" id="output">
                     <thead>
@@ -79,7 +76,8 @@
                                 </div>
                             </th>
 
-                            <th>
+                            <th class="grid-col grid-col--fixed-right">
+
                             </th>
                         </tr>
                     </thead>
@@ -96,14 +94,14 @@
                                 </div>
                             </th>
 
-                            <th class="grid-col grid-col--fixed-right" style="background-color:#f6f6f6 ;">Action</th>
+                            <th class="grid-col grid-col--fixed-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        <tr *ngFor="let item of bonLivraisons" class="{{idItemSelected === item.id ? 'color-ligne-selected' : '' }}" [id]="item.id">
+                        <tr *ngFor="let item of bonLivraisons">
 
-                            <td *ngFor="let key of objectKeys(itemsVariable)" (click)="idItemSelected = item.id">
+                            <td *ngFor="let key of objectKeys(itemsVariable)">
                                 <span *ngIf="fonctionPartages.colonnesQuantites.includes(key)"
                                     style="float:right;">{{fonctionPartages.getFormaThreeAfterVerguleNomber(item[key])}}</span>
                                 <span *ngIf="fonctionPartages.colonnesPrix.includes(key)"
@@ -119,36 +117,36 @@
                                 <span
                                     *ngIf="!(fonctionPartages.colonnesDates.includes(key) || fonctionPartages.colonnesQuantites.includes(key) || fonctionPartages.colonnesPrix.includes(key) || fonctionPartages.colonnesOuiNon.includes(key))">{{item[key]}}</span>
                             </td>
-                            <td  class="grid-col grid-col--fixed-right">
-
+                            <td class="grid-col grid-col--fixed-right">
                                 <a _ngcontent-myx-c121="" [routerLink]="pageDetails+item.id"
                                     class="btn btn-icon btn-outline-warning" style="margin-right: 5px;">
                                     <i _ngcontent-myx-c121="" class="feather icon-eye"></i>
                                 </a>
 
-                                <a *ngIf="informationGenerale.verifierAccee('modifierBonLivraison')" _ngcontent-myx-c121="" (click)="idItemSelected = item.id; setSaveFilterSession()" [routerLink]="pageModifie+item.id"
+                                <a *ngIf="informationGenerale.verifierAccee('modifierBonReception')" _ngcontent-myx-c121="" [routerLink]="pageModifie+item.id"
                                     class="btn btn-icon btn-outline-success" style="margin-right: 5px;">
                                     <i _ngcontent-myx-c121="" class="feather icon-edit"></i>
                                 </a>
 
-                                <a _ngcontent-myx-c121="" href="javascript:" class="btn btn-icon btn-outline-danger" *ngIf="informationGenerale.verifierAccee('supprimerBonLivraison') && (item.factureVente === '' || !item.factureVente)"
+                                <a *ngIf="informationGenerale.verifierAccee('supprimerBonReception') && item.isTransfert === 'non'" _ngcontent-myx-c121="" href="javascript:" class="btn btn-icon btn-outline-danger"
                                     (click)="openModalDelete(item.id,item.numero)">
                                     <i _ngcontent-myx-c121="" class="feather icon-trash-2"></i>
                                 </a>
 
-                                <button *ngIf="(item.factureVente === '' || !item.factureVente) && !isVenteContoire" class="btn btn-info btn-speciale" style="margin-left: 5px;">
-                                    <a [href]="'/factureVente/transfert/'+item.id" style="color: white;">
+                                <button class="btn btn-info btn-speciale" style="margin-left: 5px;" *ngIf="item.isTransfert === 'non' && !isAchatContoire">
+                                    <a [href]="'/factureAchat/transfert/'+item.id" style="color: white;">
                                         Transfert Facture
                                     </a>
                                 </button>
 
-                                <a  class="btn btn-icon btn-outline-success"  style="margin-left: 5px;" (click)="generationPdfFacture.openPopup(item.id, titreDocument )">
-                                       <i class="fa-solid fa-file-pdf"></i>
+                                <a  class="btn btn-icon btn-outline-success"  style="margin-left: 5px;" (click)="generationPdfFacture.openPopup(item.id, titreDocument)">
+                                    <i class="fa-solid fa-file-pdf"></i>
                                 </a>
 
-                                <input type="checkbox" *ngIf="(item.factureVente === '' || !item.factureVente) && !isVenteContoire" (click)="checkBonLivraison(item.id)" [checked]="isCochedBonLivraison(item.id)" style="margin-left: 5px;">
+                                <input type="checkbox" *ngIf="item.isTransfert === 'non'  && !isAchatContoire" (click)="checkBonReception(item.id)" [checked]="isCochedBonReception(item.id)" style="margin-left: 5px;">
 
                             </td>
+
                         </tr>
 
                     </tbody>

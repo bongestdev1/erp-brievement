@@ -2,7 +2,7 @@
 
 
 <div *ngIf="informationGenerale.verifierAccee('listBonLivraisons')" class="col-xl-14">
-    <app-card cardTitle="Liste Factures Avoirs Vente" blockClass="table-border-style">
+    <app-card cardTitle="Liste Factures Ventes" blockClass="table-border-style">
         <form [formGroup]="formBL">
             <div class="col-xl-14 pagination-inner" style="margin-bottom: 10px;">
                 <app-filtre-date-button class="col-sm-7" (getDatee)="getBonLivraisons($event)"></app-filtre-date-button>
@@ -10,8 +10,7 @@
             
             <app-entete-page-list [list]="bonLivraisons" [items]="items" [titreFile]="titreFile"
                 [nameFile]="nameFile" [acces]="'ajouterBonLivraison'" (gotToAdd)="gotToAdd()"
-                titreDocuments="Facture Avoir" [itemsVariable]="itemsVariable"
-
+                titreDocuments="Facture Vente" [itemsVariable]="itemsVariable"
                 [control]="formBL.controls['limit']" (getList)="getBonLivraisons(request)" >
             </app-entete-page-list>
 
@@ -57,13 +56,13 @@
                                 <span *ngIf="fonctionPartages.colonnesPrix.includes(key)"
                                     style="float:right;">{{fonctionPartages.getFormaThreeAfterVerguleQuantite(item[key])}}</span>
                                 <span *ngIf="fonctionPartages.colonnesDates.includes(key)"
-                                    style="text-align: center; display: block;">{{item[key]}}</span>
+                                    style="text-align: center; display: block;">{{fonctionPartages.getDate(item[key],
+                                    'yyyy-MM-dd')}}</span>
                                 <span *ngIf="fonctionPartages.colonnesOuiNon.includes(key)"
                                     style="text-align: center; display: block;"> <i class="fas fa-check-square"
                                         style="font-size: 15px;" *ngIf="item[key] == 'oui'"></i> <i
                                         class="fas fa-square" style="font-size: 15px;" *ngIf="item[key] != 'oui'"></i>
                                 </span>
-                               
                                 <span
                                     *ngIf="!(fonctionPartages.colonnesDates.includes(key) || fonctionPartages.colonnesQuantites.includes(key) || fonctionPartages.colonnesPrix.includes(key) || fonctionPartages.colonnesOuiNon.includes(key))">{{item[key]}}</span>
                             </td>
@@ -82,6 +81,7 @@
                                     (click)="openModalDelete(item.id,item.numero)">
                                     <i _ngcontent-myx-c121="" class="feather icon-trash-2"></i>
                                 </a>
+
 
                             </td>
                         </tr>

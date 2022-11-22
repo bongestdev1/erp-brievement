@@ -53,6 +53,10 @@ export class InputNumberVerguleComponent implements OnInit {
   }
 
   fixedVerguleNumber(){
+    if(this.isMarge){
+      return  this.getFormaAfterVerguleNomber(5, this.field[this.key])
+    }
+
     if(this.isTauxTva == "non"){
       if(this.isQuantite == "0"){
         this.field[this.key] = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(this.field[this.key]))

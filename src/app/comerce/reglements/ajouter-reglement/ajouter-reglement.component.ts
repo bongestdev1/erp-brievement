@@ -107,6 +107,7 @@ export class AjouterReglementComponent implements OnInit {
     try{
       let sessionCaise = this.informationsService.getSessionCaisse()
       this.request.sessionCaisse = sessionCaise[0].id
+      this.reglement.sessionCaisse = sessionCaise[0].id
     }catch(e){
       console.log(e)
     }

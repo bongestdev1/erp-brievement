@@ -35,6 +35,7 @@ export class ParametresPageComponent implements OnInit {
     validationUpdatePrixAchatFromBonAchat:"",
     validationTimbreFiscaleBonRec:"oui",
     validationTimbreFiscaleBonLiv:"oui",
+    validationTimbreFiscaleAvoirSurFacture:true,
     logo:"",
     societeTransport:""
   }
@@ -53,6 +54,7 @@ export class ParametresPageComponent implements OnInit {
     validationUpdatePrixAchatFromBonAchat:"",
     validationTimbreFiscaleBonRec:"oui",
     validationTimbreFiscaleBonLiv:"oui",
+    validationTimbreFiscaleAvoirSurFacture:true,
     logo:"",
     societeTransport:""
   }
@@ -260,6 +262,10 @@ export class ParametresPageComponent implements OnInit {
     }else{
       this.parametres.validationTimbreFiscaleBonRec = "oui"
     }
+  }
+
+  clickValidationTimbreFiscaleAvoirSurFacture(){
+    this.parametres.validationTimbreFiscaleAvoirSurFacture = !this.parametres.validationTimbreFiscaleAvoirSurFacture
   }
 
   clickIsTimbreFiscaleBonLiv(){

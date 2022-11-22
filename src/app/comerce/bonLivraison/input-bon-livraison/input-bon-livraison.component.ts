@@ -191,7 +191,7 @@ export class InputBonLivraisonComponent implements OnInit {
           this.allOrdreEmissions = resultat.ordreEmissions
 
           if (this.allClients.filter(x => x.id == this.bonLivraison.client).length > 0) {
-            this.client = this.allClients.filter(x => x.id == this.bonLivraison.client)[0]
+            this.setClientID(this.bonLivraison.client)
           }
 
           if (this.titreCrud == this.fonctionPartagesService.titreCrud.ajouter) {
@@ -840,7 +840,6 @@ export class InputBonLivraisonComponent implements OnInit {
     var resultat = this.fonctionsBL.verifierClient(this.client)
 
     this.isOpenModalBlockerClient = resultat.isOpenModalBlockerClient
-
     this.messageBlockerClient = resultat.messageBlockerClient
 
     if (resultat.isOpenModalBlockerClient) {

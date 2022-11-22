@@ -205,7 +205,7 @@ export class FactureAvoirComponent implements OnInit {
           this.allClients = resultat.clients
           if (this.allClients.filter(x => x.id == this.bonAchat.client).length > 0) {
             this.client = this.allClients.filter(x => x.id == this.bonAchat.client)[0]
-            this.getBonDocuments()
+            this.getBonDocuments(true)
           }
 
           if (this.titreCrud == this.fonctionPartagesService.titreCrud.ajouter || this.titreCrud == this.fonctionPartagesService.titreCrud.transfert) {
@@ -292,14 +292,15 @@ export class FactureAvoirComponent implements OnInit {
           //this.reseteFormulaire()
           this.request = response.resultat
           this.bonRetourSelected = response.bonRetourClients
+          this.factureVenteSelected = response.resultat.factureVentes
 
           this.titreDocument = this.request.typeAvoir
           for (let key in this.bonAchat) {
             this.bonAchat[key] = this.request[key]
           }
-
+          
           this.bonAchat.date = formatDate(new Date(this.bonAchat.date), 'yyyy-MM-dd', 'en');
-          this.calculTotalFactureAchat()
+          // this.calculTotalFactureAchat()
           this.getAllParametres()
 
         }
@@ -364,24 +365,24 @@ export class FactureAvoirComponent implements OnInit {
     this.request.typeAvoir = this.bonAchat.typeAvoir
     
     if(this.client){
-      this.getBonDocuments()
+      this.getBonDocuments(false)
     }
   }
 
-  getBonDocuments(){
+  getBonDocuments(isNotInisialiserPrix){
       this.request.typeAvoir = this.bonAchat.typeAvoir
       if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises){
-        this.getBonDocumentsBonRetourClients()
+        this.getBonDocumentsBonRetourClients(isNotInisialiserPrix)
       }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture){
-        this.getBonDocumentsFacturesClient()
+        this.getBonDocumentsFacturesClient(isNotInisialiserPrix)
       }else{
-        this.getBonDocumentsFacturesClientSansDejaTransformerAvoirSurFac()
+        this.getBonDocumentsFacturesClientSansDejaTransformerAvoirSurFac(isNotInisialiserPrix)
       }
   }
 
   allBonRetourClients = []
 
-  getBonDocumentsBonRetourClients() {
+  getBonDocumentsBonRetourClients(isNotInisialiserPrix) {
     
     if (this.isLoading) {
       return
@@ -396,10 +397,13 @@ export class FactureAvoirComponent implements OnInit {
         let resultat: any = res
         if (resultat.status) {
           this.allBonRetourClients = resultat.bonRetourClients
-          this.renitialiserFacture()
+          
+          if(!isNotInisialiserPrix){
+            this.renitialiserFacture()
+          }
            
           if(this.bonAchat.typeAvoir !== this.request.typeAvoir){
-            this.getBonDocuments()
+            this.getBonDocuments(false)
           }
         }
       }, err => {
@@ -412,7 +416,7 @@ export class FactureAvoirComponent implements OnInit {
 
   allFacturesClient = []
 
-  getBonDocumentsFacturesClientSansDejaTransformerAvoirSurFac() {
+  getBonDocumentsFacturesClientSansDejaTransformerAvoirSurFac(isNotInisialiserPrix) {
     if (this.isLoading) {
       return
     }
@@ -426,9 +430,16 @@ export class FactureAvoirComponent implements OnInit {
         let resultat: any = res
         if (resultat.status) {
           this.allFacturesClient = resultat.factureVentes
-          this.renitialiserFacture()
+          
+          for(let item of this.factureVenteSelected){
+            this.allFacturesClient = this.allFacturesClient.filter(x => x.id != item.id)
+          }
+
+          if(!isNotInisialiserPrix){
+            this.renitialiserFacture()
+          }
           if(this.bonAchat.typeAvoir !== this.request.typeAvoir){
-            this.getBonDocuments()
+            this.getBonDocuments(false)
           }
         }
       }, err => {
@@ -439,7 +450,9 @@ export class FactureAvoirComponent implements OnInit {
     );
   }
 
-  getBonDocumentsFacturesClient() {
+  
+
+  getBonDocumentsFacturesClient(isNotInisialiserPrix) {
     if (this.isLoading) {
       return
     }
@@ -453,9 +466,11 @@ export class FactureAvoirComponent implements OnInit {
         let resultat: any = res
         if (resultat.status) {
           this.allFacturesClient = resultat.factureVentes
-          this.renitialiserFacture()
+          if(!isNotInisialiserPrix){
+            this.renitialiserFacture()
+          }
           if(this.bonAchat.typeAvoir !== this.request.typeAvoir){
-            this.getBonDocuments()
+            this.getBonDocuments(false)
           }
         }
       }, err => {
@@ -467,22 +482,6 @@ export class FactureAvoirComponent implements OnInit {
   }
   
   renitialiserFacture(){
-
-    var newBonReceptions = []
-
-    for(let i = 0; i < this.bonReceptions.length; i++){
-      var result = this.allBonReceptions.filter(x => x.id === this.bonReceptions[i].id )
-
-      if(result.length > 0){
-        newBonReceptions.push(result[0])
-      }else{
-        newBonReceptions.push(this.bonReceptions[i])
-      }
-
-      this.allBonReceptions = this.allBonReceptions.filter(x => x.id !== this.bonReceptions[i].id )
-    }
-
-    this.bonReceptions = newBonReceptions
 
     var keys = ["montantTotal", "montantEscompte", "restPayer", "montantPaye", "totalDC", "totalFodec", "totalGainCommerciale", "totalHT", "totalTTC", "totalTVA", "totalRemise", "totalRedevance",  "totalGainReel", ]
     for(let key of keys){
@@ -500,7 +499,7 @@ export class FactureAvoirComponent implements OnInit {
 
     var societe = this.informationGenerale.getSocieteCurrentObject() 
     
-    if (societe.exemptTimbreFiscale == "non" ) {
+    if (societe.exemptTimbreFiscale == "non" && this.bonAchat.typeAvoir == this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture) {
       this.bonAchat.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
     } else {
       this.bonAchat.timbreFiscale = 0
@@ -541,8 +540,6 @@ export class FactureAvoirComponent implements OnInit {
          this.isLoading = false
          this.bonAchat.captureFactureVenteClient = res[0]
 
-         console.log(this.bonAchat)
-
          this.ajoutBonAchat()
       }, err => {
         this.isLoading = false
@@ -555,7 +552,7 @@ export class FactureAvoirComponent implements OnInit {
     if (this.titreCrud == this.fonctionPartagesService.titreCrud.modifier) {
       this.modifierBonAchat()
     } else if (this.titreCrud == this.fonctionPartagesService.titreCrud.transfert) {
-        this.ajoutBonAchat2()
+      this.ajoutBonAchat2()
     } else {
       this.ajoutBonAchat2()
     }
@@ -586,6 +583,12 @@ export class FactureAvoirComponent implements OnInit {
       bonRetourClients.push(x.id)
     })
 
+    var factureVentes = []
+    this.factureVenteSelected.forEach( x =>{
+      factureVentes.push({factureVente:x.id, montantFinancie:x.montantFinancie})
+    })
+    
+    request.factureVentes = factureVentes
     request.bonRetourClients = bonRetourClients
 
     this.isLoading = true
@@ -639,6 +642,13 @@ export class FactureAvoirComponent implements OnInit {
       bonRetourClients.push(x.id)
     })
 
+    
+    var factureVentes = []
+    this.factureVenteSelected.forEach( x =>{
+      factureVentes.push({factureVente:x.id, montantFinancie:x.montantFinancie})
+    })
+    
+    request.factureVentes = factureVentes
     request.bonRetourClients = bonRetourClients
 
     if (this.isLoading) {
@@ -695,7 +705,7 @@ export class FactureAvoirComponent implements OnInit {
 
     this.client = JSON.parse(JSON.stringify(client[0]))
 
-    this.getBonDocuments()
+    this.getBonDocuments(false)
   }
   //pour calculer le nombre des bons Achats non payées par un id Client
   lienBonAchatsClient = "/bonAchats/bonAchatsClient/"
@@ -752,8 +762,7 @@ export class FactureAvoirComponent implements OnInit {
       reader.onload = () => {
         this.imageData = reader.result as string;
       };
-
-      console.log(this.imageData)
+     
       reader.readAsDataURL(this.captureClient);
     }
   }
@@ -761,32 +770,25 @@ export class FactureAvoirComponent implements OnInit {
   saveFileFacture(){
     this.http.get(this.informationGenerale.baseUrl+'/'+this.bonAchat.captureFactureVenteClient, {responseType: "blob", headers: {'Accept': 'application/pdf'}})
     .subscribe(blob => {
-      console.log(blob)
       saveAs(blob, this.bonAchat.captureFactureVenteClient );
     });
   }
 
   replacePath(chaine){
-    console.log(chaine)
-    console.log(chaine.replace('\\','_'))
     return chaine.replace('\\','_')
   }
 
   calculTotalFactureAchat(){
-    console.log(this.titreDocument)
     if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises){
       this.calculTotalFactureBonRetourClient()
     }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture){
       this.calculTotalFactureAvoirSurFacture()
-    }else{
-      this.calculTotalFactureAvoirSurFacture()
+    }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirFinanciers){
+      this.changeMontantFinancier()
     } 
   }
 
   calculTotalFactureAvoirSurFacture(){
-    console.log(this.allFacturesClient)
-    console.log(this.bonAchat.factureVente)
-
     if(this.allFacturesClient.filter(x => x.id === this.bonAchat.factureVente).length > 0){
       var fv = this.allFacturesClient.filter(x => x.id === this.bonAchat.factureVente)[0]
       this.bonAchat.totalRemise = fv.totalRemise
@@ -839,7 +841,7 @@ export class FactureAvoirComponent implements OnInit {
   // }
 
   closeModal(){
-    this.getBonDocuments()
+    this.getBonDocuments(false)
   }
 
   // start BonRetourClient
@@ -946,6 +948,7 @@ export class FactureAvoirComponent implements OnInit {
     this.bonAchat.totalRemise = 0
     this.bonAchat.totalTTC = sommeTTC
     this.bonAchat.totalHT = sommeHt
+    
     this.bonAchat.montantTotal = this.bonAchat.timbreFiscale + this.bonAchat.totalTTC
     this.bonAchat.montantPaye = 0
     this.bonAchat.restPayer = 0

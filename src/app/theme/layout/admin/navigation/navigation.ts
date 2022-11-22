@@ -629,6 +629,14 @@ const NavigationItems = [
             url: '/factureVente/list',
             icon: 'icofont-ui-clip-board'
           },
+          {
+            id: 'facturesAvoir',
+            title: 'Factures Avoir Vente',
+            type: 'item',
+            classes: 'nav-item',
+            url: '/factureAvoir/list',
+            icon: 'icofont-ui-clip-board'
+          },
           //  {
           //    id: 'facturesAvoir',
           //    title: 'Factures avoir',

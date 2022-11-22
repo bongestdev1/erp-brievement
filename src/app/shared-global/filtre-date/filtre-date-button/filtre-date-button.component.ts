@@ -15,8 +15,8 @@ export class FiltreDateButtonComponent implements OnInit {
 
   @Input() isLoading = false
 
-  @Input() dateStart = ""
-  @Input() dateEnd = ""
+  // @Input() dateStart = ""
+  // @Input() dateEnd = ""
 
   request = {
     dateStart: formatDate(new Date(), 'yyyy-MM-dd', 'en'),
@@ -37,11 +37,11 @@ export class FiltreDateButtonComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.dateStart)
-    if(!this.dateEnd && !this.dateStart){
-      this.day2 = this.dateEnd
-      this.day1 = this.dateStart
-    }
+    // console.log(this.dateStart)
+    // if(!this.dateEnd && !this.dateStart){
+    //   this.day2 = this.dateEnd
+    //   this.day1 = this.dateStart
+    // }
   }
 
   getOption(ch) {    

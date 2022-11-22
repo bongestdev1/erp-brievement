@@ -65,15 +65,13 @@ export class UtilesBonLivraisonService {
   changeArrondu(item){
     var tabPrix = this.fonctionPartagesService.colonnesPrix
     var tabColonne = this.fonctionPartagesService.colonnesQuantites
-    var tabTaux = this.fonctionPartagesService.colonnesTaux
-   
+    var tabColonneTaux = ['marge', 'tauxRemise', 'remiseF']
+    
     for(let key in item){
-      if(tabPrix.includes(key) && key != 'marge'){
+      if( !tabColonneTaux.indexOf(key) && tabPrix.includes(key) && key != 'marge'){
         item[key] = this.arrondiNombre(item[key])
-      }else if(tabColonne.includes(key)){
+      }else if(!tabColonneTaux.indexOf(key) && tabColonne.includes(key)){
         item[key] = this.arrondiQuantite(item[key])
-      }else if(tabTaux.includes(key)){
-        item[key] = Number(Number(item[key]).toFixed(5))
       }
     } 
     
@@ -164,6 +162,7 @@ export class UtilesBonLivraisonService {
     }
 
     var tauxRemise = Number(item.tauxRemise.toFixed(5))
+    console.log("tauxRemise =", item.tauxRemise)
     
     item.remiseF = tauxRemise
     
@@ -202,6 +201,8 @@ export class UtilesBonLivraisonService {
     
     item = this.changeArrondu(item)
 
+    console.log("tauxRemise =", item.tauxRemise)
+    
     return item
   }
 

@@ -37,6 +37,14 @@ export class ReglementInputComponent implements OnInit {
   ngOnInit(): void {
     this.reglement.modeReglement = this.informationGenerale.modeReglCurrent
     this.isModifierReglement = this.router.url.indexOf('liltrage') === -1 
+    try {
+      let sessionCaise = this.informationGenerale.getSessionCaisse()
+      this.reglement.sessionCaisse = sessionCaise[0].id
+    } catch (e) {
+      this.reglement.sessionCaisse = null
+      console.log(e)
+      return
+    }
   }
 
   supprimerLiltrageClick(){

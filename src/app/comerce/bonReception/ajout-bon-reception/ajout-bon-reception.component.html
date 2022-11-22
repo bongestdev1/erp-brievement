@@ -1,0 +1,23 @@
+<app-controle-acces [avoirAccee]="informationGenerale.verifierAccee('ajouterBonAchat')"></app-controle-acces>
+
+<app-input-bon-livraison
+    *ngIf="informationGenerale.verifierAccee('ajouterBonAchat')"
+    [lienAjoute]="lienAjoute"
+    [apiList]="apiList"
+    [apiParametres]="apiParametres"
+    [lienModifie]="lienModifie"
+    [lienGetById]="lienGetById"
+    [titreDocument]="titreDocument"
+    [modeTiere]="modeTiere"
+    [titreCrud]="titreCrud"
+    [pageList]="pageList"
+    [lienGetByIdDocumentPrecedent]="lienGetByIdDocumentPrecedent"
+    [titreDocumentPrecedent]="titreDocumentPrecedent"
+    [lienGetDocuments]="lienGetDocuments"
+    [lienGetById2] = "lienGetById2"
+
+    [titreCrud]="titreCrud"
+    [pageList]="pageList"
+    [isPopup]="isPopup"
+    (closeModal) = "closeModalLocal()"
+></app-input-bon-livraison>
