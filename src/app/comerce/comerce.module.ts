@@ -115,6 +115,8 @@ import { FactureVenteLigneComponent } from './facture-vente/facture-vente-ligne/
 import { FactureVenteListComponent } from './facture-vente/facture-vente-list/facture-vente-list.component';
 import { FactureAvoirListComponent } from './facture-avoir/facture-avoir-list/facture-avoir-list.component';
 import { FactureAvoirComponent } from './facture-avoir/facture-avoir/facture-avoir.component';
+import { FactureAvoirAchatComponent } from './facture-avoir-achat/facture-avoir-achat/facture-avoir-achat.component';
+import { FactureAvoirAchatListComponent } from './facture-avoir-achat/facture-avoir-achat-list/facture-avoir-achat-list.component';
 
 
 /*---------------------------End-------------------*/
@@ -228,6 +230,8 @@ import { FactureAvoirComponent } from './facture-avoir/facture-avoir/facture-avo
     DetailsBonReceptionComponent,
     ListBonReceptionComponent,
     ModifierBonReceptionComponent,
+    FactureAvoirAchatComponent,
+    FactureAvoirAchatListComponent,
 
 
   ],

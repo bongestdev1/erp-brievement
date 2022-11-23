@@ -7,18 +7,19 @@ import { FonctionPartagesService } from 'src/app/services/fonction-partages.serv
 import { formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImpressionDocumentService } from 'src/app/services/impression-document.service';
-import { Client } from 'src/app/model/modelComerce/Client/Client';
+import { Fournisseur } from 'src/app/model/modelComerce/Fournisseur/Fournisseur';
 import { TokenStorageService } from 'src/app/services/authentication/token-storage.service';
 import {saveAs} from 'file-saver';
 import { GenerationPdfFactureService } from 'src/app/services/generation-pdf-facture.service';
 
 @Component({
-  selector: 'app-facture-avoir',
-  templateUrl: './facture-avoir.component.html',
-  styleUrls: ['./facture-avoir.component.scss']
+  selector: 'app-facture-avoir-achat',
+  templateUrl: './facture-avoir-achat.component.html',
+  styleUrls: ['./facture-avoir-achat.component.scss']
 })
-export class FactureAvoirComponent implements OnInit {
+export class FactureAvoirAchatComponent implements OnInit {
 
+ 
  
   public isCollapsed: boolean;
   public isCollapsed2: boolean;
@@ -29,28 +30,28 @@ export class FactureAvoirComponent implements OnInit {
 
   @Input() lienupload = "/bonLivraisons/upload"
 
-  apiGetBonReception = "/factureAvoirs/getBonReceptions"
+  apiGetBonReception = "/factureAvoirAchats/getBonReceptions"
 
-  @Input() lienAjoute = "/factureAvoirs/newFactureAvoir"
+  @Input() lienAjoute = "/factureAvoirAchats/newFactureAvoir"
 
 
-  @Input() apiParametres = "/factureAvoirs/getAllParametres"
+  @Input() apiParametres = "/factureAvoirAchats/getAllParametres"
 
-  @Input() lienModifie = "/factureAvoirs/modifierFactureAvoir/"
+  @Input() lienModifie = "/factureAvoirAchats/modifierFactureAvoir/"
 
-  @Input() lienGetById = "/factureAvoirs/getById/"
+  @Input() lienGetById = "/factureAvoirAchats/getById/"
 
   @Input() titreDocument = this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises
 
-  @Input() modeTiere = this.fonctionPartagesService.modeTiere.client
+  @Input() modeTiere = this.fonctionPartagesService.modeTiere.fournisseur
 
   @Input() titreCrud = this.fonctionPartagesService.titreCrud.ajouter
 
-  @Input() pageList = "/factureAvoir/list"
+  @Input() pageList = "/factureAvoirAchat/list"
 
-  lienGetDocuments1 = "/factureAvoirs/getBonRetourClients/"
-  lienGetDocuments2 = "/factureAvoirs/getFacturesClient/"
-  lienGetDocuments3 = "/factureAvoirs/getFacturesClientSansDejaAvoir/"
+  lienGetDocuments1 = "/factureAvoirAchats/getBonRetourFournisseurs/"
+  lienGetDocuments2 = "/factureAvoirAchats/getFacturesFournisseur/"
+  lienGetDocuments3 = "/factureAvoirAchats/getFacturesFournisseurSansDejaAvoir/"
 
   allBonReceptions = []
 
@@ -58,7 +59,7 @@ export class FactureAvoirComponent implements OnInit {
 
   id = ""
 
-  allClients = []
+  allFournisseurs = []
 
 
   objectKeys = Object.keys;
@@ -66,7 +67,7 @@ export class FactureAvoirComponent implements OnInit {
   request = {
     numero: "",
     date: "",
-    client: "",
+    fournisseur: "",
 
     totalRemise: 0,
     totalHT: 0,
@@ -92,11 +93,11 @@ export class FactureAvoirComponent implements OnInit {
 
     typeAvoir: this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises,
 
-    numeroFactureVenteClient:"",
-    dateFactureVenteClient:"",
-    captureFactureVenteClient:"",
+    numeroFactureVenteFournisseur:"",
+    dateFactureVenteFournisseur:"",
+    captureFactureVenteFournisseur:"",
 
-    bonRetourClients:[],
+    bonRetourFournisseurs:[],
     factureVentes:[],
     factureVente:""
 
@@ -105,7 +106,7 @@ export class FactureAvoirComponent implements OnInit {
   bonAchat = {
     numero: "",
     date: "",
-    client: "",
+    fournisseur: "",
 
     totalRemise: 0,
     totalHT: 0,
@@ -131,11 +132,11 @@ export class FactureAvoirComponent implements OnInit {
 
     typeAvoir: this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises,
 
-    numeroFactureVenteClient:"",
-    dateFactureVenteClient:"",
-    captureFactureVenteClient:"",
+    numeroFactureVenteFournisseur:"",
+    dateFactureVenteFournisseur:"",
+    captureFactureVenteFournisseur:"",
 
-    bonRetourClients:[],
+    bonRetourFournisseurs:[],
     factureVentes:[],
     factureVente:""
   }
@@ -143,7 +144,7 @@ export class FactureAvoirComponent implements OnInit {
   tabNumbers = ["totalDC", "montantEscompte", "tFiscale", "montantPaye", "restPaye", "totalRedevance", "totalFodec"]
 
   erreurBonAchat = {
-    client: "",
+    fournisseur: "",
     date: "",
     totalHT: "",
   }
@@ -171,19 +172,19 @@ export class FactureAvoirComponent implements OnInit {
   }
 
   clickImpression() {
-    // var client = null
-    // var clients = this.allClients.filter(x => x.id == this.bonAchat.client)
-    // if (clients.length > 0) {
-    //   client = clients[0]
+    // var fournisseur = null
+    // var fournisseurs = this.allFournisseurs.filter(x => x.id == this.bonAchat.fournisseur)
+    // if (fournisseurs.length > 0) {
+    //   fournisseur = fournisseurs[0]
     // }
-    //this.impressionDocument.generatePDF(this.titreDocument, this.bonAchat, this.articles, client)
+    //this.impressionDocument.generatePDF(this.titreDocument, this.bonAchat, this.articles, fournisseur)
 
     console.log('hello');
 
   }
 
   isPrixVenteNotPrixAchat() {
-    if (this.titreDocument == this.fonctionPartagesService.titreDocuments.bonRetourClient || this.titreDocument == this.fonctionPartagesService.titreDocuments.devis || this.titreDocument == this.fonctionPartagesService.titreDocuments.bonAchat || this.titreDocument == this.fonctionPartagesService.titreDocuments.commande) {
+    if (this.titreDocument == this.fonctionPartagesService.titreDocuments.bonRetourFournisseur || this.titreDocument == this.fonctionPartagesService.titreDocuments.devis || this.titreDocument == this.fonctionPartagesService.titreDocuments.bonAchat || this.titreDocument == this.fonctionPartagesService.titreDocuments.commande) {
       return true
     }
     return false
@@ -202,9 +203,9 @@ export class FactureAvoirComponent implements OnInit {
         this.isLoading = false
         let resultat: any = res
         if (resultat.status) {
-          this.allClients = resultat.clients
-          if (this.allClients.filter(x => x.id == this.bonAchat.client).length > 0) {
-            this.client = this.allClients.filter(x => x.id == this.bonAchat.client)[0]
+          this.allFournisseurs = resultat.fournisseurs
+          if (this.allFournisseurs.filter(x => x.id == this.bonAchat.fournisseur).length > 0) {
+            this.fournisseur = this.allFournisseurs.filter(x => x.id == this.bonAchat.fournisseur)[0]
             this.getBonDocuments(true)
           }
 
@@ -230,7 +231,7 @@ export class FactureAvoirComponent implements OnInit {
     this.multiCollapsed2 = true;
     if (this.titreCrud == this.fonctionPartagesService.titreCrud.ajouter) {
       this.bonAchat.date = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-      this.bonAchat.dateFactureVenteClient = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+      this.bonAchat.dateFactureVenteFournisseur = formatDate(new Date(), 'yyyy-MM-dd', 'en');
       this.getAllParametres()
     }else if (this.titreCrud == this.fonctionPartagesService.titreCrud.transfert){
       this.id = this.route.snapshot.paramMap.get('id');
@@ -256,8 +257,8 @@ export class FactureAvoirComponent implements OnInit {
       isValid = false
     }
 
-    if (this.bonAchat['client'] == "") {
-      this.erreurBonAchat['client'] = "Veuillez remplir ce champ"
+    if (this.bonAchat['fournisseur'] == "") {
+      this.erreurBonAchat['fournisseur'] = "Veuillez remplir ce champ"
       isValid = false
     }
 
@@ -290,8 +291,8 @@ export class FactureAvoirComponent implements OnInit {
         if (response.status) {
           //this.reseteFormulaire()
           this.request = response.resultat
-          this.bonRetourSelected = response.bonRetourClients
-          this.factureVenteSelected = response.resultat.factureVentes
+          this.bonRetourSelected = response.bonRetourFournisseurs
+          this.factureVenteSelected = response.resultat.factureAchats
 
           this.titreDocument = this.request.typeAvoir
           for (let key in this.bonAchat) {
@@ -327,12 +328,12 @@ export class FactureAvoirComponent implements OnInit {
         if (response.status) {
           //this.reseteFormulaire()
           if(response.bonReceptions.length > 0){
-            this.bonReceptions = response.bonReceptions.filter(x => x.client === response.bonReceptions[0].client)
-            this.bonAchat.client = response.bonReceptions[0].client
+            this.bonReceptions = response.bonReceptions.filter(x => x.fournisseur === response.bonReceptions[0].fournisseur)
+            this.bonAchat.fournisseur = response.bonReceptions[0].fournisseur
           }
 
           this.bonAchat.date = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-          this.bonAchat.dateFactureVenteClient = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+          this.bonAchat.dateFactureVenteFournisseur = formatDate(new Date(), 'yyyy-MM-dd', 'en');
          
           this.renitialiserFacture()
           this.getAllParametres()
@@ -363,7 +364,7 @@ export class FactureAvoirComponent implements OnInit {
 
     this.request.typeAvoir = this.bonAchat.typeAvoir
     
-    if(this.client){
+    if(this.fournisseur){
       this.getBonDocuments(false)
     }
   }
@@ -371,17 +372,17 @@ export class FactureAvoirComponent implements OnInit {
   getBonDocuments(isNotInisialiserPrix){
       this.request.typeAvoir = this.bonAchat.typeAvoir
       if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises){
-        this.getBonDocumentsBonRetourClients(isNotInisialiserPrix)
+        this.getBonDocumentsBonRetourFournisseurs(isNotInisialiserPrix)
       }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture){
-        this.getBonDocumentsFacturesClient(isNotInisialiserPrix)
+        this.getBonDocumentsFacturesFournisseur(isNotInisialiserPrix)
       }else{
-        this.getBonDocumentsFacturesClientSansDejaTransformerAvoirSurFac(isNotInisialiserPrix)
+        this.getBonDocumentsFacturesFournisseurSansDejaTransformerAvoirSurFac(isNotInisialiserPrix)
       }
   }
 
-  allBonRetourClients = []
+  allBonRetourFournisseurs = []
 
-  getBonDocumentsBonRetourClients(isNotInisialiserPrix) {
+  getBonDocumentsBonRetourFournisseurs(isNotInisialiserPrix) {
     
     if (this.isLoading) {
       return
@@ -389,13 +390,13 @@ export class FactureAvoirComponent implements OnInit {
 
     this.allBonReceptions = []
     this.isLoading = true
-    this.http.get(this.informationGenerale.baseUrl + this.lienGetDocuments1 + this.client.id+ '/' + this.informationGenerale.idSocieteCurrent, this.tokenStorageService.getHeader()).subscribe(
+    this.http.get(this.informationGenerale.baseUrl + this.lienGetDocuments1 + this.fournisseur.id+ '/' + this.informationGenerale.idSocieteCurrent, this.tokenStorageService.getHeader()).subscribe(
       res => {
         console.log(res)
         this.isLoading = false
         let resultat: any = res
         if (resultat.status) {
-          this.allBonRetourClients = resultat.bonRetourClients
+          this.allBonRetourFournisseurs = resultat.bonRetourFournisseurs
           
           if(!isNotInisialiserPrix){
             this.renitialiserFacture()
@@ -413,25 +414,25 @@ export class FactureAvoirComponent implements OnInit {
     );
   }
 
-  allFacturesClient = []
+  allFacturesFournisseur = []
 
-  getBonDocumentsFacturesClientSansDejaTransformerAvoirSurFac(isNotInisialiserPrix) {
+  getBonDocumentsFacturesFournisseurSansDejaTransformerAvoirSurFac(isNotInisialiserPrix) {
     if (this.isLoading) {
       return
     }
 
     this.allBonReceptions = []
     this.isLoading = true
-    this.http.get(this.informationGenerale.baseUrl + this.lienGetDocuments3 + this.client.id+ '/' + this.informationGenerale.idSocieteCurrent, this.tokenStorageService.getHeader()).subscribe(
+    this.http.get(this.informationGenerale.baseUrl + this.lienGetDocuments3 + this.fournisseur.id+ '/' + this.informationGenerale.idSocieteCurrent, this.tokenStorageService.getHeader()).subscribe(
       res => {
         console.log(res)
         this.isLoading = false
         let resultat: any = res
         if (resultat.status) {
-          this.allFacturesClient = resultat.factureVentes
+          this.allFacturesFournisseur = resultat.factureAchats
           
           for(let item of this.factureVenteSelected){
-            this.allFacturesClient = this.allFacturesClient.filter(x => x.id != item.id)
+            this.allFacturesFournisseur = this.allFacturesFournisseur.filter(x => x.id != item.id)
           }
 
           if(!isNotInisialiserPrix){
@@ -451,20 +452,20 @@ export class FactureAvoirComponent implements OnInit {
 
   
 
-  getBonDocumentsFacturesClient(isNotInisialiserPrix) {
+  getBonDocumentsFacturesFournisseur(isNotInisialiserPrix) {
     if (this.isLoading) {
       return
     }
 
     this.allBonReceptions = []
     this.isLoading = true
-    this.http.get(this.informationGenerale.baseUrl + this.lienGetDocuments2 + this.client.id+ '/' + this.informationGenerale.idSocieteCurrent, this.tokenStorageService.getHeader()).subscribe(
+    this.http.get(this.informationGenerale.baseUrl + this.lienGetDocuments2 + this.fournisseur.id+ '/' + this.informationGenerale.idSocieteCurrent, this.tokenStorageService.getHeader()).subscribe(
       res => {
         console.log(res)
         this.isLoading = false
         let resultat: any = res
         if (resultat.status) {
-          this.allFacturesClient = resultat.factureVentes
+          this.allFacturesFournisseur = resultat.factureVentes
           if(!isNotInisialiserPrix){
             this.renitialiserFacture()
           }
@@ -527,8 +528,8 @@ export class FactureAvoirComponent implements OnInit {
     }
 
     var request = new FormData();
-    if (this.captureClient) {
-      request.append("myFiles", this.captureClient, this.captureClient.filename);
+    if (this.captureFournisseur) {
+      request.append("myFiles", this.captureFournisseur, this.captureFournisseur.filename);
     }
 
     this.isLoading = true
@@ -537,7 +538,7 @@ export class FactureAvoirComponent implements OnInit {
 
       res => {
          this.isLoading = false
-         this.bonAchat.captureFactureVenteClient = res[0]
+         this.bonAchat.captureFactureVenteFournisseur = res[0]
 
          this.ajoutBonAchat()
       }, err => {
@@ -577,18 +578,18 @@ export class FactureAvoirComponent implements OnInit {
 
     let request: any = {}
     request = this.request
-    var bonRetourClients = []
+    var bonRetourFournisseurs = []
     this.bonRetourSelected.forEach( x =>{
-      bonRetourClients.push(x.id)
+      bonRetourFournisseurs.push(x.id)
     })
 
-    var factureVentes = []
+    var factureAchats = []
     this.factureVenteSelected.forEach( x =>{
-      factureVentes.push({documentVente:x.id, montantFinancie:x.montantFinancie})
+      factureAchats.push({documentAchat:x.id, montantFinancie:x.montantFinancie})
     })
     
-    request.factureVentes = factureVentes
-    request.bonRetourClients = bonRetourClients
+    request.factureAchats = factureAchats
+    request.bonRetourFournisseurs = bonRetourFournisseurs
 
     this.isLoading = true
 
@@ -636,19 +637,18 @@ export class FactureAvoirComponent implements OnInit {
     let request: any = {}
     request = this.request
     
-    var bonRetourClients = []
+    var bonRetourFournisseurs = []
     this.bonRetourSelected.forEach( x =>{
-      bonRetourClients.push(x.id)
+      bonRetourFournisseurs.push(x.id)
     })
 
-    
-    var factureVentes = []
+    var factureAchats = []
     this.factureVenteSelected.forEach( x =>{
-      factureVentes.push({documentVente:x.id, montantFinancie:x.montantFinancie})
+      factureAchats.push({documentAchat:x.id, montantFinancie:x.montantFinancie})
     })
     
-    request.factureVentes = factureVentes
-    request.bonRetourClients = bonRetourClients
+    request.factureAchats = factureAchats
+    request.bonRetourFournisseurs = bonRetourFournisseurs
 
     if (this.isLoading) {
       return
@@ -691,31 +691,31 @@ export class FactureAvoirComponent implements OnInit {
     this.bonAchat.restPayer = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(totalTTC - montantPaye))
   }
 
-  //autocomplete client
+  //autocomplete fournisseur
 
-  client: any = {}
-  setClientID(id) {
-    this.bonAchat.client = id
-    let client: any = this.allClients.filter(x => x.id == id)
-    if (client.length == 0) {
-      this.client = {}
+  fournisseur: any = {}
+  setFournisseurID(id) {
+    this.bonAchat.fournisseur = id
+    let fournisseur: any = this.allFournisseurs.filter(x => x.id == id)
+    if (fournisseur.length == 0) {
+      this.fournisseur = {}
       return
     }
 
-    this.client = JSON.parse(JSON.stringify(client[0]))
+    this.fournisseur = JSON.parse(JSON.stringify(fournisseur[0]))
 
     this.getBonDocuments(false)
   }
-  //pour calculer le nombre des bons Achats non payées par un id Client
-  lienBonAchatsClient = "/bonAchats/bonAchatsClient/"
-  nbLivsClientNonPayee = 0
-  bonAchatsClient(idClient) {
-    this.http.get(this.informationGenerale.baseUrl + this.lienBonAchatsClient + idClient, this.tokenStorageService.getHeader()).subscribe(
+  //pour calculer le nombre des bons Achats non payées par un id Fournisseur
+  lienBonAchatsFournisseur = "/bonAchats/bonAchatsFournisseur/"
+  nbLivsFournisseurNonPayee = 0
+  bonAchatsFournisseur(idFournisseur) {
+    this.http.get(this.informationGenerale.baseUrl + this.lienBonAchatsFournisseur + idFournisseur, this.tokenStorageService.getHeader()).subscribe(
       res => {
         this.isLoading = false
         let resultat: any = res
         if (resultat.status) {
-          this.nbLivsClientNonPayee = resultat.bonAchatsClient
+          this.nbLivsFournisseurNonPayee = resultat.bonAchatsFournisseur
         }
       }, err => {
         this.isLoading = false
@@ -724,52 +724,52 @@ export class FactureAvoirComponent implements OnInit {
     );
   }
 
-  //open modal ajout Client
-  isOpenModalAjoutClient = false
-  idAjoutClientModal = ""
+  //open modal ajout Fournisseur
+  isOpenModalAjoutFournisseur = false
+  idAjoutFournisseurModal = ""
   typeElement
-  closeModalAjoutClient() {
-    this.isOpenModalAjoutClient = false
+  closeModalAjoutFournisseur() {
+    this.isOpenModalAjoutFournisseur = false
     this.typeElement = ""
     this.getAllParametres()
   }
 
-  openModalAjoutClient() {
-    if (this.modeTiere == this.fonctionPartagesService.modeTiere.client) {
-      this.typeElement = this.fonctionPartagesService.titreOfModal.ajouterClient
+  openModalAjoutFournisseur() {
+    if (this.modeTiere == this.fonctionPartagesService.modeTiere.fournisseur) {
+      this.typeElement = this.fonctionPartagesService.titreOfModal.ajouterFournisseur
     } else {
-      this.typeElement = this.fonctionPartagesService.titreOfModal.ajouterClient
+      this.typeElement = this.fonctionPartagesService.titreOfModal.ajouterFournisseur
     }
 
-    this.isOpenModalAjoutClient = true
+    this.isOpenModalAjoutFournisseur = true
   }
 
 
-  isOpenModalBlockerClient = false
-  messageBlockerClient = ""
-  closeBlockerClient() {
-    this.isOpenModalBlockerClient = false
+  isOpenModalBlockerFournisseur = false
+  messageBlockerFournisseur = ""
+  closeBlockerFournisseur() {
+    this.isOpenModalBlockerFournisseur = false
   }
 
   imageData: string;
-  captureClient = null
+  captureFournisseur = null
 
   onFileSelect(event: Event) {
-    this.captureClient = (event.target as HTMLInputElement).files[0];
-    if (this.captureClient) {
+    this.captureFournisseur = (event.target as HTMLInputElement).files[0];
+    if (this.captureFournisseur) {
       const reader = new FileReader();
       reader.onload = () => {
         this.imageData = reader.result as string;
       };
      
-      reader.readAsDataURL(this.captureClient);
+      reader.readAsDataURL(this.captureFournisseur);
     }
   }
 
   saveFileFacture(){
-    this.http.get(this.informationGenerale.baseUrl+'/'+this.bonAchat.captureFactureVenteClient, {responseType: "blob", headers: {'Accept': 'application/pdf'}})
+    this.http.get(this.informationGenerale.baseUrl+'/'+this.bonAchat.captureFactureVenteFournisseur, {responseType: "blob", headers: {'Accept': 'application/pdf'}})
     .subscribe(blob => {
-      saveAs(blob, this.bonAchat.captureFactureVenteClient );
+      saveAs(blob, this.bonAchat.captureFactureVenteFournisseur );
     });
   }
 
@@ -779,7 +779,7 @@ export class FactureAvoirComponent implements OnInit {
 
   calculTotalFactureAchat(){
     if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises){
-      this.calculTotalFactureBonRetourClient()
+      this.calculTotalFactureBonRetourFournisseur()
     }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture){
       this.calculTotalFactureAvoirSurFacture()
     }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirFinanciers){
@@ -788,8 +788,8 @@ export class FactureAvoirComponent implements OnInit {
   }
 
   calculTotalFactureAvoirSurFacture(){
-    if(this.allFacturesClient.filter(x => x.id === this.bonAchat.factureVente).length > 0){
-      var fv = this.allFacturesClient.filter(x => x.id === this.bonAchat.factureVente)[0]
+    if(this.allFacturesFournisseur.filter(x => x.id === this.bonAchat.factureVente).length > 0){
+      var fv = this.allFacturesFournisseur.filter(x => x.id === this.bonAchat.factureVente)[0]
       this.bonAchat.totalRemise = fv.totalRemise
       this.bonAchat.totalTTC = fv.totalTTC
       this.bonAchat.totalHT = fv.totalHT
@@ -799,7 +799,7 @@ export class FactureAvoirComponent implements OnInit {
     }
   }
 
-  calculTotalFactureBonRetourClient(){
+  calculTotalFactureBonRetourFournisseur(){
     var sommeHt = 0
     var sommeTTC = 0
     var totalRemise = 0
@@ -843,7 +843,7 @@ export class FactureAvoirComponent implements OnInit {
     this.getBonDocuments(false)
   }
 
-  // start BonRetourClient
+  // start BonRetourFournisseur
   itemBRSelected = ""
   erreuritemBRSelected = ""
   bonRetourSelected = []
@@ -851,20 +851,20 @@ export class FactureAvoirComponent implements OnInit {
     this.itemBRSelected = idBonRetour
   }
   
-  ajouterBonRetourClient(){
-    if(this.allBonRetourClients.filter(x => x.id === this.itemBRSelected).length > 0 &&
+  ajouterBonRetourFournisseur(){
+    if(this.allBonRetourFournisseurs.filter(x => x.id === this.itemBRSelected).length > 0 &&
     this.bonRetourSelected.filter(x => x.id === this.itemBRSelected).length === 0
     ){
-      this.bonRetourSelected.push(this.allBonRetourClients.filter(x => x.id === this.itemBRSelected)[0])
-      this.allBonRetourClients = this.allBonRetourClients.filter(x => x.id !== this.itemBRSelected)
+      this.bonRetourSelected.push(this.allBonRetourFournisseurs.filter(x => x.id === this.itemBRSelected)[0])
+      this.allBonRetourFournisseurs = this.allBonRetourFournisseurs.filter(x => x.id !== this.itemBRSelected)
     }
     this.calculTotalFactureAchat()
   }
 
-  openModalModiferBR(idBonRetourClient){
-    this.typeElement = this.fonctionPartagesService.titreOfModal.modifierBonRetourClient    
-    this.isOpenModalAjoutClient = true
-    this.idAjoutClientModal = idBonRetourClient
+  openModalModiferBR(idBonRetourFournisseur){
+    // this.typeElement = this.fonctionPartagesService.titreOfModal.modifierBonRetourFournisseur    
+    this.isOpenModalAjoutFournisseur = true
+    this.idAjoutFournisseurModal = idBonRetourFournisseur
   }
 
   isOpenModalDelete = false
@@ -874,14 +874,14 @@ export class FactureAvoirComponent implements OnInit {
   openModalDelete(numero, params2) {
     this.itemBRSelected = numero
     this.isOpenModalDelete = true
-    this.params1Delete = "Bon Retour Client"
+    this.params1Delete = "Bon Retour Fournisseur"
     this.params2Delete = params2
   }
 
-  deleteBonRetourClient() {
-    this.notificationToast.showSuccess("Votre bon retour client est supprimée")
-    var bonRetourClient = this.bonRetourSelected.filter( x => x.id === this.itemBRSelected)[0]
-    this.allBonRetourClients.push(bonRetourClient)
+  deleteBonRetourFournisseur() {
+    this.notificationToast.showSuccess("Votre bon retour fournisseur est supprimée")
+    var bonRetourFournisseur = this.bonRetourSelected.filter( x => x.id === this.itemBRSelected)[0]
+    this.allBonRetourFournisseurs.push(bonRetourFournisseur)
     this.bonRetourSelected = this.bonRetourSelected.filter( x => x.id !== this.itemBRSelected)
     this.closeModalDelete()
     this.calculTotalFactureAchat()
@@ -890,7 +890,7 @@ export class FactureAvoirComponent implements OnInit {
   closeModalDelete() {
     this.isOpenModalDelete = false
   }
-  //end BonretourClient
+  //end BonretourFournisseur
 
   // start FactureVente
   itemFVSelected = ""
@@ -901,20 +901,20 @@ export class FactureAvoirComponent implements OnInit {
   }
   
   ajouterFV(){
-    if(this.allFacturesClient.filter(x => x.id === this.itemFVSelected).length > 0 &&
+    if(this.allFacturesFournisseur.filter(x => x.id === this.itemFVSelected).length > 0 &&
     this.factureVenteSelected.filter(x => x.id === this.itemFVSelected).length === 0
     ){
-      var factureVente = this.allFacturesClient.filter(x => x.id === this.itemFVSelected)[0]
+      var factureVente = this.allFacturesFournisseur.filter(x => x.id === this.itemFVSelected)[0]
       factureVente.montantFinancie = 0
       this.factureVenteSelected.push(factureVente)
-      this.allFacturesClient = this.allFacturesClient.filter(x => x.id !== this.itemFVSelected)
+      this.allFacturesFournisseur = this.allFacturesFournisseur.filter(x => x.id !== this.itemFVSelected)
     }
   }
 
   openModalModiferFV(itemFVSelected){
-    this.typeElement = this.fonctionPartagesService.titreOfModal.modifierBonRetourClient    
-    this.isOpenModalAjoutClient = true
-    this.idAjoutClientModal = itemFVSelected
+    // this.typeElement = this.fonctionPartagesService.titreOfModal.modifierBonRetourFournisseur    
+    this.isOpenModalAjoutFournisseur = true
+    this.idAjoutFournisseurModal = itemFVSelected
   }
 
   isOpenModalDeleteFV = false
@@ -934,7 +934,7 @@ export class FactureAvoirComponent implements OnInit {
   deleteFV() {
     this.notificationToast.showSuccess("Votre facture est supprimée")
     var fv = this.factureVenteSelected.filter( x => x.id === this.itemFVSelected)[0]
-    this.allFacturesClient.push(fv)
+    this.allFacturesFournisseur.push(fv)
     this.factureVenteSelected = this.factureVenteSelected.filter( x => x.id !== this.itemFVSelected)
     this.closeModeleDeleteFV()
     this.changeMontantFinancier()

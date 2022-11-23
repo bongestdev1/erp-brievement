@@ -5,7 +5,7 @@
             <div class="form-group row" style="justify-content: space-between !important; margin-left: 5px; margin-right: 5px;">
                 <div class="text-titre">
                     <h3><span *ngIf="titreCrud != fonctionPartagesService.titreCrud.transfert">{{titreCrud}}</span>
-                        {{titreDocument}}</h3>
+                        {{titreDocument}} Achat</h3>
                 </div>
 
                 <div class="left-button">
@@ -43,19 +43,19 @@
                         <div class="form-group row">
                             <label for="tiers" class="col-sm-4 col-form-label">{{modeTiere}}</label>
                             <div class="col-sm-8" *ngIf="titreCrud !== fonctionPartagesService.titreCrud.details">
-                                <app-autocomplete-client [bordureRed]="erreurBonAchat.client != ''"
-                                    [articles]="allClients" idHtml="20" (getAllParametres)="getAllParametres()"
-                                    (addElementEvent)="setClientID($event)" [idSelected]="bonAchat.client">
-                                </app-autocomplete-client>
+                                <app-autocomplete-fournisseur [bordureRed]="erreurBonAchat.fournisseur != ''"
+                                    [articles]="allFournisseurs" idHtml="2036" (getAllParametres)="getAllParametres()"
+                                    (addElementEvent)="setFournisseurID($event)" [idSelected]="bonAchat.fournisseur">
+                                </app-autocomplete-fournisseur>
 
-                                <p *ngIf="erreurBonAchat.client != ''" class="erreur">
-                                    {{erreurBonAchat.client}}
+                                <p *ngIf="erreurBonAchat.fournisseur != ''" class="erreur">
+                                    {{erreurBonAchat.fournisseur}}
                                 </p>
                             </div>
 
                             <div class="col-sm-8" *ngIf="titreCrud === fonctionPartagesService.titreCrud.details">
                                 <span class="form-control desactive-text-span">{{
-                                    fonctionPartagesService.getLibelleById(bonAchat.client, allClients,
+                                    fonctionPartagesService.getLibelleById(bonAchat.fournisseur, allFournisseurs,
                                     'raisonSociale') }}</span>
                             </div>
 
@@ -101,32 +101,32 @@
 
                 <div class="col-sm-4">
                     <form action="javascript:">
-                        <div class="form-group row" *ngIf="client">
+                        <div class="form-group row" *ngIf="fournisseur">
                             <label for="plafondCredit" class="col-sm-6 col-form-label">Plafond_credit:
                                 <span
-                                    *ngIf="client.plafondCredit">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(client.plafondCredit)}}</span>
-                                <span *ngIf="!client.plafondCredit">0.000</span></label>
+                                    *ngIf="fournisseur.plafondCredit">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(fournisseur.plafondCredit)}}</span>
+                                <span *ngIf="!fournisseur.plafondCredit">0.000</span></label>
 
                             <label for="credit" class="col-sm-6 col-form-label">Solde
                                 <span
-                                    *ngIf="client.credit && client.credit < 0 && isPrixVenteNotPrixAchat() ">
+                                    *ngIf="fournisseur.credit && fournisseur.credit < 0 && isPrixVenteNotPrixAchat() ">
                                     débiteur: {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(-1 *
-                                    client.credit)}}</span>
-                                <span *ngIf="client.credit && client.credit > 0 && isPrixVenteNotPrixAchat()">
+                                    fournisseur.credit)}}</span>
+                                <span *ngIf="fournisseur.credit && fournisseur.credit > 0 && isPrixVenteNotPrixAchat()">
                                     créditeur:
-                                    {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(client.credit)}}</span>
+                                    {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(fournisseur.credit)}}</span>
 
                                     
                                 <span
-                                    *ngIf="client.credit && client.credit > 0 && !isPrixVenteNotPrixAchat()">
+                                    *ngIf="fournisseur.credit && fournisseur.credit > 0 && !isPrixVenteNotPrixAchat()">
                                     débiteur:
-                                    {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(client.credit)}}</span>
+                                    {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(fournisseur.credit)}}</span>
                                 <span
-                                    *ngIf="client.credit && client.credit < 0 && !isPrixVenteNotPrixAchat()">
+                                    *ngIf="fournisseur.credit && fournisseur.credit < 0 && !isPrixVenteNotPrixAchat()">
                                     créditeur: {{fonctionPartagesService.getFormaThreeAfterVerguleNomber(-1 *
-                                    client.credit)}}</span>
+                                    fournisseur.credit)}}</span>
 
-                                <span *ngIf="!client.credit">0.000</span></label>
+                                <span *ngIf="!fournisseur.credit">0.000</span></label>
                         </div>
 
                     </form>
@@ -356,20 +356,20 @@
                 <div class="col-md-12">
                     <hr>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <input type="radio" id="huey" name="drone" value="huey" (click)="setTypeAvoir(fonctionPartagesService.titreDocuments.factureAvoirMarchandises)" [checked]="titreDocument == fonctionPartagesService.titreDocuments.factureAvoirMarchandises">
                             <label for="huey">Facture avoir marchandises</label>
                         </div>
     
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <input type="radio" id="dewey" name="drone" value="dewey" (click)="setTypeAvoir(fonctionPartagesService.titreDocuments.factureAvoirFinanciers)" [checked]="fonctionPartagesService.titreDocuments.factureAvoirFinanciers == titreDocument">
                             <label for="dewey">Facture avoir financiers</label>
                         </div>
     
-                        <div class="col-md-4">
+                        <!-- <div class="col-md-4">
                             <input type="radio" id="louie" name="drone" value="louie" (click)="setTypeAvoir(fonctionPartagesService.titreDocuments.factureAvoirSurFacture)" [checked]="titreDocument ==fonctionPartagesService.titreDocuments.factureAvoirSurFacture">
-                            <label for="louie">Facture avoir Facture</label>
-                        </div>
+                            <label for="louie">Facture avoir retour de Facture</label>
+                        </div> -->
                     </div>
                 </div>
 
@@ -381,9 +381,9 @@
                         <div class="col-sm-6">
                             <div class="form-group row">
                                 <label for="Gainreel" class="col-sm-6 col-form-label">Numero Facture
-                                    Client</label>
+                                    Fournisseur</label>
                                 <div class="col-sm-6 collapse-input">
-                                    <input class="form-control" [(ngModel)]="bonAchat.numeroFactureVenteClient"
+                                    <input class="form-control" [(ngModel)]="bonAchat.numeroFactureVenteFournisseur"
                                         style="height: 29px; padding:5px;">
                                 </div>
                             </div>
@@ -393,10 +393,10 @@
 
                             <div class="form-group row">
                                 <label for="Gainreel" class="col-sm-6 col-form-label">Date Facture
-                                    Client</label>
+                                    Fournisseur</label>
                                 <div class="col-sm-6 collapse-input">
                                     <input type="date" class="form-control"
-                                        [(ngModel)]="bonAchat.dateFactureVenteClient"
+                                        [(ngModel)]="bonAchat.dateFactureVenteFournisseur"
                                         style="height: 29px; padding:5px;">
                                 </div>
                             </div>
@@ -405,19 +405,19 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label">Capture Facture Vente Client</label>
+                        <label class="col-sm-4 col-form-label">Capture Facture Vente Fournisseur</label>
                         <div class="col-sm-4">
                             <input (change)="onFileSelect($event)" type="file" id="captureFacture"
                                 style="color: transparent;" />
 
-                            <p *ngIf="captureClient"> {{captureClient.name}} </p>
+                            <p *ngIf="captureFournisseur"> {{captureFournisseur.name}} </p>
                             <p
-                                *ngIf="!imageData && bonAchat.captureFactureVenteClient && bonAchat.captureFactureVenteClient.length > 0">
-                                {{replacePath(bonAchat.captureFactureVenteClient)}} </p>
+                                *ngIf="!imageData && bonAchat.captureFactureVenteFournisseur && bonAchat.captureFactureVenteFournisseur.length > 0">
+                                {{replacePath(bonAchat.captureFactureVenteFournisseur)}} </p>
                         </div>
                         <div class="col-sm-4">
                             <button class="btn btn-info"
-                                *ngIf="!imageData && bonAchat.captureFactureVenteClient && bonAchat.captureFactureVenteClient.length > 0"
+                                *ngIf="!imageData && bonAchat.captureFactureVenteFournisseur && bonAchat.captureFactureVenteFournisseur.length > 0"
                                 (click)="saveFileFacture()"> Télécharger </button>
                         </div>
                     </div>
@@ -441,7 +441,7 @@
                                         <div class="col-sm-10">
                                             <app-autocomplete [bordureRed]="erreuritemBRSelected != ''"
                                                 (addElementEvent)="setBonRetourId($event)" keySelected="numero" [objet]="{numero:'Num-BR'}"
-                                                [articles]="allBonRetourClients" [idSelected]="itemBRSelected" idHtml="7898BR"
+                                                [articles]="allBonRetourFournisseurs" [idSelected]="itemBRSelected" idHtml="7898BR"
                                                 >
                                             </app-autocomplete>
                         
@@ -452,7 +452,7 @@
                         
                                     <div class="row" style="text-align:center;">
                                         <div class="col-sm-12">
-                                            <button (click)="ajouterBonRetourClient()" class="btn btn-primary" style="width: 100px;">
+                                            <button (click)="ajouterBonRetourFournisseur()" class="btn btn-primary" style="width: 100px;">
                                                 Ajouter
                                             </button>
                                         </div>
@@ -558,7 +558,7 @@
                                         <div class="col-sm-10">
                                             <app-autocomplete [bordureRed]="erreuritemFVSelected != ''"
                                                 (addElementEvent)="setFactureVenteId($event)" keySelected="numero" [objet]="{numero:'Num-BR'}"
-                                                [articles]="allFacturesClient" [idSelected]="itemFVSelected" idHtml="789FV88R"
+                                                [articles]="allFacturesFournisseur" [idSelected]="itemFVSelected" idHtml="789FV88R"
                                                 >
                                             </app-autocomplete>
                         
@@ -669,7 +669,7 @@
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab *ngIf="titreDocument ==fonctionPartagesService.titreDocuments.factureAvoirSurFacture" title="Facture" class="mb-3">
+                        <!-- <ngb-tab *ngIf="titreDocument ==fonctionPartagesService.titreDocuments.factureAvoirSurFacture" title="Facture" class="mb-3">
                             <ng-template ngbTabContent>
                                 <div class="col-xl-14">
                                     <hr>
@@ -679,7 +679,7 @@
                                         <div class="col-sm-10">
                                             <app-autocomplete [bordureRed]="erreuritemFVSelected != ''"
                                                 (addElementEvent)="setFactureVenteIdSurFacture($event)" keySelected="numero" [objet]="{numero:'Num-BR'}"
-                                                [articles]="allFacturesClient" [idSelected]="bonAchat.factureVente" idHtml="7898FV11"
+                                                [articles]="allFacturesFournisseur" [idSelected]="bonAchat.factureVente" idHtml="7898FV11"
                                                 >
                                             </app-autocomplete>
                         
@@ -690,7 +690,7 @@
 
                                 </div>
                             </ng-template>
-                        </ngb-tab>
+                        </ngb-tab> -->
 
                         <!-- partie Observations-->
                         <ngb-tab title="Observations" class="mb-3">
@@ -722,12 +722,12 @@
     </div>
 </div>
 
-<app-add-element-modal [isLoading]="isLoading" [isOpenModalAjoutElement]="isOpenModalAjoutClient"
-    [idAjoutElementModal]="idAjoutClientModal" (closeModalAjoutElement)="closeModalAjoutClient()"
+<app-add-element-modal [isLoading]="isLoading" [isOpenModalAjoutElement]="isOpenModalAjoutFournisseur"
+    [idAjoutElementModal]="idAjoutFournisseurModal" (closeModalAjoutElement)="closeModalAjoutFournisseur()"
     [typeElement]="typeElement"></app-add-element-modal>
 
 <app-delete-modal [isLoading]="isLoading" [isOpenModalDelete]="isOpenModalDelete" [idDeleteModal]="itemBRSelected"
-    [params1Delete]="params1Delete" [params2Delete]="params2Delete" (deleteItem)="deleteBonRetourClient()"
+    [params1Delete]="params1Delete" [params2Delete]="params2Delete" (deleteItem)="deleteBonRetourFournisseur()"
     (closeModalDelete)="closeModalDelete()"></app-delete-modal>
 
  <app-delete-modal [isLoading]="isLoading" [isOpenModalDelete]="isOpenModalDeleteFV" [idDeleteModal]="itemFVSelected"

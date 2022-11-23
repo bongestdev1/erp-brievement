@@ -44,6 +44,10 @@ const routes: Routes = [
         loadChildren: () => import('./comerce/facture-vente/facture-vente.module').then(module => module.FactureVenteModule)
       },
       {
+        path: 'factureAvoirAchat',
+        loadChildren: () => import('./comerce/facture-avoir-achat/facture-avoir-achat.module').then(module => module.FactureAvoirAchatModule)
+      },
+      {
         path: 'factureAvoir',
         loadChildren: () => import('./comerce/facture-avoir/facture-avoir.module').then(module => module.FactureAvoirModule)
       },
