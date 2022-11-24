@@ -89,6 +89,8 @@
                     </form>
                 </div>
 
+                
+
                 <div class="col-sm-4">
                     <form action="javascript:">
                         <div class="form-group row">
@@ -129,6 +131,24 @@
 
                                 <app-autocomplete (addElementEvent)="setDocumentID($event)" keySelected="numero"
                                     [objet]="{numero:''}" [articles]="documents" [idSelected]="idDocument" idHtml="50"
+                                    (openAddElementEvent)="openModalAjoutDocument()">
+                                </app-autocomplete>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-sm-4"
+                    *ngIf="titreDocumentPrecedent && titreDocument === fonctionPartagesService.titreDocuments.bonRetourFournisseur && titreCrud != fonctionPartagesService.titreCrud.modifier">
+                    <form action="javascript:">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Facture Achat</label>
+
+                            <div class="col-sm-8">
+
+                                <app-autocomplete (addElementEvent)="setFactureID($event)" keySelected="numero"
+                                    [objet]="{numero:''}" [articles]="factures" [idSelected]="idFacture" idHtml="50"
                                     (openAddElementEvent)="openModalAjoutDocument()">
                                 </app-autocomplete>
 
@@ -666,3 +686,6 @@
 
 <app-delete-modal [isOpenModalDelete]="isOpenModalBlockerClient" (closeModalDelete)="closeBlockerClient()"
     titre="Attention" [body]="messageBlockerClient" isAlert="1"></app-delete-modal>
+
+<app-delete-modal [isOpenModalDelete]="isOpenModalBlockerAffecterNewArticles" (confirmeeAction)="confirmeeActionTelechargement()" (closeModalDelete)="closeBlockerTelechargement()"
+  (nonConfirmeeAction)="closeBlockerTelechargement()"  titre="Attention" body="Vous souhaitez télécharger ce document ?" isAlert="0"></app-delete-modal>

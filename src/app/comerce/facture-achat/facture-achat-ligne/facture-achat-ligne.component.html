@@ -1,0 +1,198 @@
+<div class="col-sm-12">
+    <div class="form-group row">
+        <div class="col-sm-12">
+
+            <div class="form-group row">
+                <label for="bonLivraison" class="col-sm-2 col-form-label" style="padding-left: 20px !important;">Bon
+                    livraison</label>
+                <div class="col-sm-10">
+                    <app-autocomplete [bordureRed]="erreurBonReception.numero != ''"
+                        (addElementEvent)="setBonReceptionId($event)" keySelected="numero" [objet]="{numero:'Num-BR', numeroBonLivraisonFournisseur:'Num-BL-Fournisseur', dateBonLivraisonFournisseur:'Date-BL-Fournisseur'}"
+                        [articles]="allBonReceptions" [idSelected]="itemBLSelected.id" idHtml="7898"
+                        (openAddElementEvent)="openModalAjoutBL()">
+                    </app-autocomplete>
+
+                    <p *ngIf="erreurBonReception.numero != ''" class="erreur">{{erreurBonReception.numero}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="row" style="text-align:center;">
+                <div class="col-sm-12">
+                    <button (click)="cocheBonReception()" class="btn btn-primary" style="width: 100px;">
+                        Ajouter
+                    </button>
+                </div>
+            </div>
+
+            <p>
+                <span style="font-size:17px; font-weight: 900;">Liste des Bons Achats </span>
+                <span style="float:right;">
+                    <app-showelements [items]="itemsShowsElements" [itemsVariable]="itemsVariableShowsElements">
+                    </app-showelements>
+                </span>
+            </p>
+
+            <div class="table-responsive" *ngIf="bonReceptions.length > 0">
+                <table class="table table-striped" style="border-spacing: collapse;">
+                    <thead>
+                        <tr id="ligneWidth">
+                            <th> Numero Bon Achat</th>
+                            <th> Date </th>
+                            <th> Total HT</th>
+                            <th> Remise Facture</th>
+                            <th> Total TTC</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let item of bonReceptions">
+
+                        <tr>
+                            <th>{{item.numero}}</th>
+                            <th>
+                                <span
+                                    style="text-align: center; display: block;">{{fonctionPartagesService.getDate(item.date,
+                                    'yyyy-MM-dd')}}</span>
+                            </th>
+
+                            <th> <span
+                                    style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalHTFacture)}}
+                                </span>
+                            </th>
+
+                            <th> 
+                                <span
+                                    style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalRemiseFacture)}}
+                                </span>
+                            </th>
+
+                            <th> <span
+                                    style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalTTCFacture)}}
+                                </span>
+                            </th>
+
+                            <th>
+                                <button class="btn btn-info" style="padding:5px;"
+                                    (click)="showArticlesbonReceptions(item.id)">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+
+
+                                <button class="btn btn-success" style="padding:5px;"
+                                    (click)="openModalModiferBL(item.id)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <button class="btn btn-danger" style="padding:5px;"
+                                    (click)="openModalDelete(item.id, item.numero)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="20" style="overflow: auto;">
+                                <div [id]="item.id" style=" display:none; width: fit-content; overflow:scroll">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th *ngFor="let key of objectKeys(itemsVariableShowsElements)">
+                                                    <div class="th-tableau">
+                                                        {{itemsShowsElements[key]}}
+                                                    </div>
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr *ngFor="let article of item.articles">
+
+                                                <td *ngFor="let key of objectKeys(itemsVariableShowsElements)">
+
+                                                    <div *ngIf="key === 'remiseFacturePourcentage'"
+                                                        class="col-sm-12 collapse-input">
+                                                        <app-input-number-vergule [field]="article" [key]="key"
+                                                            [idUnique]="key+article['numero']+item.id"
+                                                            (change)="calculTotalFactureAchat()">
+                                                        </app-input-number-vergule>
+                                                    </div>
+
+                                                    <div *ngIf="key === 'remiseFactureMontant'"
+                                                        class="col-sm-12 collapse-input">
+                                                        <app-input-number-vergule [field]="article" [key]="key"
+                                                            [idUnique]="key+article['numero']+item.id"
+                                                            (change)="calculTotalFactureAchat()">
+                                                        </app-input-number-vergule>
+                                                    </div>
+
+                                                    <span
+                                                        *ngIf="fonctionPartagesService.colonnesQuantites.includes(key)"
+                                                        style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(article[key])}}</span>
+                                                    <span
+                                                        *ngIf="key !== 'remiseFactureMontant' && fonctionPartagesService.colonnesPrix.includes(key)"
+                                                        style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleQuantite(article[key])}}</span>
+                                                    <span
+                                                        *ngIf="key !== 'remiseFacturePourcentage' && fonctionPartagesService.colonnesTaux.includes(key)"
+                                                        style="float:right;">{{fonctionPartagesService.getFormaTwoAfterVerguleTaux(article[key])}}</span>
+                                                    <span *ngIf="fonctionPartagesService.colonnesDates.includes(key)"
+                                                        style="text-align: center; display: block;">{{fonctionPartagesService.getDate(article[key],
+                                                        'yyyy-MM-dd')}}</span>
+                                                    <span *ngIf="fonctionPartagesService.colonnesOuiNon.includes(key)"
+                                                        style="text-align: center; display: block;"> <i
+                                                            class="fas fa-check-square" style="font-size: 15px;"
+                                                            *ngIf="item[key] == 'oui'"></i> <i class="fas fa-square"
+                                                            style="font-size: 15px;" *ngIf="item[key] != 'oui'"></i>
+                                                    </span>
+                                                    <span
+                                                        *ngIf="!(fonctionPartagesService.colonnesTaux.includes(key) || key === 'unite1' || fonctionPartagesService.colonnesDates.includes(key) || fonctionPartagesService.colonnesQuantites.includes(key) || fonctionPartagesService.colonnesPrix.includes(key) || fonctionPartagesService.colonnesOuiNon.includes(key))">{{article[key]}}</span>
+
+                                                    <span *ngIf="key === 'unite1'">
+                                                        {{fonctionPartagesService.getLibelleById(article[key],
+                                                        uniteMesures, 'libelle')}}</span>
+                                                </td>
+
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </th>
+                        </tr>
+                    </tbody>
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>
+                                <span
+                                    style="float:right; font-size: 15px;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(bonAchat.totalHT)}}
+                                </span>
+                            </th>
+                            <th>  
+                                <span
+                                    style="float:right; font-size: 15px;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(bonAchat.totalRemiseFacture)}}
+                                </span>
+                            </th>
+                            <th>
+                                <span
+                                    style="float:right; font-size: 15px;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(bonAchat.totalTTC)}}
+                                </span>
+                            </th>
+                            <th>
+
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<app-delete-modal [isLoading]="isLoading" [isOpenModalDelete]="isOpenModalDelete" [idDeleteModal]="numeroItemDelete"
+    [params1Delete]="params1Delete" [params2Delete]="params2Delete" (deleteItem)="deleteItem()"
+    (closeModalDelete)="closeModalDelete()"></app-delete-modal>
+
+<app-add-element-modal [isOpenModalAjoutElement]="isOpenModalAjoutElement" [idAjoutElementModal]="idAjoutElementModal"
+    (closeModalAjoutElement)="closeModalAjoutElement()" [typeElement]="typeElement"></app-add-element-modal>

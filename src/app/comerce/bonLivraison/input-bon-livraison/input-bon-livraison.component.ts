@@ -899,6 +899,8 @@ export class InputBonLivraisonComponent implements OnInit {
   }
 
   documents = []
+  factures = []
+
   idDocument = ""
 
   projetsClient = []
@@ -941,7 +943,7 @@ export class InputBonLivraisonComponent implements OnInit {
     if (this.isLoading) {
       return
     }
-
+    this.factures = []
     this.documents = []
     this.isLoading = true
     this.http.get(this.informationGenerale.baseUrl + this.lienGetDocuments + this.informationGenerale.idSocieteCurrent + "/" + this.client.id, this.tokenStorageService.getHeader()).subscribe(
@@ -953,6 +955,10 @@ export class InputBonLivraisonComponent implements OnInit {
             this.prixSpecifiqueClients = resultat.prixSpecifiqueLignes
           }
 
+          if (resultat.factures) {
+            this.factures = resultat.factures
+          }
+           
           if (resultat.prixSpecifiqueLigneTypeTiers) {
             this.prixSpecifiqueTypeTiers = resultat.prixSpecifiqueLigneTypeTiers
           }
@@ -988,9 +994,22 @@ export class InputBonLivraisonComponent implements OnInit {
 
   setDocumentID(id) {
     if (id && id.length > 0) {
+      this.openBlockerTelechargement()
       console.log(id)
       this.idDocument = id
+      this.idFacture = ""
       this.getBonLivraison(this.idDocument, this.lienGetByIdDocumentPrecedent)
+    }
+  }
+
+  idFacture = ""
+
+  setFactureID(id) {
+    if (id && id.length > 0) {
+      this.openBlockerTelechargement()
+      this.idFacture = id
+      this.idDocument = ""
+      this.getBonLivraison(this.idFacture, "/bonRetourFournisseurs/getFactureAchatWithRegroupement/")
     }
   }
 
@@ -999,5 +1018,19 @@ export class InputBonLivraisonComponent implements OnInit {
     this.typeElement = this.fonctionPartagesService.getModalDocument(this.titreDocumentPrecedent)
   }
 
+  //
 
+  isOpenModalBlockerAffecterNewArticles = false
+  
+  openBlockerTelechargement(){
+    this.isOpenModalBlockerAffecterNewArticles = true
+  }
+
+  closeBlockerTelechargement(){
+    this.isOpenModalBlockerAffecterNewArticles = false
+  }
+
+  confirmeeActionTelechargement(){
+    this.isOpenModalBlockerAffecterNewArticles = false
+  }
 }
