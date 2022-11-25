@@ -354,8 +354,13 @@ export class InputBonLivraisonComponent implements OnInit {
               this.bonLivraison[key] = this.request[key]
             }
   
-            this.bonLivraison.date = formatDate(new Date(this.bonLivraison.date), 'yyyy-MM-dd', 'en');
-  
+            if(this.titreCrud === this.fonctionPartagesService.titreCrud.modifier || this.titreCrud === this.fonctionPartagesService.titreCrud.details){
+                this.bonLivraison.date = formatDate(new Date(this.bonLivraison.date), 'yyyy-MM-dd', 'en');
+            }else{
+              this.bonLivraison.date = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+            }
+
+            
             try{
               this.bonLivraison.dateBonLivraisonFournisseur = formatDate(new Date(this.bonLivraison.dateBonLivraisonFournisseur), 'yyyy-MM-dd', 'en');
             }catch(e){
@@ -998,18 +1003,19 @@ export class InputBonLivraisonComponent implements OnInit {
       console.log(id)
       this.idDocument = id
       this.idFacture = ""
-      this.getBonLivraison(this.idDocument, this.lienGetByIdDocumentPrecedent)
+      this.urlSelectionner = this.lienGetByIdDocumentPrecedent
     }
   }
 
   idFacture = ""
+  urlSelectionner = ""
 
   setFactureID(id) {
     if (id && id.length > 0) {
       this.openBlockerTelechargement()
       this.idFacture = id
-      this.idDocument = ""
-      this.getBonLivraison(this.idFacture, "/bonRetourFournisseurs/getFactureAchatWithRegroupement/")
+      this.idDocument = ""      
+      this.urlSelectionner = "/bonRetourFournisseurs/getFactureAchatWithRegroupement/"
     }
   }
 
@@ -1032,5 +1038,10 @@ export class InputBonLivraisonComponent implements OnInit {
 
   confirmeeActionTelechargement(){
     this.isOpenModalBlockerAffecterNewArticles = false
+    if(this.idFacture != ""){
+      this.getBonLivraison(this.idFacture, this.urlSelectionner)
+    }else{
+      this.getBonLivraison(this.idDocument, this.urlSelectionner)
+    }
   }
 }
