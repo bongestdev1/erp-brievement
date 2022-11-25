@@ -225,6 +225,7 @@ export class FonctionPartagesService {
     factureAvoirMarchandises: "Avoir-marchandises",
     factureAvoirFinanciers: "Avoir-financiers",
     factureAvoirSurFacture: "Avoir-facture",
+    factureAvoirSurMarchandisesFinanciers: "Avoir-marchandises-financiers",
     bonLivraison: "Bon Livraison",
     devis: "Devis",
     devisAchat: "Devis Achat",

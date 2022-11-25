@@ -19,8 +19,6 @@ import { GenerationPdfFactureService } from 'src/app/services/generation-pdf-fac
 })
 export class FactureAvoirAchatComponent implements OnInit {
 
- 
- 
   public isCollapsed: boolean;
   public isCollapsed2: boolean;
   public multiCollapsed1: boolean;
@@ -33,7 +31,6 @@ export class FactureAvoirAchatComponent implements OnInit {
   apiGetBonReception = "/factureAvoirAchats/getBonReceptions"
 
   @Input() lienAjoute = "/factureAvoirAchats/newFactureAvoir"
-
 
   @Input() apiParametres = "/factureAvoirAchats/getAllParametres"
 
@@ -52,6 +49,7 @@ export class FactureAvoirAchatComponent implements OnInit {
   lienGetDocuments1 = "/factureAvoirAchats/getBonRetourFournisseurs/"
   lienGetDocuments2 = "/factureAvoirAchats/getFacturesFournisseur/"
   lienGetDocuments3 = "/factureAvoirAchats/getFacturesFournisseurSansDejaAvoir/"
+  lienGetDocuments4 = "/factureAvoirAchats/getFacturesFournisseurWithLignes/"
 
   allBonReceptions = []
 
@@ -93,13 +91,14 @@ export class FactureAvoirAchatComponent implements OnInit {
 
     typeAvoir: this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises,
 
-    numeroFactureVenteFournisseur:"",
-    dateFactureVenteFournisseur:"",
-    captureFactureVenteFournisseur:"",
+    numeroFactureFournisseur:"",
+    dateFactureFournisseur:"",
+    captureFactureFournisseur:"",
 
     bonRetourFournisseurs:[],
     factureVentes:[],
-    factureVente:""
+    factureVente:"",
+    withTimbreFiscal:false,
 
   }
 
@@ -132,13 +131,14 @@ export class FactureAvoirAchatComponent implements OnInit {
 
     typeAvoir: this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises,
 
-    numeroFactureVenteFournisseur:"",
-    dateFactureVenteFournisseur:"",
-    captureFactureVenteFournisseur:"",
+    numeroFactureFournisseur:"",
+    dateFactureFournisseur:"",
+    captureFactureFournisseur:"",
 
     bonRetourFournisseurs:[],
     factureVentes:[],
-    factureVente:""
+    factureVente:"",
+    withTimbreFiscal:false,
   }
 
   tabNumbers = ["totalDC", "montantEscompte", "tFiscale", "montantPaye", "restPaye", "totalRedevance", "totalFodec"]
@@ -153,6 +153,10 @@ export class FactureAvoirAchatComponent implements OnInit {
 
   bonReceptions = []
 
+  setTimbreFiscale(){
+    this.bonAchat.withTimbreFiscal = !this.bonAchat.withTimbreFiscal
+    this.calculTotalFactureAchat()
+  }
 
   constructor(
     private notificationToast: ToastNotificationService,
@@ -231,7 +235,7 @@ export class FactureAvoirAchatComponent implements OnInit {
     this.multiCollapsed2 = true;
     if (this.titreCrud == this.fonctionPartagesService.titreCrud.ajouter) {
       this.bonAchat.date = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-      this.bonAchat.dateFactureVenteFournisseur = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+      this.bonAchat.dateFactureFournisseur = formatDate(new Date(), 'yyyy-MM-dd', 'en');
       this.getAllParametres()
     }else if (this.titreCrud == this.fonctionPartagesService.titreCrud.transfert){
       this.id = this.route.snapshot.paramMap.get('id');
@@ -300,6 +304,8 @@ export class FactureAvoirAchatComponent implements OnInit {
           }
           
           this.bonAchat.date = formatDate(new Date(this.bonAchat.date), 'yyyy-MM-dd', 'en');
+          this.bonAchat.dateFactureFournisseur = formatDate(new Date(this.bonAchat.dateFactureFournisseur), 'yyyy-MM-dd', 'en');
+
           // this.calculTotalFactureAchat()
           this.getAllParametres()
 
@@ -333,7 +339,7 @@ export class FactureAvoirAchatComponent implements OnInit {
           }
 
           this.bonAchat.date = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-          this.bonAchat.dateFactureVenteFournisseur = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+          this.bonAchat.dateFactureFournisseur = formatDate(new Date(), 'yyyy-MM-dd', 'en');
          
           this.renitialiserFacture()
           this.getAllParametres()
@@ -375,9 +381,45 @@ export class FactureAvoirAchatComponent implements OnInit {
         this.getBonDocumentsBonRetourFournisseurs(isNotInisialiserPrix)
       }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture){
         this.getBonDocumentsFacturesFournisseur(isNotInisialiserPrix)
-      }else{
+      }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirFinanciers){
         this.getBonDocumentsFacturesFournisseurSansDejaTransformerAvoirSurFac(isNotInisialiserPrix)
+      }else{
+        this.getBonDocumentsAllFacturesWithLignes(isNotInisialiserPrix)
       }
+  }
+
+  allFacturesWithLignes = []
+
+  getBonDocumentsAllFacturesWithLignes(isNotInisialiserPrix) {
+    
+    if (this.isLoading) {
+      return
+    }
+
+    this.allBonReceptions = []
+    this.isLoading = true
+    this.http.get(this.informationGenerale.baseUrl + this.lienGetDocuments4 + this.fournisseur.id+ '/' + this.informationGenerale.idSocieteCurrent, this.tokenStorageService.getHeader()).subscribe(
+      res => {
+        console.log(res)
+        this.isLoading = false
+        let resultat: any = res
+        if (resultat.status) {
+          this.allFacturesWithLignes = resultat.allFacturesWithLignes
+          
+          if(!isNotInisialiserPrix){
+            this.renitialiserFacture()
+          }
+           
+          if(this.bonAchat.typeAvoir !== this.request.typeAvoir){
+            this.getBonDocuments(false)
+          }
+        }
+      }, err => {
+        this.isLoading = false
+        console.log(err)
+        alert("Désole, ilya un problème de connexion internet")
+      }
+    );
   }
 
   allBonRetourFournisseurs = []
@@ -499,7 +541,7 @@ export class FactureAvoirAchatComponent implements OnInit {
 
     var societe = this.informationGenerale.getSocieteCurrentObject() 
     
-    if (this.fonctionPartagesService.parametres.validationTimbreFiscaleAvoirSurFacture && this.bonAchat.typeAvoir == this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture) {
+    if (this.bonAchat.withTimbreFiscal) {
       this.bonAchat.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
     } else {
       this.bonAchat.timbreFiscale = 0
@@ -538,7 +580,7 @@ export class FactureAvoirAchatComponent implements OnInit {
 
       res => {
          this.isLoading = false
-         this.bonAchat.captureFactureVenteFournisseur = res[0]
+         this.bonAchat.captureFactureFournisseur = res[0]
 
          this.ajoutBonAchat()
       }, err => {
@@ -767,9 +809,9 @@ export class FactureAvoirAchatComponent implements OnInit {
   }
 
   saveFileFacture(){
-    this.http.get(this.informationGenerale.baseUrl+'/'+this.bonAchat.captureFactureVenteFournisseur, {responseType: "blob", headers: {'Accept': 'application/pdf'}})
+    this.http.get(this.informationGenerale.baseUrl+'/'+this.bonAchat.captureFactureFournisseur, {responseType: "blob", headers: {'Accept': 'application/pdf'}})
     .subscribe(blob => {
-      saveAs(blob, this.bonAchat.captureFactureVenteFournisseur );
+      saveAs(blob, this.bonAchat.captureFactureFournisseur );
     });
   }
 
@@ -944,7 +986,12 @@ export class FactureAvoirAchatComponent implements OnInit {
     var sommeHt = 0
     var sommeTTC = 0
  
-    // this.bonAchat.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+    if(this.bonAchat.withTimbreFiscal){
+      this.bonAchat.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+    }else{
+      this.bonAchat.timbreFiscale = 0
+    }
+    
     this.bonAchat.totalRemise = 0
     this.bonAchat.totalTTC = sommeTTC
     this.bonAchat.totalHT = sommeHt
@@ -978,4 +1025,5 @@ export class FactureAvoirAchatComponent implements OnInit {
   }
   //end FactureVente sur facture
   
+
 }

@@ -345,6 +345,7 @@
                             </div>
                         </div>
 
+                        
 
                         <div class="col-md-12">
 
@@ -354,24 +355,82 @@
                 </div>
 
                 <div class="col-md-12">
+
+                    <hr />
+                    <div class="form-group row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="Gainreel" class="col-sm-6 col-form-label">Numero Avoir
+                                    Fournisseur</label>
+                                <div class="col-sm-6 collapse-input">
+                                    <input class="form-control" [(ngModel)]="bonAchat.numeroFactureFournisseur"
+                                        style="height: 29px; padding:5px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+
+                            <div class="form-group row">
+                                <label for="Gainreel" class="col-sm-6 col-form-label">Date Avoir
+                                    Fournisseur</label>
+                                <div class="col-sm-6 collapse-input">
+                                    <input type="date" class="form-control"
+                                        [(ngModel)]="bonAchat.dateFactureFournisseur"
+                                        style="height: 29px; padding:5px;">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+        
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Capture Avoir Fournisseur</label>
+                        <div class="col-sm-4">
+                            <input (change)="onFileSelect($event)" type="file" id="captureFacture"
+                                style="color: transparent;" />
+
+                            <p *ngIf="captureFournisseur"> {{captureFournisseur.name}} </p>
+                            <p
+                                *ngIf="!imageData && bonAchat.captureFactureFournisseur && bonAchat.captureFactureFournisseur.length > 0">
+                                {{replacePath(bonAchat.captureFactureFournisseur)}} </p>
+                        </div>
+                        <div class="col-sm-4">
+                            <button class="btn btn-info"
+                                *ngIf="!imageData && bonAchat.captureFactureFournisseur && bonAchat.captureFactureFournisseur.length > 0"
+                                (click)="saveFileFacture()"> Télécharger </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-12">
                     <hr>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <input type="radio" id="huey" name="drone" value="huey" (click)="setTypeAvoir(fonctionPartagesService.titreDocuments.factureAvoirMarchandises)" [checked]="titreDocument == fonctionPartagesService.titreDocuments.factureAvoirMarchandises">
                             <label for="huey">Facture avoir marchandises</label>
                         </div>
     
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <input type="radio" id="dewey" name="drone" value="dewey" (click)="setTypeAvoir(fonctionPartagesService.titreDocuments.factureAvoirFinanciers)" [checked]="fonctionPartagesService.titreDocuments.factureAvoirFinanciers == titreDocument">
                             <label for="dewey">Facture avoir financiers</label>
                         </div>
     
-                        <!-- <div class="col-md-4">
-                            <input type="radio" id="louie" name="drone" value="louie" (click)="setTypeAvoir(fonctionPartagesService.titreDocuments.factureAvoirSurFacture)" [checked]="titreDocument ==fonctionPartagesService.titreDocuments.factureAvoirSurFacture">
-                            <label for="louie">Facture avoir retour de Facture</label>
-                        </div> -->
+                        <div class="col-md-4">
+                            <input type="radio" id="dewey2" name="drone" value="dewey" (click)="setTypeAvoir(fonctionPartagesService.titreDocuments.factureAvoirSurMarchandisesFinanciers)" [checked]="fonctionPartagesService.titreDocuments.factureAvoirSurMarchandisesFinanciers == titreDocument">
+                            <label for="dewey2">Facture avoir marchandises-financiers</label>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <input type="checkbox" id="timbreFiscale" name="timbreFiscale" (click)="setTimbreFiscale()" [checked]="bonAchat.withTimbreFiscal">
+                            <label for="timbreFiscale">Avec timbre fiscale</label>
+                        </div>
                     </div>
                 </div>
+
+                
 
                 <!-- <div class="col-md-12">
 
@@ -668,6 +727,128 @@
                                 </div>
                             </ng-template>
                         </ngb-tab>
+
+                        <ngb-tab *ngIf="fonctionPartagesService.titreDocuments.factureAvoirSurMarchandisesFinanciers == titreDocument" title="Avoir-marchandises-financiers" class="mb-3">
+                            <ng-template ngbTabContent>
+                                <div class="col-xl-14">
+                                    <hr>
+
+                                    <div class="form-group row">
+                                        <label for="bonLivraison" class="col-sm-2 col-form-label" style="padding-left: 20px !important;">Facture: </label>
+                                        <div class="col-sm-10">
+                                            <app-autocomplete [bordureRed]="erreuritemFVSelected != ''"
+                                                (addElementEvent)="setFactureVenteId($event)" keySelected="numero" [objet]="{numero:'Num-BR'}"
+                                                [articles]="allFacturesFournisseur" [idSelected]="itemFVSelected" idHtml="789FV88R"
+                                                >
+                                            </app-autocomplete>
+                        
+                                            <p *ngIf="erreuritemFVSelected != ''" class="erreur">{{erreuritemFVSelected}}
+                                            </p>
+                                        </div>
+                                    </div>
+                        
+                                    <div class="row" style="text-align:center;">
+                                        <div class="col-sm-12">
+                                            <button (click)="ajouterFV()" class="btn btn-primary" style="width: 100px;">
+                                                Ajouter
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="table-responsive" *ngIf="factureVenteSelected.length > 0">
+                                        <table class="table table-striped" style="border-spacing: collapse;">
+                                            <thead>
+                                                <tr id="ligneWidth">
+                                                    <th> Numero</th>
+                                                    <th> Date </th>
+                                                    <th> Total HT</th>
+                                                    <th> Total Remise</th>
+                                                    <th> Total TTC</th>
+                                                    <th> Montant Financier</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody *ngFor="let item of factureVenteSelected">
+                        
+                                                        <tr>
+                                                            <th>{{item.numero}}</th>
+                                                            <th>
+                                                                <span
+                                                                    style="text-align: center; display: block;">{{fonctionPartagesService.getDate(item.date,
+                                                                    'yyyy-MM-dd')}}</span>
+                                                            </th>
+                                
+                                                            <th> <span
+                                                                    style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalHT)}}
+                                                                </span>
+                                                            </th>
+                                
+                                                            <th> 
+                                                                <span
+                                                                    style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalRemise)}}
+                                                                </span>
+                                                            </th>
+                                
+                                                            <th> <span
+                                                                    style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalTTC)}}
+                                                                </span>
+                                                            </th>
+
+                                                            <th> 
+                                                                <app-input-number-vergule [field]="item" key="montantFinancie" [idUnique]="'montantFinancie'+item.id"
+                                                                (change)="changeMontantFinancier()"></app-input-number-vergule>
+                                                            </th>
+                                
+                                                            <th>
+                                                                <!-- <button class="btn btn-info" style="padding:5px;"
+                                                                    (click)="showArticlesbonReceptions(item.id)">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button> -->
+                                
+                                
+                                                                <button class="btn btn-danger" style="padding:5px;"
+                                                                    (click)="openModalDeleteFV(item.id, item.numero)">
+                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                </button>
+                                                            </th>
+                                                        </tr>
+                                               
+                                            </tbody>
+                        
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>
+                                                        
+                                                    </th>
+                                                    <th>  
+                                                        <!-- <span
+                                                            style="float:right; font-size: 15px;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(bonAchat.totalRemiseFacture)}}
+                                                        </span> -->
+                                                    </th>
+                                                    <th>
+                                                        <!-- <span
+                                                            style="float:right; font-size: 15px;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(bonAchat.totalTTC)}}
+                                                        </span> -->
+                                                    </th>
+                                                    <th>
+                                                        <span
+                                                            style="float:right; font-size: 15px;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(bonAchat.totalHT)}}
+                                                        </span>
+                                                    </th>
+                                                    <th>
+                        
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+
 
                         <!-- <ngb-tab *ngIf="titreDocument ==fonctionPartagesService.titreDocuments.factureAvoirSurFacture" title="Facture" class="mb-3">
                             <ng-template ngbTabContent>
