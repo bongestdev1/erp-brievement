@@ -11,6 +11,7 @@ import { Fournisseur } from 'src/app/model/modelComerce/Fournisseur/Fournisseur'
 import { TokenStorageService } from 'src/app/services/authentication/token-storage.service';
 import {saveAs} from 'file-saver';
 import { GenerationPdfFactureService } from 'src/app/services/generation-pdf-facture.service';
+import { ShemaArticleAchat } from '../../bonLivraison/lignebl/models/shema-article-achat';
 
 @Component({
   selector: 'app-facture-avoir-achat',
@@ -97,6 +98,7 @@ export class FactureAvoirAchatComponent implements OnInit {
 
     bonRetourFournisseurs:[],
     factureVentes:[],
+    factureAchatsWithArticles:[],
     factureVente:"",
     withTimbreFiscal:false,
 
@@ -137,6 +139,7 @@ export class FactureAvoirAchatComponent implements OnInit {
 
     bonRetourFournisseurs:[],
     factureVentes:[],
+    factureAchatsWithArticles:[],
     factureVente:"",
     withTimbreFiscal:false,
   }
@@ -228,6 +231,7 @@ export class FactureAvoirAchatComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initialiserVariablesOfShowsElements()
     this.titreCrud = this.fonctionPartagesService.getTitreCrudOfUrl(this.router.url);
     this.isCollapsed = true;
     this.isCollapsed2 = true;
@@ -400,11 +404,10 @@ export class FactureAvoirAchatComponent implements OnInit {
     this.isLoading = true
     this.http.get(this.informationGenerale.baseUrl + this.lienGetDocuments4 + this.fournisseur.id+ '/' + this.informationGenerale.idSocieteCurrent, this.tokenStorageService.getHeader()).subscribe(
       res => {
-        console.log(res)
         this.isLoading = false
         let resultat: any = res
         if (resultat.status) {
-          this.allFacturesWithLignes = resultat.allFacturesWithLignes
+          this.allFacturesMarchandisesFinancierFournisseur = resultat.factureAchats
           
           if(!isNotInisialiserPrix){
             this.renitialiserFacture()
@@ -826,7 +829,9 @@ export class FactureAvoirAchatComponent implements OnInit {
       this.calculTotalFactureAvoirSurFacture()
     }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirFinanciers){
       this.changeMontantFinancier()
-    } 
+    }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirSurMarchandisesFinanciers){
+      this.changeMontantFinancierMarchandisesFinancier()
+    }  
   }
 
   calculTotalFactureAvoirSurFacture(){
@@ -951,6 +956,8 @@ export class FactureAvoirAchatComponent implements OnInit {
       this.factureVenteSelected.push(factureVente)
       this.allFacturesFournisseur = this.allFacturesFournisseur.filter(x => x.id !== this.itemFVSelected)
     }
+
+    console.log("this.factureVenteSelected = ",this.factureVenteSelected)
   }
 
   openModalModiferFV(itemFVSelected){
@@ -1016,6 +1023,40 @@ export class FactureAvoirAchatComponent implements OnInit {
     this.bonAchat.restPayer = 0
   }
 
+  changeMontantFinancierMarchandisesFinancier(){
+    var sommeHt = 0
+    var sommeTTC = 0
+ 
+    if(this.bonAchat.withTimbreFiscal){
+      this.bonAchat.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+    }else{
+      this.bonAchat.timbreFiscale = 0
+    }
+    
+    this.bonAchat.totalRemise = 0
+    this.bonAchat.totalTTC = sommeTTC
+    this.bonAchat.totalHT = sommeHt
+    
+    this.bonAchat.montantTotal = this.bonAchat.timbreFiscale + this.bonAchat.totalTTC
+    this.bonAchat.montantPaye = 0
+    this.bonAchat.restPayer = 0
+  
+    for(let item of this.factureVenteSelected){
+      if(item.montantFinancie > item.montantTotal){
+        item.montantFinancie = item.montantTotal
+      } 
+      sommeHt += item.montantFinancie
+      sommeTTC += item.montantFinancie
+    }
+
+    this.bonAchat.totalRemise = 0
+    this.bonAchat.totalTTC = sommeTTC
+    this.bonAchat.totalHT = sommeHt
+    this.bonAchat.montantTotal = this.bonAchat.timbreFiscale + this.bonAchat.totalTTC
+    this.bonAchat.montantPaye = 0
+    this.bonAchat.restPayer = 0
+  }
+
   //end FactureVente
 
   //start FactureVente sur facture
@@ -1024,6 +1065,119 @@ export class FactureAvoirAchatComponent implements OnInit {
     this.calculTotalFactureAchat()
   }
   //end FactureVente sur facture
+
+  shemaArticle: any = new ShemaArticleAchat()
+
+  itemsShowsElements = {}
+  itemsVariableShowsElements = {}
+
+  itemsInput = [ "remiseAvoirPourcentage", "remiseAvoirMontant"]
+  itemsNumber = [ "remiseAvoirTotal", "prixAchatHTReelAvoir", "prixAchatTTCReelAvoir", "prixDCAvoir", "prixFodecAvoir", "totalDCAvoir", "totalFodecAvoir"]
   
 
+  initialiserVariablesOfShowsElements() {
+    for (let key in this.shemaArticle) {
+      this.itemsShowsElements[key] = this.shemaArticle[key]
+    }
+    this.itemsShowsElements['remiseAvoirPourcentage'] = "remiseAvoirPourcentage"
+    this.itemsShowsElements['remiseAvoirMontant']= "remiseAvoirMontant"
+    this.itemsShowsElements['remiseAvoirTotal']= "remiseAvoirTotal"
+    this.itemsShowsElements['prixAchatHTReelAvoir'] = "prixAchatHTReelAvoir"
+    this.itemsShowsElements['prixAchatTTCReelAvoir'] = "prixAchatTTCReelAvoir"
+    this.itemsShowsElements['prixDCAvoir'] = "prixDCAvoir"
+    this.itemsShowsElements['prixFodecAvoir'] = "prixFodecAvoir"
+    this.itemsShowsElements['totalDCAvoir'] = "totalDCAvoir"
+    this.itemsShowsElements['totalFodecAvoir'] = "totalFodecAvoir"
+    this.itemsShowsElements['totalHTAvoir'] = "totalHTAvoir"
+    this.itemsShowsElements['totalTVAAvoir'] = "totalTVAAvoir"
+    this.itemsShowsElements['totalTTCAvoir'] = "totalTTCAvoir"
+  
+    this.itemsVariableShowsElements = JSON.parse(JSON.stringify(this.itemsShowsElements)) 
+  }
+
+  showArticlesbonReceptions(idBonCommande) {
+    var ligne = document.getElementById("ligneWidth");
+    var x = document.getElementById(idBonCommande);
+    x.style.width = (ligne.clientWidth - 15)+"px"
+    if (x.style.display === "none") {
+      x.style.display = "flex";
+    } else {
+      x.style.display = "none";
+    }
+  }
+
+  // start marchandises-financiers
+  itemFVMarchandisesFinancierSelected = ""
+  erreuritemFVMarchandisesFinancierSelected = ""
+  factureVenteMarchandisesFinancierSelected = []
+  allFacturesMarchandisesFinancierFournisseur = []
+  setFactureMarchandisesFinancierVenteId(idFV){
+    this.itemFVMarchandisesFinancierSelected = idFV
+  }
+  
+  ajouterFVMarchandisesFinancier(){
+    if(this.allFacturesMarchandisesFinancierFournisseur.filter(x => x.id === this.itemFVMarchandisesFinancierSelected).length > 0 &&
+    this.factureVenteMarchandisesFinancierSelected.filter(x => x.id === this.itemFVMarchandisesFinancierSelected).length === 0
+    ){
+      var factureVente = this.allFacturesMarchandisesFinancierFournisseur.filter(x => x.id === this.itemFVMarchandisesFinancierSelected)[0]
+      factureVente.documentAchat = factureVente.id
+      factureVente.totalTVAAvoir = 0
+      factureVente.totalTTCAvoir = 0
+      factureVente.totalHTAvoir = 0
+      factureVente.totalDCAvoir = 0
+      factureVente.totalFodecAvoir = 0
+      factureVente.montantTotalAvoir = 0
+   
+      factureVente.articles.forEach(x => {
+        x.remiseAvoirPourcentage = 0
+        x.remiseAvoirMontant = 0
+        x.remiseAvoirTotal = 0
+        x.prixAchatHTReelAvoir = 0
+        x.prixAchatTTCReelAvoir = 0
+        x.prixDCAvoir = 0
+        x.prixFodecAvoir = 0
+        x.totalDCAvoir = 0
+        x.totalFodecAvoir = 0
+        x.totalHTAvoir = 0
+        x.totalTVAAvoir = 0
+        x.totalTTCAvoir = 0
+      })
+
+      this.factureVenteMarchandisesFinancierSelected.push(factureVente)
+      this.allFacturesMarchandisesFinancierFournisseur = this.allFacturesMarchandisesFinancierFournisseur.filter(x => x.id !== this.itemFVMarchandisesFinancierSelected)
+    }
+
+    console.log("this.factureVenteSelected = ",this.factureVenteMarchandisesFinancierSelected)
+  }
+
+  openModalModiferFVMarchandisesFinancier(itemFVSelected){
+    // this.typeElement = this.fonctionPartagesService.titreOfModal.modifierBonRetourFournisseur    
+    this.isOpenModalAjoutFournisseur = true
+    this.idAjoutFournisseurModal = itemFVSelected
+  }
+
+  isOpenModalDeleteFVMarchandisesFinancier = false
+  
+
+  openModalDeleteFVMarchandisesFinancier(numero, params2) {
+    this.itemFVSelected = numero
+    this.isOpenModalDeleteFV = true
+    this.params1Delete = "Facture Vente"
+    this.params2Delete = params2
+  }
+
+  closeModeleDeleteFVMarchandisesFinancier(){
+    this.isOpenModalDeleteFV = false
+  }
+
+  deleteFVMarchandisesFinancier() {
+    this.notificationToast.showSuccess("Votre facture est supprimée")
+    var fv = this.factureVenteMarchandisesFinancierSelected.filter( x => x.id === this.itemFVMarchandisesFinancierSelected)[0]
+    this.allFacturesMarchandisesFinancierFournisseur.push(fv)
+    this.factureVenteMarchandisesFinancierSelected = this.factureVenteMarchandisesFinancierSelected.filter( x => x.id !== this.itemFVMarchandisesFinancierSelected)
+    this.closeModeleDeleteFVMarchandisesFinancier()
+    this.changeMontantFinancierMarchandisesFinancier()
+  }
+  // end marchandises-financiers
+  
 }

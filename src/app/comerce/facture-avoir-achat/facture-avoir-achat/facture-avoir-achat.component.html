@@ -736,39 +736,45 @@
                                     <div class="form-group row">
                                         <label for="bonLivraison" class="col-sm-2 col-form-label" style="padding-left: 20px !important;">Facture: </label>
                                         <div class="col-sm-10">
-                                            <app-autocomplete [bordureRed]="erreuritemFVSelected != ''"
-                                                (addElementEvent)="setFactureVenteId($event)" keySelected="numero" [objet]="{numero:'Num-BR'}"
-                                                [articles]="allFacturesFournisseur" [idSelected]="itemFVSelected" idHtml="789FV88R"
+                                            <app-autocomplete [bordureRed]="erreuritemFVMarchandisesFinancierSelected != ''"
+                                                (addElementEvent)="setFactureMarchandisesFinancierVenteId($event)" keySelected="numero" [objet]="{numero:'Num-BR'}"
+                                                [articles]="allFacturesMarchandisesFinancierFournisseur" [idSelected]="itemFVMarchandisesFinancierSelected" idHtml="789FV8787988R"
                                                 >
                                             </app-autocomplete>
                         
-                                            <p *ngIf="erreuritemFVSelected != ''" class="erreur">{{erreuritemFVSelected}}
+                                            <p *ngIf="erreuritemFVMarchandisesFinancierSelected != ''" class="erreur">{{erreuritemFVMarchandisesFinancierSelected}}
                                             </p>
                                         </div>
                                     </div>
                         
                                     <div class="row" style="text-align:center;">
                                         <div class="col-sm-12">
-                                            <button (click)="ajouterFV()" class="btn btn-primary" style="width: 100px;">
+                                            <button (click)="ajouterFVMarchandisesFinancier()" class="btn btn-primary" style="width: 100px;">
                                                 Ajouter
                                             </button>
                                         </div>
                                     </div>
 
-                                    <div class="table-responsive" *ngIf="factureVenteSelected.length > 0">
+                                    <div class="table-responsive" *ngIf="factureVenteMarchandisesFinancierSelected.length > 0">
                                         <table class="table table-striped" style="border-spacing: collapse;">
                                             <thead>
                                                 <tr id="ligneWidth">
                                                     <th> Numero</th>
                                                     <th> Date </th>
-                                                    <th> Total HT</th>
-                                                    <th> Total Remise</th>
-                                                    <th> Total TTC</th>
-                                                    <th> Montant Financier</th>
+                                                    <th> Total HT </th>
+                                                    <th> Total Remise </th>
+                                                    <th> Total TTC </th>
+
+                                                    <th> Total-DC-Avoir </th>
+                                                    <th> Total-Fodec-Avoir </th>
+                                                    <th> Total-HT-Avoir </th>
+                                                    <th> Total-TVA-Avoir </th>
+                                                    <th> Total-TTC-Avoir </th>
+
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            <tbody *ngFor="let item of factureVenteSelected">
+                                            <tbody *ngFor="let item of factureVenteMarchandisesFinancierSelected">
                         
                                                         <tr>
                                                             <th>{{item.numero}}</th>
@@ -794,22 +800,113 @@
                                                                 </span>
                                                             </th>
 
-                                                            <th> 
-                                                                <app-input-number-vergule [field]="item" key="montantFinancie" [idUnique]="'montantFinancie'+item.id"
-                                                                (change)="changeMontantFinancier()"></app-input-number-vergule>
+                                                            
+
+                                                            <th> <span
+                                                                style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalDCAvoir)}}
+                                                               </span>
                                                             </th>
-                                
+
+                                                            <th> <span
+                                                                style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalFodecAvoir)}}
+                                                               </span>
+                                                            </th>
+
+                                                            <th> <span
+                                                                style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalHTAvoir)}}
+                                                              </span>
+                                                            </th>
+
+                                                            <th> <span
+                                                                style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalTVAAvoir)}}
+                                                               </span>
+                                                            </th>
+
+                                                            <th> <span
+                                                                style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.totalTTCAvoir)}}
+                                                               </span>
+                                                            </th>
+
                                                             <th>
-                                                                <!-- <button class="btn btn-info" style="padding:5px;"
+                                                                <button class="btn btn-info" style="padding:5px;"
                                                                     (click)="showArticlesbonReceptions(item.id)">
                                                                     <i class="fa fa-eye"></i>
-                                                                </button> -->
+                                                                </button>
                                 
                                 
                                                                 <button class="btn btn-danger" style="padding:5px;"
                                                                     (click)="openModalDeleteFV(item.id, item.numero)">
                                                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                                                 </button>
+                                                            </th>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th colspan="20" style="overflow: auto;">
+                                                                <div [id]="item.id" style=" display:none; width: fit-content; overflow:scroll">
+                                                                    <table>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th *ngFor="let key of objectKeys(itemsVariableShowsElements)">
+                                                                                    <div class="th-tableau">
+                                                                                        {{itemsShowsElements[key]}}
+                                                                                    </div>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                
+                                                                            <tr *ngFor="let article of item.articles">
+                                
+                                                                                <td *ngFor="let key of objectKeys(itemsVariableShowsElements)">
+                                
+                                                                                    <div *ngIf="key === 'remiseAvoirPourcentage'"
+                                                                                        class="col-sm-12 collapse-input">
+                                                                                        <app-input-number-vergule [field]="article" [key]="key"
+                                                                                            [idUnique]="key+article['article']+item.id"
+                                                                                            (change)="calculTotalFactureAchat()">
+                                                                                        </app-input-number-vergule>
+                                                                                    </div>
+                                
+                                                                                    <div *ngIf="key === 'remiseAvoirMontant'"
+                                                                                        class="col-sm-12 collapse-input">
+                                                                                        <app-input-number-vergule [field]="article" [key]="key"
+                                                                                            [idUnique]="key+article['article']+item.id"
+                                                                                            (change)="calculTotalFactureAchat()" [isMarge]="true">
+                                                                                        </app-input-number-vergule>
+                                                                                    </div>
+                                
+                                                                                    <span
+                                                                                        *ngIf="fonctionPartagesService.colonnesQuantites.includes(key)"
+                                                                                        style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(article[key])}}</span>
+                                                                                    <span
+                                                                                        *ngIf="key !== 'remiseAvoirMontant' && fonctionPartagesService.colonnesPrix.includes(key)"
+                                                                                        style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleQuantite(article[key])}}</span>
+                                                                                    <span
+                                                                                        *ngIf="key !== 'remiseAvoirPourcentage' && fonctionPartagesService.colonnesTaux.includes(key)"
+                                                                                        style="float:right;">{{fonctionPartagesService.getFormaTwoAfterVerguleTaux(article[key])}}</span>
+                                                                                    <span *ngIf="fonctionPartagesService.colonnesDates.includes(key)"
+                                                                                        style="text-align: center; display: block;">{{fonctionPartagesService.getDate(article[key],
+                                                                                        'yyyy-MM-dd')}}</span>
+                                                                                    <span *ngIf="fonctionPartagesService.colonnesOuiNon.includes(key)"
+                                                                                        style="text-align: center; display: block;"> <i
+                                                                                            class="fas fa-check-square" style="font-size: 15px;"
+                                                                                            *ngIf="item[key] == 'oui'"></i> <i class="fas fa-square"
+                                                                                            style="font-size: 15px;" *ngIf="item[key] != 'oui'"></i>
+                                                                                    </span>
+                                                                                    <span
+                                                                                        *ngIf="!(fonctionPartagesService.colonnesTaux.includes(key) || key === 'unite1' || fonctionPartagesService.colonnesDates.includes(key) || fonctionPartagesService.colonnesQuantites.includes(key) || fonctionPartagesService.colonnesPrix.includes(key) || fonctionPartagesService.colonnesOuiNon.includes(key))">{{article[key]}}</span>
+                                
+                                                                                    <span *ngIf="key === 'unite1'">
+                                                                                        {{fonctionPartagesService.getLibelleById(article[key],
+                                                                                        uniteMesures, 'libelle')}}</span>
+                                                                                </td>
+                                
+                                                                            </tr>
+                                
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
                                                             </th>
                                                         </tr>
                                                
@@ -836,6 +933,18 @@
                                                         <span
                                                             style="float:right; font-size: 15px;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(bonAchat.totalHT)}}
                                                         </span>
+                                                    </th>
+                                                    <th>
+                        
+                                                    </th>
+                                                    <th>
+                        
+                                                    </th>
+                                                    <th>
+                        
+                                                    </th>
+                                                    <th>
+                        
                                                     </th>
                                                     <th>
                         
