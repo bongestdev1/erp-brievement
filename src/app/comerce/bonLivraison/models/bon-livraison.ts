@@ -42,5 +42,7 @@ export class BonLivraison {
     projet=""
     transporteur=""
     coutTransport=0
+
+    typeRetour = 0
     
 }

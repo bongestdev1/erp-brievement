@@ -43,6 +43,8 @@ export class LigneblComponent implements OnInit {
   // begin autocomplete articles
   keySelectedArticle = "reference"
 
+  @Input() typeRetour = 0 
+
   @Input() allFrais
   @Input() articles
 
@@ -54,7 +56,7 @@ export class LigneblComponent implements OnInit {
 
   @Input() prixSpecifiqueClients
 
-  @Output() changePrixTotalEvent = new EventEmitter<string>();
+  @Output() changePrixTotalEvent = new EventEmitter<Object>();
 
   @Output() getAllParametresEvent = new EventEmitter<string>();
 
@@ -78,8 +80,6 @@ export class LigneblComponent implements OnInit {
       this.articlesSelected[i].numero = i + 1
     }
 
-    this.changePrixTotalEvent.emit();
-
     var totals = new TotalsDocument()
 
     for (let i = 0; i < this.articlesSelected.length; i++) {
@@ -90,17 +90,30 @@ export class LigneblComponent implements OnInit {
         quantite = this.articlesSelected[i].quantiteAchat
       }
 
-      totals.totalTTC += this.articlesSelected[i].totalTTC
-      totals.totalRemise += this.articlesSelected[i].totalRemise
-      totals.totalTVA += this.articlesSelected[i].totalTVA
-      totals.totalHT += this.articlesSelected[i].totalHT
-      if (this.isPrixVenteNotPrixAchat()) {
-        totals.totalGainCommerciale += this.articlesSelected[i].totalGainCommerciale
-        totals.totalGainReel += this.articlesSelected[i].totalGainReel
+      if(this.typeRetour === 0){
+        totals.totalTTC += this.articlesSelected[i].totalTTC
+        totals.totalRemise += this.articlesSelected[i].totalRemise
+        totals.totalTVA += this.articlesSelected[i].totalTVA
+        totals.totalHT += this.articlesSelected[i].totalHT
+        if (this.isPrixVenteNotPrixAchat()) {
+          totals.totalGainCommerciale += this.articlesSelected[i].totalGainCommerciale
+          totals.totalGainReel += this.articlesSelected[i].totalGainReel
+        }
+        totals.totalFodec += this.articlesSelected[i].prixFodec * quantite
+        totals.totalDC += this.articlesSelected[i].prixDC * quantite
+        totals.totalRedevance += this.articlesSelected[i].redevance * quantite
+      }else{
+        totals.totalTTC += this.articlesSelected[i].totalTTCFinancier
+        totals.totalRemise = 0
+        totals.totalTVA += this.articlesSelected[i].totalTVAFinancier
+        totals.totalHT += this.articlesSelected[i].totalHTFinancier
+        totals.totalGainCommerciale = 0
+        totals.totalGainReel = 0
+        totals.totalFodec += this.articlesSelected[i].totalFodecFinancier
+        totals.totalDC += this.articlesSelected[i].totalDCFinancier
+        totals.totalRedevance = 0
       }
-      totals.totalFodec += this.articlesSelected[i].prixFodec * quantite
-      totals.totalDC += this.articlesSelected[i].prixDC * quantite
-      totals.totalRedevance += this.articlesSelected[i].redevance * quantite
+      
     }
 
     this.bonLivraison.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
@@ -126,6 +139,9 @@ export class LigneblComponent implements OnInit {
     for (let key in totals) {
       this.bonLivraison[key] = this.arrondiNombre(totals[key])
     }
+
+    this.changePrixTotalEvent.emit(totals);
+
 
     var montantPaye = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(this.bonLivraison.montantPaye))
     this.bonLivraison.montantTotal = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(totals.totalTTC + this.bonLivraison.timbreFiscale))
@@ -1049,8 +1065,8 @@ export class LigneblComponent implements OnInit {
 
   //fin delete item
   tabNumbersInput = ['remiseParMontant2', 'remiseParMontant', 'prixFourn', 'prixVenteHTReel2', 'prixVenteHTReel', 'tauxRemise', 'quantiteVente', 'quantiteVente2', 'quantiteAchat', 'quantiteAchat2']
-  allTabNumbers = ['prixTTC', 'totalRedevance', 'montantRemise', 'remiseParMontant2', 'remiseParMontant', 'totalRemise', 'redevance', 'totalGainCommerciale', 'totalGainReel', 'prixVenteHTReel2', 'prixVenteHTReel', 'prixAchatHTReel2', 'prixAchatHTReel', 'totalGain', 'pVenteConseille', 'totalTTC', 'tauxTVA', 'totalHT', 'prixVente', 'plafondRemise', 'prixVenteHT', 'prixAchat', 'tauxRemise', 'quantiteVente', 'quantiteVente2', 'quantiteAchat', 'quantiteAchat2', 'prixFourn', 'prixFodec', 'prixDC', 'tauxDC']
-  tabNumbersLabel = ['totalRedevance', 'montantRemise', 'totalRemise', 'redevance', 'totalGainCommerciale', 'totalGainReel', 'prixAchatHTReel2', 'totalGain', 'pVenteConseille', 'totalTTC', 'tauxTVA', 'totalHT', 'prixVente', 'plafondRemise', 'prixVenteHT', 'prixAchat', 'prixFodec', 'prixDC', 'tauxDC']
+  allTabNumbers = ['remiseFinancierMontant', 'remiseFinancierPourcentage','totalTTCFinancier', 'totalTVAFinancier', 'totalHTFinancier', 'totalFodecFinancier', 'totalDCFinancier', 'prixFodecFinancier', 'prixDCFinancier', 'prixAchatTTCReelFinancier', 'prixAchatHTReelFinancier','remiseFinancierTotal', 'prixTTC', 'totalRedevance', 'montantRemise', 'remiseParMontant2', 'remiseParMontant', 'totalRemise', 'redevance', 'totalGainCommerciale', 'totalGainReel', 'prixVenteHTReel2', 'prixVenteHTReel', 'prixAchatHTReel2', 'prixAchatHTReel', 'totalGain', 'pVenteConseille', 'totalTTC', 'tauxTVA', 'totalHT', 'prixVente', 'plafondRemise', 'prixVenteHT', 'prixAchat', 'tauxRemise', 'quantiteVente', 'quantiteVente2', 'quantiteAchat', 'quantiteAchat2', 'prixFourn', 'prixFodec', 'prixDC', 'tauxDC']
+  tabNumbersLabel = ['totalTTCFinancier', 'totalTVAFinancier', 'totalHTFinancier', 'totalFodecFinancier', 'totalDCFinancier', 'prixFodecFinancier', 'prixDCFinancier', 'prixAchatTTCReelFinancier', 'prixAchatHTReelFinancier','remiseFinancierTotal','totalRedevance', 'montantRemise', 'totalRemise', 'redevance', 'totalGainCommerciale', 'totalGainReel', 'prixAchatHTReel2', 'totalGain', 'pVenteConseille', 'totalTTC', 'tauxTVA', 'totalHT', 'prixVente', 'plafondRemise', 'prixVenteHT', 'prixAchat', 'prixFodec', 'prixDC', 'tauxDC']
 
   deplaceLigne(numero, pas) {
     var newPos = numero + pas
@@ -1077,8 +1093,57 @@ export class LigneblComponent implements OnInit {
     this.getAllParametresEvent.emit()
   }
 
+  tabVariablesFinancier = { 
+    numero: "Numéro",
+    reference: "Réference",
+    designation: "Désignation",
+    quantiteAchat : "Quantité",
+    prixAchatHTReel : "Prix HT",
+    tauxTVA : "Taux TVA",
+    unite1 : "Unité",
+    remiseFinancierPourcentage: "remise-Fi(%)",
+    remiseFinancierMontant: "remise-Fi($)",
+    remiseFinancierTotal: "remise-Fi-Total",
+    prixAchatHTReelFinancier: "prixHTNet-Fi",
+    prixAchatTTCReelFinancier:"prixTTC-Fi",
+    prixDCFinancier:"prixDC-Fi",
+    prixFodecFinancier:"prixFodec-Fi",
+    totalDCFinancier:"totalDC-Fi",
+    totalFodecFinancier:"totalFodec-Fi",
+    totalHTFinancier:"totalHT-Fi",
+    totalTVAFinancier:"totalTVA-Fi",
+    totalTTCFinancier:"totalTTC-Fi"
+  }
 
   ngOnChanges(changes: SimpleChanges) {
+
+    this.itemsShowsElements = {}
+    this.itemsVariableShowsElements = {}
+
+    if(this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur){
+      if(this.bonLivraison.typeRetour === 0){
+        for (let key in this.shemaArticle) {
+          this.itemsShowsElements[key] = this.shemaArticle[key]
+          this.itemsVariableShowsElements[key] = this.shemaArticle[key]
+        }
+      }else if(this.bonLivraison.typeRetour === 1){
+        for (let key in this.tabVariablesFinancier) {
+          this.itemsShowsElements[key] = this.tabVariablesFinancier[key]
+          this.itemsVariableShowsElements[key] = this.tabVariablesFinancier[key]
+          
+          for(let item of this.articlesSelected){
+            if(!item[key]){
+              item[key] = 0
+            }
+          }
+        }
+      }
+    }
+
+    if(this.titreCrud != this.fonctionPartagesService.titreCrud.modifier){
+      this.modifierPrixTotalBL()
+    }
+   
     // if(this.articles.length > 0){
     //   this.resetLigneBL()
     // }

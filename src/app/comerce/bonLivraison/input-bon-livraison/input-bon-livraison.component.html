@@ -89,8 +89,6 @@
                     </form>
                 </div>
 
-                
-
                 <div class="col-sm-4">
                     <form action="javascript:">
                         <div class="form-group row">
@@ -277,7 +275,7 @@
 
                 <!-- Partie formulaire à Droite en haut -->
                 <div class="col-md-4"
-                    *ngIf="titreDocument==  fonctionPartagesService.titreDocuments.bonCommande || titreDocument== fonctionPartagesService.titreDocuments.commande">
+                    *ngIf="titreDocument == fonctionPartagesService.titreDocuments.bonCommande || titreDocument== fonctionPartagesService.titreDocuments.commande">
                     <form action="javascript:">
                         <div class="form-group row">
                             <label for="validation" class="col-sm-4 col-form-label">Validation de commande</label>
@@ -489,60 +487,78 @@
                 <div class="col-md-12"
                             *ngIf="titreDocument === fonctionPartagesService.titreDocuments.bonReception">
 
-                            <hr />
+                    <hr />
+
+                    <div class="form-group row">
+                        <div class="col-sm-6">
 
                             <div class="form-group row">
-                                <div class="col-sm-6">
-
-                                    <div class="form-group row">
 
 
-                                    <label for="Gainreel" class="col-sm-6 col-form-label">Numero Bon Livraison
+                            <label for="Gainreel" class="col-sm-6 col-form-label">Numero Bon Livraison
 
-                                        Fournisseur</label>
-                                    <div class="col-sm-6 collapse-input">
-                                        <input class="form-control"
-                                            [(ngModel)]="bonLivraison.numeroBonLivraisonFournisseur"
-                                            style="height: 29px; padding:5px;">
-                                    </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="form-group row">
-
-
-                                    <label for="Gainreel" class="col-sm-6 col-form-label">Date Bon Livraison
-                                        Fournisseur</label>
-                                    <div class="col-sm-6 collapse-input">
-                                        <input class="form-control" type="date"
-                                            [(ngModel)]="bonLivraison.dateBonLivraisonFournisseur"
-                                            style="height: 29px; padding:5px;">
-                                    </div>
-                                    </div>
-                                </div>
+                                Fournisseur</label>
+                            <div class="col-sm-6 collapse-input">
+                                <input class="form-control"
+                                    [(ngModel)]="bonLivraison.numeroBonLivraisonFournisseur"
+                                    style="height: 29px; padding:5px;">
                             </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Capture Bon Livraison Fournisseur</label>
-                                <div class="col-sm-4">
-                                    <input (change)="onFileSelect($event)" type="file" id="captureFacture"
-                                        style="color: transparent;" />
-
-                                    <p *ngIf="captureFournisseur"> {{captureFournisseur.name}} </p>
-                                    <p
-                                        *ngIf="!imageData && bonLivraison.captureBonLivraisonFournisseur && bonLivraison.captureBonLivraisonFournisseur.length > 0">
-                                        {{replacePath(bonLivraison.captureBonLivraisonFournisseur)}} </p>
-                                </div>
-                                <div class="col-sm-4">
-                                    <button class="btn btn-info"
-                                        *ngIf="!imageData && bonLivraison.captureBonLivraisonFournisseur && bonLivraison.captureBonLivraisonFournisseur.length > 0"
-                                        (click)="saveFileFacture()"> Télécharger </button>
-                                </div>
                             </div>
-
                         </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+
+
+                            <label for="Gainreel" class="col-sm-6 col-form-label">Date Bon Livraison
+                                Fournisseur</label>
+                            <div class="col-sm-6 collapse-input">
+                                <input class="form-control" type="date"
+                                    [(ngModel)]="bonLivraison.dateBonLivraisonFournisseur"
+                                    style="height: 29px; padding:5px;">
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Capture Bon Livraison Fournisseur</label>
+                        <div class="col-sm-4">
+                            <input (change)="onFileSelect($event)" type="file" id="captureFacture"
+                                style="color: transparent;" />
+
+                            <p *ngIf="captureFournisseur"> {{captureFournisseur.name}} </p>
+                            <p
+                                *ngIf="!imageData && bonLivraison.captureBonLivraisonFournisseur && bonLivraison.captureBonLivraisonFournisseur.length > 0">
+                                {{replacePath(bonLivraison.captureBonLivraisonFournisseur)}} </p>
+                        </div>
+                        <div class="col-sm-4">
+                            <button class="btn btn-info"
+                                *ngIf="!imageData && bonLivraison.captureBonLivraisonFournisseur && bonLivraison.captureBonLivraisonFournisseur.length > 0"
+                                (click)="saveFileFacture()"> Télécharger </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-12" *ngIf="titreDocument === fonctionPartagesService.titreDocuments.bonRetourFournisseur && titreCrud != fonctionPartagesService.titreCrud.modifier">
+                    <hr>
+                    <div class="row">
+    
+                        <div class="col-md-4">
+                            <input type="radio" id="huey" name="drone" value="huey" (click)="setTypeRetour(0)" [checked]="bonLivraison.typeRetour == 0">
+                            <label for="huey">Retour marchandises</label>
+                        </div>
+    
+                        <div class="col-md-4">
+                            <input type="radio" id="dewey" name="drone" value="dewey" (click)="setTypeRetour(1)" [checked]="bonLivraison.typeRetour == 1">
+                            <label for="dewey">Retour financiers</label>
+                        </div>
+    
+                    </div>
+                    <hr>
+                </div>
 
                 <!-- partie tabs -->
                 <div class="col-md-12">
@@ -553,10 +569,11 @@
                                 <div class="col-xl-14">
                                     <hr>
                                     <app-lignebl [titreCrud]="titreCrud" [articlesSelected]="articles"
-                                        [titreDocument]="titreDocument" (changePrixTotalEvent)="changePrixTotalEvent()"
+                                        [titreDocument]="titreDocument" (changePrixTotalEvent)="changePrixTotalEvent($event)"
                                         [bonLivraison]="bonLivraison" [articles]="allArticles" [client]="client"
                                         [uniteMesures]="uniteMesures" (getAllParametresEvent)="getAllParametres()"
                                         [allFrais]="allFrais" [prixSpecifiqueTypeTiers]="prixSpecifiqueTypeTiers"
+                                        [typeRetour]="typeRetour"
                                         [prixSpecifiqueClients]="prixSpecifiqueClients">
                                     </app-lignebl>
                                 </div>

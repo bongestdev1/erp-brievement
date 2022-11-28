@@ -98,6 +98,12 @@ export class InputBonLivraisonComponent implements OnInit {
     // this.ajoutImage()
   }
 
+  typeRetour = 0
+  setTypeRetour(type) {
+    this.typeRetour = type
+    this.bonLivraison.typeRetour = type
+  }
+
   autoriserCoutTransporteur(){
     if(this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison || this.titreDocument === this.fonctionPartagesService.titreDocuments.bonReception || this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourClient || this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur){
         return true
@@ -233,7 +239,8 @@ export class InputBonLivraisonComponent implements OnInit {
     );
   }
 
-  changePrixTotalEvent() {
+  changePrixTotalEvent(totals) {
+
   }
 
   isVenteContoire = false
@@ -301,15 +308,12 @@ export class InputBonLivraisonComponent implements OnInit {
     }
     this.isLoading = true
 
-    console.log(url)
-
     this.http.get(this.informationGenerale.baseUrl + url + id, this.tokenStorageService.getHeader()).subscribe(
 
       res => {
         this.isLoading = false
         let response: any = res
 
-        console.log(response)
         if (response.status) {
 
          //this.reseteFormulaire()
@@ -367,7 +371,6 @@ export class InputBonLivraisonComponent implements OnInit {
               this.bonLivraison.dateBonLivraisonFournisseur = formatDate(new Date(), 'yyyy-MM-dd', 'en');
             }
   
-  
             if (this.modeTiere == this.fonctionPartagesService.modeTiere.fournisseur) {
               this.bonLivraison.client = response.resultat.fournisseur
             }
@@ -398,7 +401,8 @@ export class InputBonLivraisonComponent implements OnInit {
             }
   
             this.bonLivraison.date = formatDate(new Date(this.bonLivraison.date), 'yyyy-MM-dd', 'en');
-  
+            this.bonLivraison.typeRetour = this.typeRetour
+            this.setTypeRetour(this.bonLivraison.typeRetour)
             this.getAllParametres()
   
             if (!this.bonLivraison.coutTransport) {
@@ -462,7 +466,6 @@ export class InputBonLivraisonComponent implements OnInit {
     this.isLoading = true
 
     this.http.post(this.informationGenerale.baseUrl + this.lienupload, request, this.tokenStorageService.getHeader()).subscribe(
-
       res => {
         this.isLoading = false
         this.bonLivraison.captureBonLivraisonFournisseur = res[0]
@@ -995,7 +998,6 @@ export class InputBonLivraisonComponent implements OnInit {
       }
     );
   }
-
 
   setDocumentID(id) {
     if (id && id.length > 0) {

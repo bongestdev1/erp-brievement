@@ -35,9 +35,7 @@ export class UtilesBonLivraisonService {
 
     var prixVenteHT = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.prixVenteHT))
     var prixVenteHTReel = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(item.prixVenteHTReel))
-    
-    console.log(item.sansRemise)
-    console.log(item.plafondRemise)
+   
 
     if(item.sansRemise === "oui"){
       if(prixVenteHT > prixVenteHTReel){
@@ -162,8 +160,7 @@ export class UtilesBonLivraisonService {
     }
 
     var tauxRemise = Number(item.tauxRemise.toFixed(5))
-    console.log("tauxRemise =", item.tauxRemise)
-    
+   
     item.remiseF = tauxRemise
     
     item.prixAchatHTReel = Number(item.prixFourn) - Number(item.prixFourn) * Number(item.remiseF / 100) - Number(item.remiseParMontant)
@@ -201,7 +198,26 @@ export class UtilesBonLivraisonService {
     
     item = this.changeArrondu(item)
 
-    console.log("tauxRemise =", item.tauxRemise)
+    //start calcul finance
+    // item.remiseFinancierPourcentage = 
+    // item.remiseFinancierMontant = 
+    item.remiseFinancierTotal = this.arrondiNombre(item.prixAchatHTReel * (item.remiseFinancierPourcentage / 100) + item.remiseFinancierMontant)
+   
+    item.prixDCFinancier = this.arrondiNombre(item.remiseFinancierTotal * item.tauxDC / 100) 
+    
+    item.prixFodecFinancier = 0
+    if(item.isFodec == "oui"){
+      item.prixFodecFinancier = this.arrondiNombre(item.remiseFinancierTotal * this.fonctionPartagesService.parametres.tauxFodec / 100)
+    }
+
+    item.prixAchatHTReelFinancier = this.arrondiNombre(item.remiseFinancierTotal + item.prixFodecFinancier + item.prixDCFinancier)
+    item.prixAchatTTCReelFinancier = this.arrondiNombre(item.prixAchatHTReelFinancier * (1 + item.tauxTVA / 100))  
+    item.totalDCFinancier = item.prixDCFinancier * item.quantiteAchat
+    item.totalFodecFinancier = item.prixFodecFinancier * item.quantiteAchat
+    item.totalHTFinancier = item.prixAchatHTReelFinancier * item.quantiteAchat
+    item.totalTTCFinancier = item.prixAchatTTCReelFinancier * item.quantiteAchat
+    item.totalTVAFinancier = item.totalTTCFinancier - item.totalHTFinancier
+    //end calcul finance
     
     return item
   }

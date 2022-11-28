@@ -132,7 +132,7 @@
                 </label>
                 
                 <div class="col-sm-6 padding-LR-0">
-                    <app-input-number-vergule [field]="itemArticleSelected" key="remiseParMontant" idUnique="remiseParMontantF222" (change)="changePrixTotal()" [isMarge]=true></app-input-number-vergule>
+                    <app-input-number-vergule [field]="itemArticleSelected" key="remiseParMontant" idUnique="remiseParMontantF222" (change)="changePrixTotal()" ></app-input-number-vergule>
                 </div>
             </div>
         </div>
@@ -235,7 +235,7 @@
                 <tr>
                     <th *ngFor="let key of objectKeys(itemsVariableShowsElements)" >
                         <div class="th-tableau">
-                            {{shemaArticle[key]}} 
+                            {{itemsVariableShowsElements[key]}} 
                         </div>
                     </th>
                     
@@ -296,22 +296,32 @@
                         </div>
 
                         <div *ngIf="item && key == 'prixAchatHTReel'" class="col-sm-12 collapse-input">
-                            <span *ngIf="isDetails == 'oui'" style="float:right;">{{getNumber(item[key])}}</span>
-                            <app-input-number-vergule *ngIf="isDetails == 'non'" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changePrixAchatHT(item['numero'])"></app-input-number-vergule>
+                            <span *ngIf="isDetails == 'oui' || typeRetour == 1" style="float:right;">{{getNumber(item[key])}}</span>
+                            <app-input-number-vergule *ngIf="isDetails == 'non' && typeRetour == 0" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changePrixAchatHT(item['numero'])"></app-input-number-vergule>
                         </div>
 
                         <!--start Prix Achat-->
                         <div *ngIf="item && key == 'quantiteAchat'" class="col-sm-12 collapse-input">
-                            <app-input-number-vergule *ngIf="isDetails == 'non'" isQuantite="1" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changePrixTotalArray(item['numero'])"></app-input-number-vergule>
-                            <span *ngIf="isDetails == 'oui'" style="float:right;">{{getNumber(item[key])}}</span>
+                            <app-input-number-vergule *ngIf="isDetails == 'non' && typeRetour == 0" isQuantite="1" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changePrixTotalArray(item['numero'])"></app-input-number-vergule>
+                            <span *ngIf="isDetails == 'oui' || typeRetour == 1" style="float:right;">{{getNumber(item[key])}}</span>
                         </div>
                         
                         <div *ngIf="item && key == 'quantiteAchat2' && item.unite2 != null" class="col-sm-12 collapse-input">
-                            <app-input-number-vergule *ngIf="isDetails == 'non'" isQuantite="1" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changeQuantiteAchat2Array(item['numero'])"></app-input-number-vergule>
-                            <span *ngIf="isDetails == 'oui'" style="float:right;">{{getNumber(item[key])}}</span>
+                            <app-input-number-vergule *ngIf="isDetails == 'non' && typeRetour == 0" isQuantite="1" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changeQuantiteAchat2Array(item['numero'])"></app-input-number-vergule>
+                            <span *ngIf="isDetails == 'oui' || typeRetour == 1" style="float:right;">{{getNumber(item[key])}}</span>
                         </div>
 
                         <div *ngIf="item && key == 'prixFourn'" class="col-sm-12 collapse-input">
+                            <app-input-number-vergule *ngIf="isDetails == 'non'" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changePrixTotalArray(item['numero'])"></app-input-number-vergule>
+                            <span *ngIf="isDetails == 'oui'" style="float:right;">{{getNumber(item[key])}}</span>
+                        </div>
+
+                        <div *ngIf="item && key == 'remiseFinancierPourcentage'" class="col-sm-12 collapse-input">
+                            <app-input-number-vergule *ngIf="isDetails == 'non'" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changePrixTotalArray(item['numero'])" [isMarge]="true"></app-input-number-vergule>
+                            <span *ngIf="isDetails == 'oui'" style="float:right;">{{getNumber(item[key])}}</span>
+                        </div>
+
+                        <div *ngIf="item && key == 'remiseFinancierMontant'" class="col-sm-12 collapse-input">
                             <app-input-number-vergule *ngIf="isDetails == 'non'" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changePrixTotalArray(item['numero'])"></app-input-number-vergule>
                             <span *ngIf="isDetails == 'oui'" style="float:right;">{{getNumber(item[key])}}</span>
                         </div>

@@ -26,4 +26,5 @@ export class ShemaArticleAchat {
     totalTTC="Total TTC"
     //pVenteConseille="Prix vente conseillé"   
   
+    
 }

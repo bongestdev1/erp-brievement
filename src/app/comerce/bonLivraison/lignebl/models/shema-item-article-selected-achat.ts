@@ -1,5 +1,18 @@
 export class ShemaItemArticleSelectedAchat {
 
+    remiseFinancierPourcentage = 0
+    remiseFinancierMontant = 0
+    remiseFinancierTotal = 0
+    prixAchatHTReelFinancier = 0
+    prixAchatTTCReelFinancier = 0
+    prixDCFinancier = 0
+    prixFodecFinancier = 0
+    totalDCFinancier = 0
+    totalFodecFinancier = 0
+    totalHTFinancier = 0
+    totalTVAFinancier = 0
+    totalTTCFinancier = 0
+ 
     remiseFacturePourcentage= 0
     remiseFactureMontant= 0
     remiseFactureTotal= 0
