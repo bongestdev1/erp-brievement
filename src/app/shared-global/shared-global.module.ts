@@ -42,6 +42,7 @@ import { PopupChoixTransfertDocumentComponent } from './popup-choix-transfert-do
 import { PopupSessionCaisseCourantComponent } from './popup-session-caisse-courant/popup-session-caisse-courant.component';
 import { FiltreDateArretComponent } from './filtre-date-arret/filtre-date-arret.component';
 import { AutoCompleteTypeTiersComponent } from './auto-complete-type-tiers/auto-complete-type-tiers.component';
+import { AutoCompleteMultipleComponent } from './auto-complete-multiple/auto-complete-multiple.component';
 
 
 
@@ -80,6 +81,7 @@ import { AutoCompleteTypeTiersComponent } from './auto-complete-type-tiers/auto-
     PopupChoixTransfertDocumentComponent,
     PopupSessionCaisseCourantComponent,
     AutoCompleteTypeTiersComponent,
+    AutoCompleteMultipleComponent,
 
   ],
   imports: [
@@ -120,6 +122,8 @@ import { AutoCompleteTypeTiersComponent } from './auto-complete-type-tiers/auto-
     NombreListPageComponent,
     EntetePageListComponent,
     PopupSessionCaisseCourantComponent,
+    AutoCompleteMultipleComponent,
+    
   ],
   providers: [
 
