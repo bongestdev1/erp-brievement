@@ -4,8 +4,10 @@
             <!-- Partie Header -->
             <div class="form-group row" style="justify-content: space-between !important; margin-left: 5px; margin-right: 5px;">
                 <div class="text-titre">
-                    <h3><span *ngIf="titreCrud != fonctionPartagesService.titreCrud.transfert">{{titreCrud}}</span>
-                        {{titreDocument}} Achat</h3>
+                    <!-- <h3><span *ngIf="titreCrud != fonctionPartagesService.titreCrud.transfert">{{titreCrud}}</span>
+                        {{titreDocument}} Achat</h3> -->
+                        <h3><span *ngIf="titreCrud != fonctionPartagesService.titreCrud.transfert">{{titreCrud}}</span>
+                            Avoir Achat</h3>
                 </div>
 
                 <div class="left-button">
@@ -408,7 +410,7 @@
                 <div class="col-md-12">
                     <hr>
                     <div class="row">
-                        <div class="col-md-4">
+                        <!-- <div class="col-md-4">
                             <input type="radio" id="huey" name="drone" value="huey" (click)="setTypeAvoir(fonctionPartagesService.titreDocuments.factureAvoirMarchandises)" [checked]="titreDocument == fonctionPartagesService.titreDocuments.factureAvoirMarchandises">
                             <label for="huey">Facture avoir marchandises</label>
                         </div>
@@ -421,7 +423,7 @@
                         <div class="col-md-4">
                             <input type="radio" id="dewey2" name="drone" value="dewey" (click)="setTypeAvoir(fonctionPartagesService.titreDocuments.factureAvoirSurMarchandisesFinanciers)" [checked]="fonctionPartagesService.titreDocuments.factureAvoirSurMarchandisesFinanciers == titreDocument">
                             <label for="dewey2">Facture avoir marchandises-financiers</label>
-                        </div>
+                        </div> -->
                         
                         <div class="col-md-4">
                             <input type="checkbox" id="timbreFiscale" name="timbreFiscale" (click)="setTimbreFiscale()" [checked]="bonAchat.withTimbreFiscal">

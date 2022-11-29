@@ -239,8 +239,14 @@ export class InputBonLivraisonComponent implements OnInit {
     );
   }
 
+  arrondiNombre(float){
+    return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(float))
+  }
+  
   changePrixTotalEvent(totals) {
-
+    for (let key in totals) {
+      this.bonLivraison[key] = this.arrondiNombre(totals[key])
+    }
   }
 
   isVenteContoire = false
@@ -401,7 +407,10 @@ export class InputBonLivraisonComponent implements OnInit {
             }
   
             this.bonLivraison.date = formatDate(new Date(this.bonLivraison.date), 'yyyy-MM-dd', 'en');
+            
+            if(!this.bonLivraison.typeRetour)
             this.bonLivraison.typeRetour = this.typeRetour
+            
             this.setTypeRetour(this.bonLivraison.typeRetour)
             this.getAllParametres()
   
@@ -538,7 +547,7 @@ export class InputBonLivraisonComponent implements OnInit {
 
     if (this.titreCrud == this.fonctionPartagesService.titreCrud.modifier) {
       this.modifierBonLivraison()
-    } else if (this.titreCrud == this.fonctionPartagesService.titreCrud.transfert) {
+    }else if (this.titreCrud == this.fonctionPartagesService.titreCrud.transfert) {
       if (this.modeTransfert) {
         this.ajoutBonLivraison2()
       } else {
@@ -637,7 +646,7 @@ export class InputBonLivraisonComponent implements OnInit {
       request = this.getRequestDocumentTransfert(this.id, this.titreDocumentTransfert, request)
     }
 
-    this.http.post(this.informationGenerale.baseUrl + this.lienAjoute, request, this.tokenStorageService.getHeader()).subscribe(
+    this.http.post(this.informationGenerale.baseUrl + this.   lienAjoute, request, this.tokenStorageService.getHeader()).subscribe(
 
       res => {
         this.isLoading = false

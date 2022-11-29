@@ -1,3 +1,5 @@
+import { FactureAvoirAchatListComponent } from './facture-avoir-achat/facture-avoir-achat-list/facture-avoir-achat-list.component';
+import { FactureAvoirAchatComponent } from './facture-avoir-achat/facture-avoir-achat/facture-avoir-achat.component';
 import { PrixSpecifiqueTypeTierComponent } from './article/prix-specifique-type-tier/prix-specifique-type-tier.component';
 import { ClassementFournisseurComponent } from './fournisseur/classement-fournisseur/classement-fournisseur.component';
 import { NgModule } from '@angular/core';
@@ -100,11 +102,25 @@ import { ListReceptionComponent } from './bonLivraison/receptions/list-reception
 import { ModifierReceptionComponent } from './bonLivraison/receptions/modifier-reception/modifier-reception.component'
 
 import { FilterAticleCategorieComponent } from './filter-aticle-categorie/filter-aticle-categorie.component';
+import { FactureAchatComponent } from './facture-achat/facture-achat/facture-achat.component';
+import { FactureAchatLigneComponent } from './facture-achat/facture-achat-ligne/facture-achat-ligne.component';
+import { FactureAchatListComponent } from './facture-achat/facture-achat-list/facture-achat-list.component';
 import { AutocompleteSocieteComponent } from './autocompletes/autocomplete-societe/autocomplete-societe.component';
 
+import { FactureAvoirListComponent } from './facture-avoir/facture-avoir-list/facture-avoir-list.component';
+import { FactureAvoirComponent } from './facture-avoir/facture-avoir/facture-avoir.component';
 
 
 /* ------------Start---------------- */
+
+import { AjoutBonRetourClientComponent } from './bonRetourClient/ajout-bon-retour-client/ajout-bon-retour-client.component';
+import { DetailsBonRetourClientComponent } from './bonRetourClient/details-bon-retour-client/details-bon-retour-client.component';
+import { ListBonRetourClientComponent } from './bonRetourClient/list-bon-retour-client/list-bon-retour-client.component';
+import { ModifierBonRetourClientComponent } from './bonRetourClient/modifier-bon-retour-client/modifier-bon-retour-client.component';
+import { AjoutBonRetourFournisseurComponent } from './bonRetourFournisseur/ajout-bon-retour-fournisseur/ajout-bon-retour-fournisseur.component';
+import { DetailsBonRetourFournisseurComponent } from './bonRetourFournisseur/details-bon-retour-fournisseur/details-bon-retour-fournisseur.component';
+import { ListBonRetourFournisseurComponent } from './bonRetourFournisseur/list-bon-retour-fournisseur/list-bon-retour-fournisseur.component';
+import { ModifierBonRetourFournisseurComponent } from './bonRetourFournisseur/modifier-bon-retour-fournisseur/modifier-bon-retour-fournisseur.component';
 
 import { AjoutBonReceptionComponent } from './bonReception/ajout-bon-reception/ajout-bon-reception.component';
 import { DetailsBonReceptionComponent } from './bonReception/details-bon-reception/details-bon-reception.component';
@@ -114,42 +130,23 @@ import { ModifierBonReceptionComponent } from './bonReception/modifier-bon-recep
 import { FactureVenteComponent } from './facture-vente/facture-vente/facture-vente.component';
 import { FactureVenteLigneComponent } from './facture-vente/facture-vente-ligne/facture-vente-ligne.component';
 import { FactureVenteListComponent } from './facture-vente/facture-vente-list/facture-vente-list.component';
-import { FactureAvoirListComponent } from './facture-avoir/facture-avoir-list/facture-avoir-list.component';
-import { FactureAvoirComponent } from './facture-avoir/facture-avoir/facture-avoir.component';
-import { FactureAvoirAchatComponent } from './facture-avoir-achat/facture-avoir-achat/facture-avoir-achat.component';
-import { FactureAvoirAchatListComponent } from './facture-avoir-achat/facture-avoir-achat-list/facture-avoir-achat-list.component';
-import { FactureAchatComponent } from './facture-achat/facture-achat/facture-achat.component';
-import { FactureAchatLigneComponent } from './facture-achat/facture-achat-ligne/facture-achat-ligne.component';
-import { FactureAchatListComponent } from './facture-achat/facture-achat-list/facture-achat-list.component';
-import { AjoutBonRetourFournisseurComponent } from './bonRetourFournisseur/ajout-bon-retour-fournisseur/ajout-bon-retour-fournisseur.component';
-import { DetailsBonRetourFournisseurComponent } from './bonRetourFournisseur/details-bon-retour-fournisseur/details-bon-retour-fournisseur.component';
-import { ListBonRetourFournisseurComponent } from './bonRetourFournisseur/list-bon-retour-fournisseur/list-bon-retour-fournisseur.component';
-import { ModifierBonRetourFournisseurComponent } from './bonRetourFournisseur/modifier-bon-retour-fournisseur/modifier-bon-retour-fournisseur.component';
 
 
 /*---------------------------End-------------------*/
 
 @NgModule({
   declarations: [
-    
+
+    FactureAvoirAchatComponent,
+    FactureAvoirAchatListComponent,
+
     /* ---------------- Start ---------------*/
-    
-    FactureAchatComponent,
-    FactureAchatLigneComponent,
-    FactureAchatListComponent,
-
-    FactureAchatComponent,
-    FactureAchatLigneComponent,
-    FactureAchatListComponent,
-
-    FactureVenteComponent,
-    FactureVenteLigneComponent,
-    FactureVenteListComponent,
-
+    LigneblComponent,
     FactureAvoirComponent,
     FactureAvoirListComponent,
-
-    LigneblComponent,
+    FactureAchatComponent,
+    FactureAchatLigneComponent,
+    FactureAchatListComponent,
     AutocompleteSocieteComponent,
     ListparamlivraisonComponent,
     HeaderANDfooterPDFComponent,
@@ -243,19 +240,27 @@ import { ModifierBonRetourFournisseurComponent } from './bonRetourFournisseur/mo
     AutocompleteSousFamilleComponent,
     /* ---------------- END ---------------*/
 
+    
+    FactureVenteComponent,
+    FactureVenteLigneComponent,
+    FactureVenteListComponent,
+ 
+
+
     AjoutBonReceptionComponent,
     DetailsBonReceptionComponent,
     ListBonReceptionComponent,
     ModifierBonReceptionComponent,
 
+    AjoutBonRetourClientComponent,
+    DetailsBonRetourClientComponent,
+    ListBonRetourClientComponent,
+    ModifierBonRetourClientComponent,
     AjoutBonRetourFournisseurComponent,
     DetailsBonRetourFournisseurComponent,
     ListBonRetourFournisseurComponent,
     ModifierBonRetourFournisseurComponent,
-
-    FactureAvoirAchatComponent,
-    FactureAvoirAchatListComponent,
-
+    
 
   ],
   imports: [

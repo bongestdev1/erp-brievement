@@ -31,7 +31,7 @@ const routes: Routes = [
     path: 'dashboard-admin',
     component: SuperAdminComponent,
     children: [
-    
+      
     ]
   },
 
@@ -39,26 +39,7 @@ const routes: Routes = [
     path: '',
     component: AdminComponent,
     children: [
-      {
-        path: 'factureVente',
-        loadChildren: () => import('./comerce/facture-vente/facture-vente.module').then(module => module.FactureVenteModule)
-      },
-      {
-        path: 'factureAchat',
-        loadChildren: () => import('./comerce/facture-achat/facture-achat.module').then(module => module.FactureAchatModule)
-      },
-      {
-        path: 'bonRetourFournisseur',
-        loadChildren: () => import('./comerce/bonRetourFournisseur/bonretourfournisseur.module').then(module => module.BonretourfournisseurModule)
-      },
-      {
-        path: 'factureAvoirAchat',
-        loadChildren: () => import('./comerce/facture-avoir-achat/facture-avoir-achat.module').then(module => module.FactureAvoirAchatModule)
-      },
-      {
-        path: 'factureAvoir',
-        loadChildren: () => import('./comerce/facture-avoir/facture-avoir.module').then(module => module.FactureAvoirModule)
-      },
+      
       {
         path: 'prixSpecifiques',
         loadChildren: () => import('./comerce/article/prix-specifique-article/prix-specifique-articl-input/prix-specifique-articl-input.module').then(module => module.PrixSpecifiqueArticlInputModule)
@@ -127,6 +108,7 @@ const routes: Routes = [
         path: 'alert-stock',
         loadChildren: () => import('./comerce/article/alert-stock/alert-stock.module').then(module => module.AlertStockModule)
       },
+     
       {
         path: 'bonLivraison',
         loadChildren: () => import('./comerce/bonLivraison/bon-livrason.module').then(module => module.BonLivrasonModule)
@@ -143,6 +125,8 @@ const routes: Routes = [
         path: 'parametreGeneraleFacture',
         loadChildren: () => import('./comerce/bonLivraison/parametrelivraison/parametrelivraison.module').then(module => module.ParametrelivraisonModule)
       },
+      
+
       {
         path: 'bonReception',
         loadChildren: () => import('./comerce/bonReception/bonreception.module').then(module => module.BonreceptionModule)
@@ -151,22 +135,57 @@ const routes: Routes = [
         path: 'achatComptoire',
         loadChildren: () => import('./comerce/bonReception/bonreception.module').then(module => module.BonreceptionModule)
       },
+      
+      {
+        path: 'bonRetourClient',
+        loadChildren: () => import('./comerce/bonRetourClient/bonretourclient.module').then(module => module.BonretourclientModule)
+      },
+      {
+        path: 'retourVenteComptoire',
+        loadChildren: () => import('./comerce/bonRetourClient/bonretourclient.module').then(module => module.BonretourclientModule)
+      },
+      {
+        path: 'bonRetourFournisseur',
+        loadChildren: () => import('./comerce/bonRetourFournisseur/bonretourfournisseur.module').then(module => module.BonretourfournisseurModule)
+      },
+      {
+        path: 'retourAchatComptoire',
+        loadChildren: () => import('./comerce/bonRetourFournisseur/bonretourfournisseur.module').then(module => module.BonretourfournisseurModule)
+      },
+      
       {
         path: 'reglement',
         loadChildren: () => import('./comerce/reglements/reglements.module').then(module => module.ReglementsModule)
       },
-    
+      {
+        path: 'factureVente',
+        loadChildren: () => import('./comerce/facture-vente/facture-vente-routing.module').then(module => module.FactureVenteRoutingModule)
+      },
+      {
+        path: 'factureAvoirAchat',
+        loadChildren: () => import('./comerce/facture-avoir-achat/facture-avoir-achat.module').then(module => module.FactureAvoirAchatModule)
+      },
+      {
+        path: 'factureAvoir',
+        loadChildren: () => import('./comerce/facture-avoir/facture-avoir-routing.module').then(module => module.FactureAvoirRoutingModule)
+      },
+      {
+        path: 'factureAchat',
+        loadChildren: () => import('./comerce/facture-achat/facture-achat-routing.module').then(module => module.FactureAchatRoutingModule)
+      },
+     
 
       {
         path: 'recepetion',
         loadChildren: () => import('./comerce/bonLivraison/receptions/receptions.module').then(module => module.ReceptionsModule)
       },
 
-    
+     
       {
         path: 'filterCat',
         loadChildren: () => import('./comerce/filter-aticle-categorie/filter-aticle-categorie.module').then(module => module.FilterAticleCategorieModule)
       },
+    
       {
         path: 'comptabilite',
         loadChildren: () => import('./Comptabilite/comptabilite.module').then(module => module.ComptabiliteModule)

@@ -243,6 +243,7 @@ export class FactureAvoirComponent implements OnInit {
         this.getBonAchat(this.id)
       }
     }
+
   }
 
   controleInputs() {
@@ -252,7 +253,7 @@ export class FactureAvoirComponent implements OnInit {
 
     var isValid = true
     if (this.bonAchat['totalHT'] == 0) {
-      this.erreurBonAchat['totalHT'] = "Veuillez ajouter votres documents"
+      this.erreurBonAchat['totalHT'] = "Veuillez ajouter votres articles"
       isValid = false
     }
 
@@ -297,6 +298,9 @@ export class FactureAvoirComponent implements OnInit {
           for (let key in this.bonAchat) {
             this.bonAchat[key] = this.request[key]
           }
+          
+          console.log("this.bonAchat =",this.bonAchat)
+          console.log("this.request =",this.request)
           
           this.bonAchat.date = formatDate(new Date(this.bonAchat.date), 'yyyy-MM-dd', 'en');
           // this.calculTotalFactureAchat()
@@ -482,6 +486,22 @@ export class FactureAvoirComponent implements OnInit {
   
   renitialiserFacture(){
 
+    var newBonReceptions = []
+
+    for(let i = 0; i < this.bonReceptions.length; i++){
+      var result = this.allBonReceptions.filter(x => x.id === this.bonReceptions[i].id )
+
+      if(result.length > 0){
+        newBonReceptions.push(result[0])
+      }else{
+        newBonReceptions.push(this.bonReceptions[i])
+      }
+
+      this.allBonReceptions = this.allBonReceptions.filter(x => x.id !== this.bonReceptions[i].id )
+    }
+
+    this.bonReceptions = newBonReceptions
+
     var keys = ["montantTotal", "montantEscompte", "restPayer", "montantPaye", "totalDC", "totalFodec", "totalGainCommerciale", "totalHT", "totalTTC", "totalTVA", "totalRemise", "totalRedevance",  "totalGainReel", ]
     for(let key of keys){
       this.bonAchat[key] = 0
@@ -498,7 +518,7 @@ export class FactureAvoirComponent implements OnInit {
 
     var societe = this.informationGenerale.getSocieteCurrentObject() 
     
-    if (this.fonctionPartagesService.parametres.validationTimbreFiscaleAvoirSurFacture && this.bonAchat.typeAvoir == this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture) {
+    if (societe.exemptTimbreFiscale == "non" ) {
       this.bonAchat.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
     } else {
       this.bonAchat.timbreFiscale = 0
@@ -539,6 +559,8 @@ export class FactureAvoirComponent implements OnInit {
          this.isLoading = false
          this.bonAchat.captureFactureVenteClient = res[0]
 
+         console.log(this.bonAchat)
+
          this.ajoutBonAchat()
       }, err => {
         this.isLoading = false
@@ -551,7 +573,7 @@ export class FactureAvoirComponent implements OnInit {
     if (this.titreCrud == this.fonctionPartagesService.titreCrud.modifier) {
       this.modifierBonAchat()
     } else if (this.titreCrud == this.fonctionPartagesService.titreCrud.transfert) {
-      this.ajoutBonAchat2()
+        this.ajoutBonAchat2()
     } else {
       this.ajoutBonAchat2()
     }
@@ -584,7 +606,7 @@ export class FactureAvoirComponent implements OnInit {
 
     var factureVentes = []
     this.factureVenteSelected.forEach( x =>{
-      factureVentes.push({documentVente:x.id, montantFinancie:x.montantFinancie})
+      factureVentes.push({factureVente:x.id, montantFinancie:x.montantFinancie})
     })
     
     request.factureVentes = factureVentes
@@ -644,7 +666,7 @@ export class FactureAvoirComponent implements OnInit {
     
     var factureVentes = []
     this.factureVenteSelected.forEach( x =>{
-      factureVentes.push({documentVente:x.id, montantFinancie:x.montantFinancie})
+      factureVentes.push({factureVente:x.id, montantFinancie:x.montantFinancie})
     })
     
     request.factureVentes = factureVentes
@@ -761,7 +783,8 @@ export class FactureAvoirComponent implements OnInit {
       reader.onload = () => {
         this.imageData = reader.result as string;
       };
-     
+
+      console.log(this.imageData)
       reader.readAsDataURL(this.captureClient);
     }
   }
@@ -769,25 +792,32 @@ export class FactureAvoirComponent implements OnInit {
   saveFileFacture(){
     this.http.get(this.informationGenerale.baseUrl+'/'+this.bonAchat.captureFactureVenteClient, {responseType: "blob", headers: {'Accept': 'application/pdf'}})
     .subscribe(blob => {
+      console.log(blob)
       saveAs(blob, this.bonAchat.captureFactureVenteClient );
     });
   }
 
   replacePath(chaine){
+    console.log(chaine)
+    console.log(chaine.replace('\\','_'))
     return chaine.replace('\\','_')
   }
 
   calculTotalFactureAchat(){
+    console.log(this.titreDocument)
     if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirMarchandises){
       this.calculTotalFactureBonRetourClient()
     }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirSurFacture){
       this.calculTotalFactureAvoirSurFacture()
-    }else if(this.titreDocument === this.fonctionPartagesService.titreDocuments.factureAvoirFinanciers){
-      this.changeMontantFinancier()
+    }else{
+      this.calculTotalFactureAvoirSurFacture()
     } 
   }
 
   calculTotalFactureAvoirSurFacture(){
+    console.log(this.allFacturesClient)
+    console.log(this.bonAchat.factureVente)
+
     if(this.allFacturesClient.filter(x => x.id === this.bonAchat.factureVente).length > 0){
       var fv = this.allFacturesClient.filter(x => x.id === this.bonAchat.factureVente)[0]
       this.bonAchat.totalRemise = fv.totalRemise
@@ -919,7 +949,6 @@ export class FactureAvoirComponent implements OnInit {
 
   isOpenModalDeleteFV = false
   
-
   openModalDeleteFV(numero, params2) {
     this.itemFVSelected = numero
     this.isOpenModalDeleteFV = true
@@ -948,7 +977,6 @@ export class FactureAvoirComponent implements OnInit {
     this.bonAchat.totalRemise = 0
     this.bonAchat.totalTTC = sommeTTC
     this.bonAchat.totalHT = sommeHt
-    
     this.bonAchat.montantTotal = this.bonAchat.timbreFiscale + this.bonAchat.totalTTC
     this.bonAchat.montantPaye = 0
     this.bonAchat.restPayer = 0

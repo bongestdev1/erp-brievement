@@ -116,13 +116,13 @@ export class LigneblComponent implements OnInit {
       
     }
 
-    this.bonLivraison.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+    totals.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
 
     if (this.client && this.isPrixVenteNotPrixAchat()) {
       if (this.client.exemptTimbreFiscale == "non" && (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonReception || (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison && this.fonctionPartagesService.parametres.validationTimbreFiscaleBonLiv === "oui"))) {
-        this.bonLivraison.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+        totals.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
       } else {
-        this.bonLivraison.timbreFiscale = 0
+        totals.timbreFiscale = 0
       }
     }
 
@@ -130,26 +130,21 @@ export class LigneblComponent implements OnInit {
       var societe = this.informationGenerale.getSocieteCurrentObject()
 
       if (societe.exemptTimbreFiscale == "non" && this.titreDocument == this.fonctionPartagesService.titreDocuments.bonReception && this.fonctionPartagesService.parametres.validationTimbreFiscaleBonRec === "oui") {
-        this.bonLivraison.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+        totals.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
       } else {
-        this.bonLivraison.timbreFiscale = 0
+        totals.timbreFiscale = 0
       }
     }
 
-    for (let key in totals) {
-      this.bonLivraison[key] = this.arrondiNombre(totals[key])
-    }
-
-    this.changePrixTotalEvent.emit(totals);
-
-
     var montantPaye = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(this.bonLivraison.montantPaye))
-    this.bonLivraison.montantTotal = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(totals.totalTTC + this.bonLivraison.timbreFiscale))
+    totals.montantTotal = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(totals.totalTTC + totals.timbreFiscale))
 
     //this.bonLivraison.montantTotal = this.calculeRemise(this.bonLivraison.montantTotal)
 
     //this.bonLivraison.totalTTC = this.bonLivraison.montantTotal
-    this.bonLivraison.restPayer = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(this.bonLivraison.montantTotal - montantPaye))
+    totals.restPayer = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(totals.montantTotal - montantPaye))
+    
+    this.changePrixTotalEvent.emit(totals);
 
   }
 
@@ -242,7 +237,7 @@ export class LigneblComponent implements OnInit {
       }
       
       //if (Number(articles[0].qteEnStock) < 0 && this.isPrixVenteNotPrixAchat() && articles[0].venteAvecStockNegative && articles[0].venteAvecStockNegative === "non") {
-      if (Number(articles[0].qteEnStock) < 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison && articles[0].venteAvecStockNegative && articles[0].venteAvecStockNegative === "non") {
+      if (this.typeRetour == 0 && Number(articles[0].qteEnStock) < 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison && articles[0].venteAvecStockNegative && articles[0].venteAvecStockNegative === "non") {
         this.openBlockedStockNegative()
         this.itemArticleSelected.article = ""
         this.resetItemSelecte()
@@ -685,9 +680,10 @@ export class LigneblComponent implements OnInit {
   changeQuantiteVente() {
     var articles = this.articles.filter(x => x.id == this.itemArticleSelected.article)
     if (articles.length > 0) {
-      console.log(this.titreDocument)
+      // console.log(this.titreDocument)
       //if (this.isPrixVenteNotPrixAchat()) {
-      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
+
+      if ( this.typeRetour === 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
         var result = this.verifierStockNegative(this.itemArticleSelected.article)
         if (!result.isValid) {
           this.openBlockedStockNegative()
@@ -707,7 +703,8 @@ export class LigneblComponent implements OnInit {
   changeQuantiteAchat() {
     var articles = this.articles.filter(x => x.id == this.itemArticleSelected.article)
     if (articles.length > 0) {
-      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
+      
+      if ( this.typeRetour === 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
         var result = this.verifierStockNegative(this.itemArticleSelected.article)
         if (!result.isValid) {
           this.openBlockedStockNegative()
@@ -783,7 +780,7 @@ export class LigneblComponent implements OnInit {
     if (articles.length > 0) {
 
       // if (this.isPrixVenteNotPrixAchat()) {
-      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
+      if ( this.typeRetour === 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
         var result = this.verifierStockNegative(this.articlesSelected[numero - 1].article)
         if (!result.isValid) {
           this.openBlockedStockNegative()
@@ -794,7 +791,7 @@ export class LigneblComponent implements OnInit {
         }
       }
 
-      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
+      if ( this.typeRetour === 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
         var result = this.verifierStockNegative(this.articlesSelected[numero - 1].article)
         if (!result.isValid) {
           this.openBlockedStockNegative()

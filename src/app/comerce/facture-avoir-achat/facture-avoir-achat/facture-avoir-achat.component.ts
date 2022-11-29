@@ -858,12 +858,18 @@ export class FactureAvoirAchatComponent implements OnInit {
       sommePaye += this.bonRetourSelected[i].montantPaye
     }
     // this.bonAchat.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+    this.bonAchat.timbreFiscale = 0
+    if(this.bonAchat.withTimbreFiscal){
+      this.bonAchat.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+    }
+
     this.bonAchat.totalRemise = totalRemise
     this.bonAchat.totalTTC = sommeTTC
     this.bonAchat.totalHT = sommeHt
     this.bonAchat.montantTotal = this.bonAchat.timbreFiscale + this.bonAchat.totalTTC
     this.bonAchat.montantPaye = sommePaye
     this.bonAchat.restPayer = this.bonAchat.montantTotal - sommePaye
+    
   }
   // calculTotalFactureAchat(){
   //   var sommeHt = 0

@@ -12,7 +12,7 @@ export class ShemaItemArticleSelectedAchat {
     totalHTFinancier = 0
     totalTVAFinancier = 0
     totalTTCFinancier = 0
- 
+    
     remiseFacturePourcentage= 0
     remiseFactureMontant= 0
     remiseFactureTotal= 0

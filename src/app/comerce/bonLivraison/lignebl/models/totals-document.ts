@@ -8,4 +8,10 @@ export class TotalsDocument {
     totalFodec= 0
     totalRedevance= 0
     totalDC= 0
+
+    timbreFiscale = 0
+
+    montantTotal = 0
+
+    restPayer = 0
 }
