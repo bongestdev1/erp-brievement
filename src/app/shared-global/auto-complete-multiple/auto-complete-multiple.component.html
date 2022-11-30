@@ -5,8 +5,12 @@
     <div style="display: flex; flex-direction: row; flex-wrap: nowrap;" *ngIf="!bordureRed">
       <button style="width: 0px !important; padding:0px !important; border:none; margin:0px !important;" (focus)="clickSearch()"></button>
       <span class="button-select-autocomplete"  type=button (click)="clickSearch()" style="padding-left: 0px;">
-        <div style="width: 100%; padding:1px; text-align: left;">
+        <!-- <div style="width: 100%; padding:1px; text-align: left;">
           <span style="color: transparent; width: 5px !important;">I</span>{{autocompleteValue2}}
+        </div> -->
+
+        <div style="width: 100%; padding:1px; text-align: left;">
+            Nbr-list cochée : {{getListCochee()}}
         </div>
         <i [id]="idAutocompleteUpDown" class="fa fa-caret-down" style="padding:1px; padding-top: 5px;"></i>
       </span>
@@ -87,7 +91,7 @@
              <tr style="cursor: pointer;" *ngFor="let item of articlesFilter"  class="item-list-autocomplete" (click)="clickItem(item)">
                <td *ngFor="let key of objectKeys(objet)" >
 
-                  <input type="checkbox">
+                  <input type="checkbox" [checked]="item.isCheckedAutocomplete" >
                   <span *ngIf="fonctionPartagesService.colonnesQuantites.includes(key)" style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleNomber(item[key])}}</span>
                   <span *ngIf="fonctionPartagesService.colonnesPrix.includes(key)" style="float:right;">{{fonctionPartagesService.getFormaThreeAfterVerguleQuantite(item[key])}}</span>
                   <span *ngIf="fonctionPartagesService.colonnesDates.includes(key)" style="text-align: center; display: block;">{{fonctionPartagesService.getDate(item[key], 'yyyy-MM-dd')}}</span>

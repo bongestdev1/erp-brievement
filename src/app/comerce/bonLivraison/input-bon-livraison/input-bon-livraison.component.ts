@@ -1030,9 +1030,42 @@ export class InputBonLivraisonComponent implements OnInit {
     }
   }
 
-  openModalAjoutDocument() {
-    this.isOpenModalAjout = true
-    this.typeElement = this.fonctionPartagesService.getModalDocument(this.titreDocumentPrecedent)
+  getDocumentsCochee(listFactureCochee) {
+    // this.isOpenModalAjout = true
+    // this.typeElement = this.fonctionPartagesService.getModalDocument(this.titreDocumentPrecedent)
+    console.log("listFactureCochee = ", listFactureCochee)
+    this.getBonDocumentsCocheesFactures(listFactureCochee)
+  }
+
+  getBonDocumentsCocheesFactures(listFactureCochee) {
+    if (this.isLoading) {
+      return
+    }
+    // this.factures = []
+    // this.documents = []
+
+    var request = {factureAchats: listFactureCochee}
+  
+    this.isLoading = true
+    this.http.post(this.informationGenerale.baseUrl + "/bonRetourFournisseurs/getFactureAchatCocheeWithRegroupement", request, this.tokenStorageService.getHeader()).subscribe(
+      res => {
+        this.isLoading = false
+        let resultat: any = res
+        if (resultat.status) {
+           
+          resultat.ligne.forEach( x =>{
+            this.articles.push(x)
+          })
+
+          this.notificationToast.showSuccess("Vos articles sont rajoutés.")
+           
+        }
+      }, err => {
+        this.isLoading = false
+        console.log(err)
+        alert("Désole, ilya un problème de connexion internet")
+      }
+    );
   }
 
   //

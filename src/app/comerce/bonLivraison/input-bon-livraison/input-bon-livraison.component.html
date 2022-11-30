@@ -148,7 +148,7 @@
 
                                 <app-auto-complete-multiple (addElementEvent)="setFactureID($event)" keySelected="numero"
                                     [objet]="{numero:''}" [articles]="factures" [idSelected]="idFacture" idHtml="50"
-                                    (openAddElementEvent)="openModalAjoutDocument()">
+                                    (openAddElementEvent)="getDocumentsCochee($event)">
                                 </app-auto-complete-multiple>
 
                             </div>

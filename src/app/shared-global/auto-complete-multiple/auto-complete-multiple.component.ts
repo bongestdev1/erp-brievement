@@ -12,7 +12,6 @@ import { FonctionPartagesService } from 'src/app/services/fonction-partages.serv
 })
 export class AutoCompleteMultipleComponent implements OnInit {
 
-
   constructor(
     public informationGenerale: InformationsService,
     public fonctionPartagesService: FonctionPartagesService,
@@ -58,7 +57,7 @@ export class AutoCompleteMultipleComponent implements OnInit {
 
   @Output() addElementEvent = new EventEmitter<object>();
   @Output() getElementsEvent = new EventEmitter<string>();
-  @Output() openAddElementEvent = new EventEmitter<string>();
+  @Output() openAddElementEvent = new EventEmitter<Object>();
  
   autocompleteValue = ""
   autocompleteValue2 = ""
@@ -103,27 +102,16 @@ export class AutoCompleteMultipleComponent implements OnInit {
 
   isOpen = false
 
-  @Input() articles = [
-    {id:"1", name:"article1", description:"description1", categorie:"categorie1"},
-    {id:"2", name:"article2", description:"description2", categorie:"categorie2"},
-    {id:"3", name:"article3", description:"description3", categorie:"categorie3"},
-    {id:"4", name:"article4", description:"description4", categorie:"categorie4"},
-    {id:"5", name:"article5", description:"description5", categorie:"categorie5"},
-    {id:"6", name:"article6", description:"description6", categorie:"categorie6"},
-    {id:"7", name:"article7", description:"description7", categorie:"categorie7"},
-    {id:"8", name:"article8", description:"description8", categorie:"categorie8"},
-    {id:"9", name:"barticle1", description:"description1", categorie:"categorie1"},
-    {id:"10", name:"barticle2", description:"description2", categorie:"categorie2"},
-    {id:"11", name:"barticle3", description:"description3", categorie:"categorie3"},
-    {id:"12", name:"barticle4", description:"description4", categorie:"categorie4"},
-    {id:"13", name:"barticle5", description:"description5", categorie:"categorie5"},
-    {id:"14", name:"barticle6", description:"description6", categorie:"categorie6"},
-    {id:"15", name:"barticle7", description:"description7", categorie:"categorie7"},
-    {id:"16", name:"barticle8", description:"description8", categorie:"categorie8"}
-  ]
+  @Input() articles:any = []
 
   openAddElement(){
-    this.openAddElementEvent.emit();
+    var newArticles = this.articles.filter(x => x.isCheckedAutocomplete )
+    var listIds = []
+    newArticles.filter(x => {
+      listIds.push(x.id)
+    })
+
+    this.openAddElementEvent.emit(listIds);
   }
 
   id="myInput"
@@ -152,7 +140,6 @@ export class AutoCompleteMultipleComponent implements OnInit {
           setTimeout(() => {
             this.isOpen = false
           })
-       
         }
     });
   }
@@ -290,11 +277,21 @@ export class AutoCompleteMultipleComponent implements OnInit {
 
   setArticle(id){
     
-    if(this.sendMode2Parametres == "oui"){
-      this.addElementEvent.emit({id:id, item:this.parametres2});
-    }else{
-      this.addElementEvent.emit(id);
-    }
+    this.articles.forEach(x => {
+      if(x.id == id){
+        x.isCheckedAutocomplete = !x.isCheckedAutocomplete
+      }
+    })
+
+    // if(this.sendMode2Parametres == "oui"){
+    //   this.addElementEvent.emit({id:id, item:this.parametres2});
+    // }else{
+    //   this.addElementEvent.emit(id);
+    // }
+  }
+
+  getListCochee(){
+    return this.articlesFilter.filter( x => x.isCheckedAutocomplete ).length
   }
 
   clickItem(item){
@@ -311,12 +308,13 @@ export class AutoCompleteMultipleComponent implements OnInit {
 
     this.autocompleteValue2 = this.autocompleteValue 
     this.setArticle(item.id);
-    this.resetList()
+    // this.resetList()
     for(let i = 0; i < this.articlesFilter.length; i++){
       if(this.articlesFilter[i].id == item.id){
         this.currentFocus = i
       }
     }
+
     this.activeItem()
   }
 
