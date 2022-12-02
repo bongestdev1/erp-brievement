@@ -778,7 +778,7 @@ export class LigneblComponent implements OnInit {
     if (articles.length > 0) {
 
       // if (this.isPrixVenteNotPrixAchat()) {
-      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
+      if (this.typeRetour === 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
         var result = this.verifierStockNegative(this.articlesSelected[numero - 1].article)
         if (!result.isValid) {
           this.openBlockedStockNegative()
@@ -789,7 +789,7 @@ export class LigneblComponent implements OnInit {
         }
       }
 
-      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
+      if (this.typeRetour === 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
         var result = this.verifierStockNegative(this.articlesSelected[numero - 1].article)
         if (!result.isValid) {
           this.openBlockedStockNegative()
@@ -809,7 +809,6 @@ export class LigneblComponent implements OnInit {
           return
         }
       }
-
     }
 
     this.misAJourLigneBL(numero)

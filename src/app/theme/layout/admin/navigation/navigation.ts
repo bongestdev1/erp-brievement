@@ -323,6 +323,15 @@ const NavigationItems = [
             classes: 'nav-item',
             icon: 'icofont-rounded-double-left'
           },
+          
+          {
+            id: 'facturesAvoirAchat',
+            title: 'Avoir Achat',
+            type: 'item',
+            classes: 'nav-item',
+            url: '/factureAvoirAchat/list',
+            icon: 'icofont-ui-clip-board'
+          },
           //  {
           //    id: 'avoirsFournisseurs',
           //    title: 'Avoirs fournisseurs',

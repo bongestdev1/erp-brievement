@@ -70,6 +70,10 @@ export class InputBonLivraisonComponent implements OnInit {
 
   @Input() receptions = []
 
+  @Input() urlBonDocuments = "/bonRetourFournisseurs/getBonReceptionCocheeWithRegroupement"
+
+  @Input() urlFactures = "/bonRetourFournisseurs/getFactureAchatCocheeWithRegroupement"
+
   ancienReglements = []
 
   modeTransfert = false
@@ -1100,27 +1104,27 @@ export class InputBonLivraisonComponent implements OnInit {
     }
   }
 
-  getDocumentsCochee(listFactureCochee) {
-    this.getBonDocumentsCocheesFactures(listFactureCochee)
+  getDocumentsCochee(ids) {
+    this.getBonDocumentsCocheesFactures(ids)
   }
 
-  getDocumentsCocheeBonReception(listBonReceptionCochee) {
-    this.getBonDocumentsCocheesBonReception(listBonReceptionCochee)
+  getDocumentsCocheeBon(ids) {
+    this.getBonDocumentsCocheesBon(ids)
   }
 
   tabArticleFinancier = ["remiseFinancierPourcentage", "remiseFinancierMontant", "remiseFinancierTotal", "prixAchatHTReelFinancier", "prixAchatTTCReelFinancier", "prixDCFinancier", "prixFodecFinancier", "totalDCFinancier", "totalFodecFinancier", "totalHTFinancier", "totalTVAFinancier", "totalTTCFinancier"]
 
-  getBonDocumentsCocheesBonReception(listBonReceptionCochee) {
+  getBonDocumentsCocheesBon(ids) {
     if (this.isLoading) {
       return
     }
     // this.factures = []
     // this.documents = []
 
-    var request = {listBonReceptionCochee: listBonReceptionCochee}
+    var request = {ids: ids}
   
     this.isLoading = true
-    this.http.post(this.informationGenerale.baseUrl + "/bonRetourFournisseurs/getBonReceptionCocheeWithRegroupement", request, this.tokenStorageService.getHeader()).subscribe(
+    this.http.post(this.informationGenerale.baseUrl + this.urlBonDocuments, request, this.tokenStorageService.getHeader()).subscribe(
       res => {
         this.isLoading = false
         let resultat: any = res
@@ -1150,17 +1154,17 @@ export class InputBonLivraisonComponent implements OnInit {
     );
   }
 
-  getBonDocumentsCocheesFactures(listFactureCochee) {
+  getBonDocumentsCocheesFactures(ids) {
     if (this.isLoading) {
       return
     }
     // this.factures = []
     // this.documents = []
 
-    var request = {factureAchats: listFactureCochee}
+    var request = {ids: ids}
   
     this.isLoading = true
-    this.http.post(this.informationGenerale.baseUrl + "/bonRetourFournisseurs/getFactureAchatCocheeWithRegroupement", request, this.tokenStorageService.getHeader()).subscribe(
+    this.http.post(this.informationGenerale.baseUrl + this.urlFactures, request, this.tokenStorageService.getHeader()).subscribe(
       res => {
         this.isLoading = false
         let resultat: any = res
