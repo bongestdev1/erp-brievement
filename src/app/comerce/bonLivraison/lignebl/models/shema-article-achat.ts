@@ -3,27 +3,35 @@ export class ShemaArticleAchat {
     numero= "Numéro"
     reference= "Réference"
     designation= "Désignation"
+    quantiteAchat= "Quantité"
     prixFourn= "Prix Fournisseur"
-    
+    totalBrutHT= "total Brut HT"
+
     tauxRemise= "Taux_Rémise"
     remiseParMontant= "Rémise Par Montant"
-    montantRemise= "Montant Rémise"
+    // montantRemise= "Montant Rémise"
     totalRemise= "Total Rémise"
-
-    prixFodec="Montant Fodec"
+    totalBrutHTAvecRemise= "Total HT"
+    
+    totalFodec="Total Fodec"
+    
+    // prixFodec="Montant Fodec"
     tauxDC="Taux DC"
-    prixDC="Montant DC"
+    // prixDC="Montant DC"
+    totalDC="Total DC"
+   
+    totalHT= "Total Net HT"
+    tauxTVA= "Taux_TVA (%)"
+    totalTTC="Total TTC"
+    
     redevance="Redevance" 
     totalRedevance="Total Redevance" 
     
-    quantiteAchat= "Quantité"
-    prixAchatHTReel= "Prix HT"
     unite1= "Unité"
 
-    totalHT= "Total HT"
-    tauxTVA= "Taux_TVA (%)"
+    prixAchatHTReel= "Prix U Net HT"
     prixTTC="P.U TTC"
-    totalTTC="Total TTC"
+    
     //pVenteConseille="Prix vente conseillé"   
   
 }

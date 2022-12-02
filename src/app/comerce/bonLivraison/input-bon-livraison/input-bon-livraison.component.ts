@@ -1,3 +1,4 @@
+import { TotalsDocument } from './../lignebl/models/totals-document';
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -243,7 +244,76 @@ export class InputBonLivraisonComponent implements OnInit {
     return Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(float))
   }
   
-  changePrixTotalEvent(totals) {
+  changePrixTotalEvent() {
+    
+    for (let i = 0; i < this.articles.length; i++) {
+      this.articles[i].numero = i + 1
+    }
+
+    var totals = new TotalsDocument()
+
+    for (let i = 0; i < this.articles.length; i++) {
+      var quantite = 0
+      if (this.isPrixVenteNotPrixAchat()) {
+        quantite = this.articles[i].quantiteVente
+      } else {
+        quantite = this.articles[i].quantiteAchat
+      }
+
+      if(this.typeRetour === 0){
+        totals.totalTTC += this.articles[i].totalTTC
+        totals.totalRemise += this.articles[i].totalRemise
+        totals.totalTVA += this.articles[i].totalTVA
+        totals.totalHT += this.articles[i].totalHT
+        if (this.isPrixVenteNotPrixAchat()) {
+          totals.totalGainCommerciale += this.articles[i].totalGainCommerciale
+          totals.totalGainReel += this.articles[i].totalGainReel
+        }
+        totals.totalFodec += this.articles[i].prixFodec * quantite
+        totals.totalDC += this.articles[i].prixDC * quantite
+        totals.totalRedevance += this.articles[i].redevance * quantite
+      }else{
+        totals.totalTTC += this.articles[i].totalTTCFinancier
+        totals.totalRemise = 0
+        totals.totalTVA += this.articles[i].totalTVAFinancier
+        totals.totalHT += this.articles[i].totalHTFinancier
+        totals.totalGainCommerciale = 0
+        totals.totalGainReel = 0
+        totals.totalFodec += this.articles[i].totalFodecFinancier
+        totals.totalDC += this.articles[i].totalDCFinancier
+        totals.totalRedevance = 0
+      }
+      
+    }
+
+    totals.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+
+    if (this.client && this.isPrixVenteNotPrixAchat()) {
+      if (this.client.exemptTimbreFiscale == "non" && (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonReception || (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison && this.fonctionPartagesService.parametres.validationTimbreFiscaleBonLiv === "oui"))) {
+        totals.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+      } else {
+        totals.timbreFiscale = 0
+      }
+    }
+
+    if (!this.isPrixVenteNotPrixAchat()) {
+      var societe = this.informationGenerale.getSocieteCurrentObject()
+
+      if (societe.exemptTimbreFiscale == "non" && this.titreDocument == this.fonctionPartagesService.titreDocuments.bonReception && this.fonctionPartagesService.parametres.validationTimbreFiscaleBonRec === "oui") {
+        totals.timbreFiscale = this.fonctionPartagesService.parametres.prixTimbreFiscale
+      } else {
+        totals.timbreFiscale = 0
+      }
+    }
+
+    var montantPaye = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(this.bonLivraison.montantPaye))
+    totals.montantTotal = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(totals.totalTTC + totals.timbreFiscale))
+
+    //this.bonLivraison.montantTotal = this.calculeRemise(this.bonLivraison.montantTotal)
+
+    //this.bonLivraison.totalTTC = this.bonLivraison.montantTotal
+    totals.restPayer = Number(this.fonctionPartagesService.getFormaThreeAfterVerguleNomber(totals.montantTotal - montantPaye))
+    
     for (let key in totals) {
       this.bonLivraison[key] = this.arrondiNombre(totals[key])
     }
@@ -1031,10 +1101,53 @@ export class InputBonLivraisonComponent implements OnInit {
   }
 
   getDocumentsCochee(listFactureCochee) {
-    // this.isOpenModalAjout = true
-    // this.typeElement = this.fonctionPartagesService.getModalDocument(this.titreDocumentPrecedent)
-    console.log("listFactureCochee = ", listFactureCochee)
     this.getBonDocumentsCocheesFactures(listFactureCochee)
+  }
+
+  getDocumentsCocheeBonReception(listBonReceptionCochee) {
+    this.getBonDocumentsCocheesBonReception(listBonReceptionCochee)
+  }
+
+  tabArticleFinancier = ["remiseFinancierPourcentage", "remiseFinancierMontant", "remiseFinancierTotal", "prixAchatHTReelFinancier", "prixAchatTTCReelFinancier", "prixDCFinancier", "prixFodecFinancier", "totalDCFinancier", "totalFodecFinancier", "totalHTFinancier", "totalTVAFinancier", "totalTTCFinancier"]
+
+  getBonDocumentsCocheesBonReception(listBonReceptionCochee) {
+    if (this.isLoading) {
+      return
+    }
+    // this.factures = []
+    // this.documents = []
+
+    var request = {listBonReceptionCochee: listBonReceptionCochee}
+  
+    this.isLoading = true
+    this.http.post(this.informationGenerale.baseUrl + "/bonRetourFournisseurs/getBonReceptionCocheeWithRegroupement", request, this.tokenStorageService.getHeader()).subscribe(
+      res => {
+        this.isLoading = false
+        let resultat: any = res
+        if (resultat.status) {
+           
+          resultat.lignes.forEach( y =>{
+            for(let key of this.tabArticleFinancier){
+              y[key] = 0
+            }
+
+            if(this.articles.filter(x => (x.article === y.article && x.idBonReception && x.idBonReception === y.idBonReception)).length == 0)
+            this.articles.push(y)
+          })
+          
+          this.articles = this.fonctionsBL.organiserArtticlesSelonNumero(this.articles)
+  
+          this.changePrixTotalEvent()
+
+          this.notificationToast.showSuccess("Vos articles sont rajoutés.")
+           
+        }
+      }, err => {
+        this.isLoading = false
+        console.log(err)
+        alert("Désole, ilya un problème de connexion internet")
+      }
+    );
   }
 
   getBonDocumentsCocheesFactures(listFactureCochee) {
@@ -1053,10 +1166,20 @@ export class InputBonLivraisonComponent implements OnInit {
         let resultat: any = res
         if (resultat.status) {
            
-          resultat.ligne.forEach( x =>{
-            this.articles.push(x)
+          resultat.lignes.forEach( y =>{
+            for(let key of this.tabArticleFinancier){
+              y[key] = 0
+            }
+            
+            if(this.articles.filter(x => (x.article === y.article && x.idFactureAchat && x.idFactureAchat === y.idFactureAchat)).length == 0)
+            this.articles.push(y)
           })
 
+          
+          this.articles = this.fonctionsBL.organiserArtticlesSelonNumero(this.articles)
+  
+          this.changePrixTotalEvent()
+          
           this.notificationToast.showSuccess("Vos articles sont rajoutés.")
            
         }

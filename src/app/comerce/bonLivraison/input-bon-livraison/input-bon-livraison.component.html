@@ -120,42 +120,6 @@
                     </form>
                 </div>
 
-                <div class="col-sm-4"
-                    *ngIf="titreDocumentPrecedent && titreCrud != fonctionPartagesService.titreCrud.modifier">
-                    <form action="javascript:">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">{{titreDocumentPrecedent}}</label>
-
-                            <div class="col-sm-8">
-
-                                <app-autocomplete (addElementEvent)="setDocumentID($event)" keySelected="numero"
-                                    [objet]="{numero:''}" [articles]="documents" [idSelected]="idDocument" idHtml="50"
-                                    (openAddElementEvent)="openModalAjoutDocument()">
-                                </app-autocomplete>
-
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="col-sm-4"
-                    *ngIf="titreDocumentPrecedent && titreDocument === fonctionPartagesService.titreDocuments.bonRetourFournisseur && titreCrud != fonctionPartagesService.titreCrud.modifier">
-                    <form action="javascript:">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Facture Achat</label>
-
-                            <div class="col-sm-8">
-
-                                <app-auto-complete-multiple (addElementEvent)="setFactureID($event)" keySelected="numero"
-                                    [objet]="{numero:''}" [articles]="factures" [idSelected]="idFacture" idHtml="50"
-                                    (openAddElementEvent)="getDocumentsCochee($event)">
-                                </app-auto-complete-multiple>
-
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
                 <div class="col-sm-4">
                     <form action="javascript:">
                         <div class="form-group row" *ngIf="client">
@@ -185,7 +149,25 @@
                     </form>
                 </div>
 
+                <div class="col-sm-4"
+                    *ngIf="titreDocument != fonctionPartagesService.titreDocuments.bonRetourFournisseur && titreDocumentPrecedent && titreCrud != fonctionPartagesService.titreCrud.modifier">
+                    <form action="javascript:">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">{{titreDocumentPrecedent}}</label>
 
+                            <div class="col-sm-8">
+
+                                <app-autocomplete (addElementEvent)="setDocumentID($event)" keySelected="numero"
+                                    [objet]="{numero:''}" [articles]="documents" [idSelected]="idDocument" idHtml="50"
+                                    (openAddElementEvent)="openModalAjoutDocument()">
+                                </app-autocomplete>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+               
                 <div class="col-sm-4" *ngIf="titreDocument === fonctionPartagesService.titreDocuments.bonLivraison">
                     <form action="javascript:">
                         <div class="form-group row">
@@ -559,6 +541,50 @@
                     <hr>
                 </div>
 
+                <div class="col-sm-4"
+                *ngIf="titreDocumentPrecedent && titreDocument === fonctionPartagesService.titreDocuments.bonRetourFournisseur && titreCrud != fonctionPartagesService.titreCrud.modifier">
+                <form action="javascript:">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Bon réception</label>
+
+                        <div class="col-sm-8">
+
+                            <app-auto-complete-multiple (addElementEvent)="setFactureID($event)" keySelected="numero"
+                                [objet]="{numero:''}" [articles]="documents" [idSelected]="idFacture" idHtml="880"
+                                (openAddElementEvent)="getDocumentsCocheeBonReception($event)">
+                            </app-auto-complete-multiple>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+
+                <div class="col-sm-4"
+                    *ngIf="titreDocumentPrecedent && titreDocument === fonctionPartagesService.titreDocuments.bonRetourFournisseur && titreCrud != fonctionPartagesService.titreCrud.modifier">
+                    <form action="javascript:">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Facture Achat</label>
+
+                            <div class="col-sm-8">
+
+                                <app-auto-complete-multiple (addElementEvent)="setFactureID($event)" keySelected="numero"
+                                    [objet]="{numero:''}" [articles]="factures" [idSelected]="idFacture" idHtml="89s0"
+                                    (openAddElementEvent)="getDocumentsCochee($event)">
+                                </app-auto-complete-multiple>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-sm-12">
+                    <hr>
+
+                </div>
+              
+                
                 <!-- partie tabs -->
                 <div class="col-md-12">
                     <ngb-tabset type="pills">
@@ -568,7 +594,7 @@
                                 <div class="col-xl-14">
                                     <hr>
                                     <app-lignebl [titreCrud]="titreCrud" [articlesSelected]="articles"
-                                        [titreDocument]="titreDocument" (changePrixTotalEvent)="changePrixTotalEvent($event)"
+                                        [titreDocument]="titreDocument" (changePrixTotalEvent)="changePrixTotalEvent()"
                                         [bonLivraison]="bonLivraison" [articles]="allArticles" [client]="client"
                                         [uniteMesures]="uniteMesures" (getAllParametresEvent)="getAllParametres()"
                                         [allFrais]="allFrais" [prixSpecifiqueTypeTiers]="prixSpecifiqueTypeTiers"

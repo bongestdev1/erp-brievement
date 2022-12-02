@@ -232,6 +232,7 @@
             
         <table class="table table-striped" id="output">
             <thead>
+                
                 <tr>
                     <th *ngFor="let key of objectKeys(itemsVariableShowsElements)" >
                         <div class="th-tableau">
@@ -253,7 +254,13 @@
                         
                         <span *ngIf="item && !allTabNumbers.includes(key) && key != 'sousProduit' && key != 'unite1' && key != 'unite2' && key != 'prixRevient' && key != 'numero'" >{{item[key]}}</span>
                        
-                        <span *ngIf="item && key === 'numero' && item[key]" >{{item[key]}} <span *ngIf="item['numeroBonReception'] != '' && item['numeroBonReception']"> {{'('+item['numeroBonReception']+')'}}</span> </span>
+                        <span *ngIf="item && key === 'numero' && item[key]" >{{item[key]}} <span *ngIf="item['numeroDocument'] != '' && item['numeroDocument']"> {{'('+item['numeroDocument']+')'}}</span> </span>
+                        
+                        <span *ngIf="item && key === 'totalBrutHT'" style="float:right;" >{{getNumber(item.prixFourn * item.quantiteAchat)}} </span>
+                        <span *ngIf="item && key === 'totalBrutHTAvecRemise'" style="float:right;" >{{getNumber(item.prixFourn * item.quantiteAchat - item.totalRemise)}} </span>
+                        
+                        <span *ngIf="item && key === 'totalFodec'" style="float:right;" >{{getNumber(item.prixFodec * item.quantiteAchat)}} </span>
+                        <span *ngIf="item && key === 'totalDC'"  style="float:right;">{{getNumber(item.prixDC * item.quantiteAchat)}} </span>
                         
                         <div *ngIf="item && key == 'quantiteVente'" class="col-sm-12 collapse-input">
                             <app-input-number-vergule *ngIf="isDetails == 'non'" isQuantite="1" [field]="item" [key]="key" [idUnique]="key+item['numero']" (change)="changePrixTotalArray(item['numero'])"></app-input-number-vergule>

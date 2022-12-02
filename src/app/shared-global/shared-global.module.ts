@@ -50,6 +50,7 @@ import { AutoCompleteMultipleComponent } from './auto-complete-multiple/auto-com
 
 @NgModule({
   declarations: [
+    AutoCompleteMultipleComponent,
     AccordionItemComponent,
     AccordionComponent,
     FiltreDateArretComponent,
@@ -81,7 +82,6 @@ import { AutoCompleteMultipleComponent } from './auto-complete-multiple/auto-com
     PopupChoixTransfertDocumentComponent,
     PopupSessionCaisseCourantComponent,
     AutoCompleteTypeTiersComponent,
-    AutoCompleteMultipleComponent,
 
   ],
   imports: [
@@ -92,6 +92,7 @@ import { AutoCompleteMultipleComponent } from './auto-complete-multiple/auto-com
 
   ],
   exports:[
+    AutoCompleteMultipleComponent,
     AccordionItemComponent,
     AccordionComponent,
     AutoCompleteTypeTiersComponent,
@@ -122,8 +123,6 @@ import { AutoCompleteMultipleComponent } from './auto-complete-multiple/auto-com
     NombreListPageComponent,
     EntetePageListComponent,
     PopupSessionCaisseCourantComponent,
-    AutoCompleteMultipleComponent,
-    
   ],
   providers: [
 

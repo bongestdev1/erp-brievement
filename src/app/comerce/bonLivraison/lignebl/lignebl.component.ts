@@ -237,7 +237,7 @@ export class LigneblComponent implements OnInit {
       }
       
       //if (Number(articles[0].qteEnStock) < 0 && this.isPrixVenteNotPrixAchat() && articles[0].venteAvecStockNegative && articles[0].venteAvecStockNegative === "non") {
-      if (this.typeRetour == 0 && Number(articles[0].qteEnStock) < 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison && articles[0].venteAvecStockNegative && articles[0].venteAvecStockNegative === "non") {
+      if (Number(articles[0].qteEnStock) < 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison && articles[0].venteAvecStockNegative && articles[0].venteAvecStockNegative === "non") {
         this.openBlockedStockNegative()
         this.itemArticleSelected.article = ""
         this.resetItemSelecte()
@@ -680,10 +680,9 @@ export class LigneblComponent implements OnInit {
   changeQuantiteVente() {
     var articles = this.articles.filter(x => x.id == this.itemArticleSelected.article)
     if (articles.length > 0) {
-      // console.log(this.titreDocument)
+      console.log(this.titreDocument)
       //if (this.isPrixVenteNotPrixAchat()) {
-
-      if ( this.typeRetour === 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
+      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
         var result = this.verifierStockNegative(this.itemArticleSelected.article)
         if (!result.isValid) {
           this.openBlockedStockNegative()
@@ -703,8 +702,7 @@ export class LigneblComponent implements OnInit {
   changeQuantiteAchat() {
     var articles = this.articles.filter(x => x.id == this.itemArticleSelected.article)
     if (articles.length > 0) {
-      
-      if ( this.typeRetour === 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
+      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
         var result = this.verifierStockNegative(this.itemArticleSelected.article)
         if (!result.isValid) {
           this.openBlockedStockNegative()
@@ -780,7 +778,7 @@ export class LigneblComponent implements OnInit {
     if (articles.length > 0) {
 
       // if (this.isPrixVenteNotPrixAchat()) {
-      if ( this.typeRetour === 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
+      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonLivraison) {
         var result = this.verifierStockNegative(this.articlesSelected[numero - 1].article)
         if (!result.isValid) {
           this.openBlockedStockNegative()
@@ -791,7 +789,7 @@ export class LigneblComponent implements OnInit {
         }
       }
 
-      if ( this.typeRetour === 0 && this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
+      if (this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur) {
         var result = this.verifierStockNegative(this.articlesSelected[numero - 1].article)
         if (!result.isValid) {
           this.openBlockedStockNegative()
@@ -1117,21 +1115,19 @@ export class LigneblComponent implements OnInit {
     this.itemsShowsElements = {}
     this.itemsVariableShowsElements = {}
 
-    if(this.titreDocument === this.fonctionPartagesService.titreDocuments.bonRetourFournisseur){
-      if(this.bonLivraison.typeRetour === 0){
-        for (let key in this.shemaArticle) {
-          this.itemsShowsElements[key] = this.shemaArticle[key]
-          this.itemsVariableShowsElements[key] = this.shemaArticle[key]
-        }
-      }else if(this.bonLivraison.typeRetour === 1){
-        for (let key in this.tabVariablesFinancier) {
-          this.itemsShowsElements[key] = this.tabVariablesFinancier[key]
-          this.itemsVariableShowsElements[key] = this.tabVariablesFinancier[key]
-          
-          for(let item of this.articlesSelected){
-            if(!item[key]){
-              item[key] = 0
-            }
+    if(this.bonLivraison.typeRetour === 0){
+      for (let key in this.shemaArticle) {
+        this.itemsShowsElements[key] = this.shemaArticle[key]
+        this.itemsVariableShowsElements[key] = this.shemaArticle[key]
+      }
+    }else if(this.bonLivraison.typeRetour === 1){
+      for (let key in this.tabVariablesFinancier) {
+        this.itemsShowsElements[key] = this.tabVariablesFinancier[key]
+        this.itemsVariableShowsElements[key] = this.tabVariablesFinancier[key]
+        
+        for(let item of this.articlesSelected){
+          if(!item[key]){
+            item[key] = 0
           }
         }
       }

@@ -82,9 +82,8 @@ export class FactureAvoirAchatListComponent implements OnInit {
 
     this.formBL = this.fb.group({
       numero: [''],
-      typeAvoir: [''],
       date: [''],
-      client: [''],
+      fournisseur: [''],
       totalHT: [''],
       totalTVA: [''],
       tFiscale: [''],
@@ -111,8 +110,7 @@ export class FactureAvoirAchatListComponent implements OnInit {
   items = {
     numero: "Numero",
     date: "Date",
-    client: "client",
-    typeAvoir: "typeAvoir",
+    fournisseur: "fournisseur",
     totalHT: "Total_HT",
     totalTVA: "Total_TVA",
     tFiscale: "Timbre_Fiscale",
@@ -123,8 +121,7 @@ export class FactureAvoirAchatListComponent implements OnInit {
   itemsVariable = {
     numero: "Numero",
     date: "Date",
-    client: "client",
-    typeAvoir: "typeAvoir",
+    fournisseur: "fournisseur",
     totalHT: "Total_HT",
     totalTVA: "Total_TVA",
     tFiscale: "Timbre_Fiscale",
@@ -137,8 +134,7 @@ export class FactureAvoirAchatListComponent implements OnInit {
     magasin: "",
     search: {
       numero: "",
-      client: "",
-      typeAvoir: "",
+      fournisseur: "",
       date: "",
       tiers: "",
       totalHT: "",
@@ -148,8 +144,7 @@ export class FactureAvoirAchatListComponent implements OnInit {
     },
     orderBy: {
       numero: 0,
-      client: 0,
-      typeAvoir: 0,
+      fournisseur: 0,
       date: 0,
       tiers: 0,
       totalHT: 0,
@@ -167,8 +162,7 @@ export class FactureAvoirAchatListComponent implements OnInit {
     magasin: "",
     search: {
       numero: "",
-      client: "",
-      typeAvoir: "",
+      fournisseur: "",
       date: "",
       tiers: "",
       totalHT: "",
@@ -178,8 +172,7 @@ export class FactureAvoirAchatListComponent implements OnInit {
     },
     orderBy: {
       numero: 0,
-      client: 0,
-      typeAvoir: 0,
+      fournisseur: 0,
       date: 0,
       tiers: 0,
       totalHT: 0,
